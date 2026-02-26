@@ -1,19 +1,20 @@
-import { Button } from '@/components/ui/button'
-import { ArrowUpIcon } from 'lucide-react'
+import { Routes, Route } from 'react-router-dom'
 import { ThemeProvider } from '@/components/ui/theme-provider'
+import Sidebar from './components/Sidebar'
+import Dashboard from './pages/Dashboard'
 
 function App(): React.JSX.Element {
   return (
     <>
-      <div className="flex flex-wrap items-center gap-2 md:flex-row">
-        <Button variant="outline">Button</Button>
-        <Button variant="outline" size="icon" aria-label="Submit">
-          <ArrowUpIcon />
-        </Button>
-        <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-          <></>
-        </ThemeProvider>
-      </div>
+      <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+        <div className="flex flex-col h-screen">
+          <Sidebar>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+            </Routes>
+          </Sidebar>
+        </div>
+      </ThemeProvider>
     </>
   )
 }
