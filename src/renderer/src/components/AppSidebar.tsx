@@ -1,43 +1,23 @@
 import { Link, useLocation } from 'react-router-dom'
 import { navItems } from '@/pages/_pages'
-import { useState } from 'react'
-import { Button } from './ui/button'
-import { PanelLeftClose, PanelLeftOpen } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
 interface SidebarProps {
+  os: string
   children: React.ReactNode
 }
 
-export default function AppSidebar({ children }: SidebarProps): React.JSX.Element {
+export default function AppSidebar({ os, children }: SidebarProps): React.JSX.Element {
   const location = useLocation()
-  const [hideSidebar, setHideSidebar] = useState(false)
+  const hideSidebar = true
 
   return (
     <div className="flex flex-1 overflow-hidden">
       <aside
-        className={`font-montserrat bg-transparent text-gray-300 text-sm flex flex-col shrink-0 pt-4 transition-all duration-200 ${
+        className={`font-montserrat bg-transparent text-gray-300 text-sm flex flex-col shrink-0 ${os === 'Windows' ? 'pt-2' : 'pt-3'} transition-all duration-200 ${
           hideSidebar ? 'w-15' : 'w-56'
         }`}
       >
-        <div className="flex items-center justify-between px-3 mb-4">
-          <h1 className={`font-semibold text-white truncate ${hideSidebar && 'hidden'}`}>
-            My Account
-          </h1>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="shrink-0 text-gray-400 hover:text-white hover:bg-[#414141]"
-            onClick={() => setHideSidebar(!hideSidebar)}
-          >
-            {hideSidebar ? (
-              <PanelLeftOpen className="w-4 h-4" />
-            ) : (
-              <PanelLeftClose className="w-4 h-4" />
-            )}
-          </Button>
-        </div>
-
         <nav className="flex flex-col gap-1 py-0.5 px-2">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path
@@ -88,7 +68,11 @@ export default function AppSidebar({ children }: SidebarProps): React.JSX.Elemen
                 location.pathname.replace(/\//, '').slice(1)}
           </h2>
         </header>
-        <div className="flex-1 overflow-auto p-6">{children}</div>
+        <div
+          className={`flex-1 overflow-auto p-6 ${os === 'Windows' && `hover:scrollbar-thumb-[#4b4e52] scrollbar-active:scrollbar-thumb-[#696E78] h-32 scrollbar`}`}
+        >
+          {children}
+        </div>
       </main>
     </div>
   )

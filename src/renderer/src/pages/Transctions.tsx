@@ -1,5 +1,3 @@
-import React from 'react'
-
 function Transctions(): React.JSX.Element {
   return <div></div>
 }

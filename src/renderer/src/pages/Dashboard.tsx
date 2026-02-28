@@ -1,5 +1,6 @@
 import React from 'react'
 import { TrendingUp, Wallet, CreditCard, ArrowUpRight, ArrowDownLeft } from 'lucide-react'
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 function Dashboard(): React.JSX.Element {
   // Mock data, replace these with the real ones when the db is ready
@@ -19,33 +20,29 @@ function Dashboard(): React.JSX.Element {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {stats.map((stat) => (
-          <div
-            key={stat.label}
-            className="bg-[#222222] rounded-xl p-5 border border-[#303030] hover:border-[#404040] transition-colors"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-gray-400 text-sm">{stat.label}</span>
-              <div
-                className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                  stat.trend === 'up'
-                    ? 'bg-blue-500/20 text-blue-400'
-                    : 'bg-red-500/20 text-red-400'
-                }`}
-              >
-                <stat.icon className="w-4 h-4" />
+          <Card key={stat.label}>
+            <CardHeader>
+              <CardTitle className="text-gray-400">{stat.label}</CardTitle>
+              <CardAction>
+                <div className={`flex items-center justify-center`}>
+                  <stat.icon className="w-4 h-4" />
+                </div>
+              </CardAction>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center justify-between mb-3"></div>
+              <div className="text-2xl font-semibold text-white mb-1">{stat.value}</div>
+              <div className={`text-xs ${stat.trend === 'up' ? 'text-green-400' : 'text-red-400'}`}>
+                {stat.change} from last month
               </div>
-            </div>
-            <div className="text-2xl font-semibold text-white mb-1">{stat.value}</div>
-            <div className={`text-xs ${stat.trend === 'up' ? 'text-green-400' : 'text-red-400'}`}>
-              {stat.change} from last month
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         ))}
       </div>
       <br />
-      <div className="bg-[#222222] rounded-xl border border-[#303030] overflow-hidden">
+      <div className="rounded-xl border border-[#303030] overflow-hidden">
         <div className="px-5 py-4 border-b border-[#303030]">
           <h3 className="font-semibold text-white">Recent Transactions</h3>
         </div>
