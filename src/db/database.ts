@@ -115,7 +115,7 @@ class AppDatabase {
     }
   }
 
-  getAllTransactions(filters: TransactionFilters): Transaction[] {
+  getTransactions(filters: TransactionFilters): Transaction[] {
     try {
       let query = 'SELECT * FROM transactions WHERE 1=1'
       const params: (string | number)[] = []

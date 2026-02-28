@@ -23,7 +23,18 @@ import {
   TableRow
 } from '@/components/ui/table'
 
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
+
 import { Label } from '@/components/ui/label'
+
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -35,7 +46,11 @@ export function DataTable<TData, TValue>({
   data
 }: DataTableProps<TData, TValue>): React.ReactElement {
   const [sorting, setSorting] = React.useState<SortingState>([])
-  const [pagination, setPagination] = React.useState({ pageIndex: 0, pageSize: 20 })
+  const [pagination, setPagination] = React.useState<{ pageIndex: number; pageSize: number }>({
+    pageIndex: 0,
+    pageSize: 15
+  })
+  const [rowCountOption, setRowCountOption] = React.useState<string>('10')
 
   const table = useReactTable({
     data,
@@ -49,6 +64,10 @@ export function DataTable<TData, TValue>({
       pagination
     }
   })
+
+  React.useEffect(() => {
+    setPagination({ ...pagination, pageSize: Number(rowCountOption) })
+  }, [rowCountOption])
 
   return (
     <div>
@@ -95,13 +114,26 @@ export function DataTable<TData, TValue>({
           Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
         </Label>
         <div className="flex gap-2">
+          <Select value={rowCountOption} onValueChange={(e) => setRowCountOption(e)}>
+            <SelectTrigger className="w-26" size="sm">
+              <SelectValue placeholder="Theme" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="10">10 Rows</SelectItem>
+                <SelectItem value="25">25 Rows</SelectItem>
+                <SelectItem value="50">50 Rows</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
           <Button
             variant="outline"
             size="sm"
             onClick={() => setPagination({ ...pagination, pageIndex: pagination.pageIndex - 1 })}
             disabled={!table.getCanPreviousPage()}
           >
-            Previous
+            <ChevronLeft /> Previous
           </Button>
 
           <Button
@@ -110,7 +142,7 @@ export function DataTable<TData, TValue>({
             onClick={() => setPagination({ ...pagination, pageIndex: pagination.pageIndex + 1 })}
             disabled={!table.getCanNextPage()}
           >
-            Next
+            Next <ChevronRight />
           </Button>
         </div>
       </div>

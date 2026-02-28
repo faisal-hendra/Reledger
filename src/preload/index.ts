@@ -4,12 +4,12 @@ import { Transaction, TransactionUpdate, TransactionFilters } from '../db/databa
 
 // Custom APIs for renderer
 const api = {
-  getTransactions: (filters: TransactionFilters) => ipcRenderer.invoke('get-transactions', filters),
-  addTransaction: (transaction: Transaction) => ipcRenderer.invoke('add-transaction', transaction),
+  getTransactions: (filters: TransactionFilters) => ipcRenderer.invoke('getTransactions', filters),
+  addTransaction: (transaction: Transaction) => ipcRenderer.invoke('addTransaction', transaction),
   deleteTransaction: (transactionId: string) =>
-    ipcRenderer.invoke('delete-transaction', transactionId),
+    ipcRenderer.invoke('deleteTransaction', transactionId),
   updateTransaction: (transaction: TransactionUpdate) =>
-    ipcRenderer.invoke('update-transaction', transaction)
+    ipcRenderer.invoke('updateTransaction', transaction)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
