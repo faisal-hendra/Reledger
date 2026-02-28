@@ -9,7 +9,7 @@ const api = {
     ipcRenderer.invoke('deleteTransaction', transactionId),
   updateTransaction: (transaction: TransactionUpdate) =>
     ipcRenderer.invoke('updateTransaction', transaction),
-  getRecentTransaction: (limit: number) => ipcRenderer.invoke('getRecentTransaction', limit)
+  getRecentTransactions: (limit: number) => ipcRenderer.invoke('getRecentTransactions', limit)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

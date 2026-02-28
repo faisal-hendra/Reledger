@@ -131,8 +131,10 @@ class AppDatabase {
 
   getRecentTransactions(limit: number): Transaction[] | null {
     try {
+      console.log('Get recent transaction starts')
       const query = `SELECT * FROM transactions ORDER BY date(date) DESC LIMIT ?`
       const stmt = this.db.prepare(query)
+      console.log('Recent transactions from db:', stmt.all(limit) as Transaction[])
       return stmt.all(limit) as Transaction[]
     } catch (error) {
       console.log('Failed to get recent transaction: ', error)

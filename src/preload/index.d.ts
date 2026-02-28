@@ -9,6 +9,7 @@ declare global {
       addTransaction: (transaction: Transaction) => Promise<void>
       deleteTransaction: (transactionId: string) => Promise<void>
       updateTransaction: (transaction: TransactionUpdate) => Promise<void>
+      getRecentTransactions: (limit: number) => Promise<void>
     }
   }
 }

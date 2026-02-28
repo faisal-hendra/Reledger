@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 
-import { Button } from '@renderer/components/ui/button'
+import { Button } from '@/components/ui/button'
 
 import {
   ColumnDef,
@@ -21,7 +21,7 @@ import {
   TableHead,
   TableHeader,
   TableRow
-} from '@renderer/components/ui/table'
+} from '@/components/ui/table'
 
 import {
   Select,
@@ -30,9 +30,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue
-} from '@renderer/components/ui/select'
+} from '@/components/ui/select'
 
-import { Label } from '@renderer/components/ui/label'
+import { Label } from '@/components/ui/label'
 
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
@@ -109,7 +109,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-between space-x-2 py-4 gap-2 items-center">
+      <div className="flex justify-between space-x-2 py-4 gap-2 items-center">
         <Label className="text-xs opacity-70">
           Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
         </Label>
