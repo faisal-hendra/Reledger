@@ -73,12 +73,12 @@ class AppDatabase {
     }
   }
 
-  deleteTransaction(TransactionID: TransactionID): void {
+  deleteTransaction(TransactionID: number): void {
     try {
       const stmt = this.db.prepare(`
         DELETE FROM transactions WHERE id = ?
       `)
-      stmt.run(TransactionID.id)
+      stmt.run(TransactionID)
     } catch (error) {
       console.error('Failed to delete transaction:', error)
       throw error
@@ -117,12 +117,12 @@ class AppDatabase {
     }
   }
 
-  getTransactionById(TransactionID: TransactionID): Transaction | null {
+  getTransactionById(TransactionID: number): Transaction | null {
     try {
       const stmt = this.db.prepare(`
         SELECT * FROM transactions WHERE id = ?
       `)
-      return stmt.get(TransactionID.id) as Transaction | null
+      return stmt.get(TransactionID) as Transaction | null
     } catch (error) {
       console.error('Failed to get transaction by id:', error)
       throw error

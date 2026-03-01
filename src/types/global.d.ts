@@ -21,19 +21,10 @@ declare global {
     id: number
   }
 
-  interface TransactionID {
-    id: number
-  }
-
   interface TransactionFilters {
     month: number | null
     year: number | null
     keyword: string | null
-  }
-
-  interface Window {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    api: any
   }
 
   interface MonthlyTotal {
@@ -44,5 +35,10 @@ declare global {
   interface MonthlyTotalFilters {
     month: number
     year: number
+  }
+
+  interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    api: any
   }
 }
