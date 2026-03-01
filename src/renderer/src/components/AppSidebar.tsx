@@ -14,7 +14,7 @@ export default function AppSidebar({ platform, children }: SidebarProps): React.
   return (
     <div className="flex flex-1 overflow-hidden">
       <aside
-        className={`font-montserrat bg-transparent text-gray-300 text-sm flex flex-col shrink-0 ${platform === 'win32' ? 'pt-2' : 'pt-3'} transition-all duration-200 ${
+        className={`font-montserrat bg-transparent text-gray-300 text-sm flex flex-col shrink-0 pt-2 transition-all duration-200 ${
           hideSidebar ? 'w-15' : 'w-56'
         }`}
       >
