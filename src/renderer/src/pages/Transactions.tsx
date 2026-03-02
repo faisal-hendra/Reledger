@@ -2,16 +2,6 @@ import { columns } from '@/components/Columns'
 import { DataTable } from '@/components/DataTable'
 import { useState, useEffect } from 'react'
 
-type Transaction = {
-  id: number
-  transaction_type: 'expense' | 'income'
-  name: string
-  amount: number
-  category: string
-  description?: string
-  date: string
-}
-
 function Transctions(): React.JSX.Element {
   const [transactions, setTransactions] = useState<Transaction[]>([])
 

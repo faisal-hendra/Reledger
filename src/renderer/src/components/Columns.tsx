@@ -5,19 +5,7 @@ import { ArrowUpDown } from 'lucide-react'
 import { Button } from './ui/button'
 import { Badge } from '@/components/ui/badge'
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Transaction = {
-  id: number
-  transaction_type: 'expense' | 'income'
-  name: string
-  amount: number
-  category: string
-  description?: string
-  date: string
-}
-
-export const columns: ColumnDef<Transaction>[] = [
+export const columns: ColumnDef<Transaction, unknown>[] = [
   {
     accessorKey: 'transaction_type',
     header: 'Type',
