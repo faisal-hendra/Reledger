@@ -28,7 +28,14 @@ declare global {
   }
 
   interface Window {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    api: any
+    api: {
+      platform: string
+      getTransactions: (filters: TransactionFilters) => Promise<Transaction[]>
+      addTransaction: (transaction: Transaction) => Promise<void>
+      deleteTransaction: (transactionId: string) => Promise<void>
+      updateTransaction: (transaction: Transaction) => Promise<void>
+      getRecentTransactions: (limit: number) => Promise<Transaction[] | null>
+      getMonthlyTotal: (filters: MonthlyTotalFilters) => Promise<MonthlyTotal | null>
+    }
   }
 }
