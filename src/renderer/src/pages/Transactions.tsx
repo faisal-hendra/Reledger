@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import PageHeader from '@/components/PageHeader'
 import { Button } from '@/components/ui/button'
 import { FunnelIcon, PlusIcon } from 'lucide-react'
+import { ButtonGroup } from '@/components/ui/button-group'
 
 interface Props {
   platform: string
@@ -41,14 +42,16 @@ function Transctions({ platform }: Props): React.JSX.Element {
   return (
     <>
       <PageHeader>
-        <Button variant="outline" size="sm">
-          <FunnelIcon />
-          Filter
-        </Button>
-        <Button variant="default" size="sm" onClick={() => buttonTest()}>
-          <PlusIcon />
-          Add
-        </Button>
+        <ButtonGroup>
+          <Button variant="outline">
+            <FunnelIcon />
+            Filter
+          </Button>
+          <Button onClick={() => buttonTest()}>
+            <PlusIcon />
+            Add
+          </Button>
+        </ButtonGroup>
       </PageHeader>
       <div
         className={`space-y-6 flex-1 overflow-auto p-6 ${platform === 'win32' && `hover:scrollbar-thumb-[#4b4e52] scrollbar-active:scrollbar-thumb-[#696E78] h-32 scrollbar`}`}

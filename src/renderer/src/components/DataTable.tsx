@@ -4,6 +4,8 @@ import * as React from 'react'
 
 import { Button } from '@/components/ui/button'
 
+import { ButtonGroup } from '@/components/ui/button-group'
+
 import {
   ColumnDef,
   flexRender,
@@ -127,23 +129,25 @@ export function DataTable<TData, TValue>({
             </SelectContent>
           </Select>
 
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setPagination({ ...pagination, pageIndex: pagination.pageIndex - 1 })}
-            disabled={!table.getCanPreviousPage()}
-          >
-            <ChevronLeft /> Previous
-          </Button>
+          <ButtonGroup>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPagination({ ...pagination, pageIndex: pagination.pageIndex - 1 })}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <ChevronLeft /> Previous
+            </Button>
 
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setPagination({ ...pagination, pageIndex: pagination.pageIndex + 1 })}
-            disabled={!table.getCanNextPage()}
-          >
-            Next <ChevronRight />
-          </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPagination({ ...pagination, pageIndex: pagination.pageIndex + 1 })}
+              disabled={!table.getCanNextPage()}
+            >
+              Next <ChevronRight />
+            </Button>
+          </ButtonGroup>
         </div>
       </div>
     </div>
