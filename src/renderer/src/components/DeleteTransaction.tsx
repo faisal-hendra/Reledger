@@ -34,9 +34,9 @@ function DeleteTransaction({ children, id, onRefresh, alert }: Props): React.JSX
           <AlertDialogMedia className="bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive">
             <Trash2Icon />
           </AlertDialogMedia>
-          <AlertDialogTitle>Delete chat?</AlertDialogTitle>
+          <AlertDialogTitle>Delete transaction?</AlertDialogTitle>
           <AlertDialogDescription>
-            This will permanently delete this transaction
+            This will permanently delete the transaction
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
