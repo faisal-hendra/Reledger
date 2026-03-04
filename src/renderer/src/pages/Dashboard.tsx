@@ -37,10 +37,12 @@ function Dashboard({ platform }: Props): React.JSX.Element {
     const loadThisMonthTotal = async (): Promise<void> => {
       try {
         const filters = {
-          month: dayjs().month(),
+          month: dayjs().month() + 1,
           year: dayjs().year()
         }
         const data = await window.api.getMonthlyTotal(filters)
+        console.log('AAAAAA', data)
+        console.log('bbbbbb', dayjs().month())
         setThisMonthTotal(data)
       } catch (error) {
         console.log('Failed to fetch monthly total', error)
@@ -54,7 +56,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
     const loadLastMonthTotal = async (): Promise<void> => {
       try {
         const filters = {
-          month: dayjs().subtract(1, 'month').month(),
+          month: dayjs().month(),
           year: dayjs().year()
         }
         const data = await window.api.getMonthlyTotal(filters)
@@ -98,20 +100,24 @@ function Dashboard({ platform }: Props): React.JSX.Element {
       current: number,
       previous: number
     ): { change: string; trend: 'up' | 'down' } => {
-      if (previous === 0) {
+      if (previous === 0 || current === 0) {
         return { change: current > 0 ? '+100%' : '0%', trend: current >= 0 ? 'up' : 'down' }
       }
 
-      const change = ((current - previous) / previous) * 100
-      return {
-        change: `${change >= 0 ? '+' : ''}${change.toFixed(1)}%`,
-        trend: change >= 0 ? 'up' : 'down'
+      const change = (current - previous) / previous
+      if (isFinite(change)) {
+        return {
+          change: `${change >= 0 ? '+' : ''}${(change * 100).toFixed(1)}%`,
+          trend: change >= 0 ? 'up' : 'down'
+        }
       }
+
+      return { change: '0%', trend: 'down' }
     }
 
     // Format currency
     const formatCurrency = (amount: number): string => {
-      return `$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+      return `$${amount?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) ?? '0.00'}`
     }
 
     // Calculate stats
