@@ -13,10 +13,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import { AddTransaction } from './AddTransaction'
 
 export const createColumns = (
   onRefresh?: () => void,
-  deleteTransactionToast?: () => void
+  dislayToast?: (message: string) => void
 ): ColumnDef<Transaction, unknown>[] => [
   {
     accessorKey: 'transaction_type',
@@ -128,15 +129,24 @@ export const createColumns = (
               <CopyIcon />
               Copy
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <PenIcon />
-              Edit
-            </DropdownMenuItem>
+            <AddTransaction
+              onTransactionAdded={() => {
+                onRefresh?.()
+              }}
+              editMode={true}
+              idToEdit={transaction.id}
+              alert={() => dislayToast?.('Transaction edited successfully')}
+            >
+              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                <PenIcon />
+                Edit
+              </DropdownMenuItem>
+            </AddTransaction>
             <DropdownMenuSeparator />
             <DeleteTransaction
               id={transaction.id?.toString() || ''}
               onRefresh={onRefresh}
-              alert={deleteTransactionToast}
+              alert={() => dislayToast?.('Transaction deleted successfuly')}
             >
               <DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
                 <TrashIcon />

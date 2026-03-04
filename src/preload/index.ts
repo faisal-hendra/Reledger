@@ -3,6 +3,7 @@ import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
 const api = {
+  // Get oprating system name
   platform: process.platform, // 'win32' | 'darwin' | 'linux'
   getTransactions: (filters: TransactionFilters) => ipcRenderer.invoke('getTransactions', filters),
   addTransaction: (transaction: Transaction) => ipcRenderer.invoke('addTransaction', transaction),
@@ -11,10 +12,9 @@ const api = {
   updateTransaction: (transaction: Transaction) =>
     ipcRenderer.invoke('updateTransaction', transaction),
   getRecentTransactions: (limit: number) => ipcRenderer.invoke('getRecentTransactions', limit),
-  getMonthlyTotal: (filters: MonthlyTotalFilters) => ipcRenderer.invoke('getMonthlyTotal', filters)
+  getMonthlyTotal: (filters: MonthlyTotalFilters) => ipcRenderer.invoke('getMonthlyTotal', filters),
+  getTransactionById: (id: number) => ipcRenderer.invoke('getTransactionById', id)
 }
-
-// Get oprating system name
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise

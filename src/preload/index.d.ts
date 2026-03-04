@@ -13,6 +13,7 @@ declare global {
       updateTransaction: (transaction: Transaction) => Promise<void>
       getRecentTransactions: (limit: number) => Promise<Transaction[] | null>
       getMonthlyTotal: (filters: MonthlyTotalFilters) => Promise<MonthlyTotal | null>
+      getTransactionById: (id: number) => Promise<Transaction | null>
     }
   }
 }

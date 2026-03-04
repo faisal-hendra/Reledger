@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -29,7 +29,7 @@ import dayjs from 'dayjs'
 interface Props {
   children: React.ReactNode
   onTransactionAdded: () => void
-  alert: () => void
+  alert: (message: string) => void
   editMode: boolean
   idToEdit?: number
 }
@@ -79,17 +79,68 @@ export function AddTransaction({
       setFormData(INITIAL_FORM)
       setOpen(false)
       onTransactionAdded?.()
-      alert?.()
+      alert?.('Transaction added successfully')
     } catch (error) {
       console.error('Failed to add transaction:', error)
     }
   }
 
+  const handleEdit = async (e: React.FormEvent): Promise<void> => {
+    e.preventDefault()
+    try {
+      await window.api.updateTransaction({
+        id: idToEdit,
+        transaction_type: formData.transaction_type as 'expense' | 'income',
+        name: formData.name,
+        amount: parseFloat(formData.amount),
+        category: formData.category,
+        description: formData.description,
+        date: formData.date
+      })
+      setFormData(INITIAL_FORM)
+      setOpen(false)
+      onTransactionAdded?.()
+      alert?.('Transaction edited successfully')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // Fetch data if in edit mode
+  useEffect(() => {
+    if (idToEdit) {
+      const fetchDataToEdit = async (): Promise<void> => {
+        try {
+          if (idToEdit === undefined) {
+            console.error('idToEdit is not available')
+            return
+          }
+          const dataToEdit = await window.api.getTransactionById(idToEdit)
+          const FETCHED_DATA = {
+            transaction_type: dataToEdit?.transaction_type || 'expense',
+            date: dataToEdit?.date || dayjs().format('YYYY-MM-DD'),
+            name: dataToEdit?.name || '',
+            amount: dataToEdit?.amount?.toString() || '',
+            category: dataToEdit?.category || '',
+            description: dataToEdit?.description || ''
+          }
+          if (dataToEdit) {
+            setFormData(FETCHED_DATA)
+          }
+          console.log('Data to edit: ', dataToEdit)
+        } catch (error) {
+          console.log('Failed to fetch transaction to update: ', error)
+        }
+      }
+      fetchDataToEdit()
+    }
+  }, [idToEdit])
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="max-w-md">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={!editMode ? handleSubmit : handleEdit}>
           <DialogHeader>
             <DialogTitle>{!editMode ? 'Add transaction' : 'Edit transaction'}</DialogTitle>
             <br />

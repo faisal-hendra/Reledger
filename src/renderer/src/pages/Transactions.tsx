@@ -51,12 +51,8 @@ function Transctions({ platform }: Props): React.JSX.Element {
     console.log('Transactions: ', transactions)
   }, [transactions])
 
-  const addTransactionToast = (): void => {
-    toast.success('Transaction has been added')
-  }
-
-  const deleteTransactionToast = (): void => {
-    toast.success('Transaction has been deleted')
+  const displayToast = (message: string): void => {
+    toast.success(message, { position: 'top-center' })
   }
 
   return (
@@ -70,7 +66,7 @@ function Transctions({ platform }: Props): React.JSX.Element {
           <AddTransaction
             onTransactionAdded={loadTransactions}
             editMode={false}
-            alert={addTransactionToast}
+            alert={displayToast}
           >
             <Button>
               <PlusIcon />
@@ -83,10 +79,7 @@ function Transctions({ platform }: Props): React.JSX.Element {
         className={`space-y-6 flex-1 overflow-auto p-6 ${platform === 'win32' && `hover:scrollbar-thumb-[#4b4e52] scrollbar-active:scrollbar-thumb-[#696E78] h-32 scrollbar`}`}
       >
         {transactions.length > 0 ? (
-          <DataTable
-            columns={createColumns(loadTransactions, deleteTransactionToast)}
-            data={transactions}
-          />
+          <DataTable columns={createColumns(loadTransactions, displayToast)} data={transactions} />
         ) : (
           <div className="w-full text-center opacity-70 text-sm">No data to display</div>
         )}

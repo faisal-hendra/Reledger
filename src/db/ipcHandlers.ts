@@ -23,4 +23,7 @@ export default function setUpHandlers(db: AppDatabase): void {
   ipcMain.handle('getMonthlyTotal', (_, filters) => {
     return db.getMonthlyTotal(filters)
   })
+  ipcMain.handle('getTransactionById', (_, id) => {
+    return db.getTransactionById(id)
+  })
 }

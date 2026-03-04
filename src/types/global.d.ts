@@ -35,6 +35,7 @@ declare global {
     updateTransaction: (transaction: Transaction) => Promise<void>
     getRecentTransactions: (limit: number) => Promise<Transaction[]>
     getMonthlyTotal: (filters: MonthlyTotalFilters) => Promise<MonthlyTotal>
+    getTransactionById: (id: number) => Promise<Transaction | null>
   }
 
   interface Window {
