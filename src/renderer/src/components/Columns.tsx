@@ -65,6 +65,10 @@ export const createColumns = (
     header: 'Name'
   },
   {
+    accessorKey: 'category',
+    header: 'Category'
+  },
+  {
     accessorKey: 'description',
     header: 'Description',
     cell: ({ row }) => {
