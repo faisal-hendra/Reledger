@@ -52,7 +52,7 @@ export function DataTable<TData, TValue>({
     pageIndex: 0,
     pageSize: 15
   })
-  const [rowCountOption, setRowCountOption] = React.useState<string>('10')
+  const [rowCountOption, setRowCountOption] = React.useState<string>('15')
 
   const table = useReactTable({
     data,
@@ -128,7 +128,7 @@ export function DataTable<TData, TValue>({
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="10">10 Rows</SelectItem>
+                <SelectItem value="15">15 Rows</SelectItem>
                 <SelectItem value="25">25 Rows</SelectItem>
                 <SelectItem value="50">50 Rows</SelectItem>
               </SelectGroup>

@@ -22,8 +22,14 @@ const chartConfig = {
 
 interface Props {
   data: { month: number; income: number; expense: number }[] | undefined
+  displayIncomeChart: boolean
+  displayExpenseChart: boolean
 }
-export function TrendChart({ data }: Props): React.JSX.Element {
+export function TrendChart({
+  data,
+  displayIncomeChart,
+  displayExpenseChart
+}: Props): React.JSX.Element {
   return (
     <ChartContainer config={chartConfig} className="h-75 w-full">
       <BarChart accessibilityLayer data={data}>
@@ -40,8 +46,14 @@ export function TrendChart({ data }: Props): React.JSX.Element {
           }
         />
         <CartesianGrid vertical={false} />
-        <Bar dataKey="income" fill="var(--color-income)" radius={[0, 0, 4, 4]} stackId="a" />
-        <Bar dataKey="expense" fill="var(--color-expense)" radius={[4, 4, 0, 0]} stackId="a" />
+
+        {displayIncomeChart && (
+          <Bar dataKey="income" fill="var(--color-income)" radius={[0, 0, 4, 4]} stackId="a" />
+        )}
+
+        {displayExpenseChart && (
+          <Bar dataKey="expense" fill="var(--color-expense)" radius={[4, 4, 0, 0]} stackId="a" />
+        )}
       </BarChart>
     </ChartContainer>
   )

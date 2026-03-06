@@ -60,7 +60,6 @@ function Transctions({ platform }: Props): React.JSX.Element {
           <FilterTransaction onFilterChange={setFilters} onTransactionFiltered={loadTransactions}>
             <Button variant="outline">
               <FunnelIcon />
-              Filter
             </Button>
           </FilterTransaction>
           <AddTransaction

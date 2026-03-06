@@ -1,16 +1,21 @@
-import { Wallet, ArrowUpRight, ArrowDownLeft } from 'lucide-react'
+import { Wallet, ArrowUpRight, ArrowDownLeft, FunnelIcon } from 'lucide-react'
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import RecentTransactions from '@/components/RecentTransactions'
 import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import PageHeader from '@/components/PageHeader'
 import { TrendChart } from '@/components/TrendChart'
+import FilterDashboard from '@/components/FilterDashboard'
+import { Button } from '@/components/ui/button'
 
 interface Props {
   platform: string
 }
 
 function Dashboard({ platform }: Props): React.JSX.Element {
+  const [displayExpenseChart, setDisplayExpenseChart] = useState(true)
+  const [displayIncomeChart, setDisplayIncomeChart] = useState(true)
+
   const [recentTransactions, setRecentTransactions] = useState<Transaction[]>([])
   const [thisMonthTotal, setThisMonthTotal] = useState<MonthlyTotal>({
     income: 0,
@@ -193,7 +198,18 @@ function Dashboard({ platform }: Props): React.JSX.Element {
 
   return (
     <>
-      <PageHeader />
+      <PageHeader>
+        <FilterDashboard
+          displayIncomeChart={displayIncomeChart}
+          displayExpenseChart={displayExpenseChart}
+          setDisplayIncomeChart={setDisplayIncomeChart}
+          setDisplayExpenseChart={setDisplayExpenseChart}
+        >
+          <Button variant="outline">
+            <FunnelIcon />
+          </Button>
+        </FilterDashboard>
+      </PageHeader>
       <div
         className={`space-y-6 flex-1 overflow-auto p-6 ${platform === 'win32' && `hover:scrollbar-thumb-[#4b4e52] scrollbar-active:scrollbar-thumb-[#696E78] h-32 scrollbar`}`}
       >
@@ -219,7 +235,11 @@ function Dashboard({ platform }: Props): React.JSX.Element {
           ))}
         </div>
         <br />
-        <TrendChart data={FullMonthlyTotal} />
+        <TrendChart
+          data={FullMonthlyTotal}
+          displayIncomeChart={displayIncomeChart}
+          displayExpenseChart={displayExpenseChart}
+        />
         <br />
         <RecentTransactions recentTransactions={recentTransactions} />
       </div>

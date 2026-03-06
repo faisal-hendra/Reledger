@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { AddTransaction } from './AddTransaction'
+import dayjs from 'dayjs'
 
 export const createColumns = (
   onRefresh?: () => void,
@@ -56,7 +57,7 @@ export const createColumns = (
     },
     cell: ({ row }) => {
       const date: string = row.getValue('date')
-      return <div className="px-3">{date}</div>
+      return <div className="px-3">{dayjs(date).format('DD MMM YYYY')}</div>
     }
   },
   {
