@@ -1,6 +1,8 @@
 import React from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { ChartBarIcon } from 'lucide-react'
+import { Switch } from '@/components/ui/switch'
+import { Label } from '@/components/ui/label'
 
 interface Props {
   children: React.ReactNode
@@ -9,9 +11,6 @@ interface Props {
   displayExpenseChart: boolean
   setDisplayExpenseChart: (value: boolean) => void
 }
-
-import { Switch } from '@/components/ui/switch'
-import { Label } from './ui/label'
 
 function FilterDashboard({
   children,
