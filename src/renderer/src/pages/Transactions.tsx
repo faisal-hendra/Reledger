@@ -45,10 +45,6 @@ function Transctions({ platform }: Props): React.JSX.Element {
     initializeTransactions()
   }, [])
 
-  useEffect(() => {
-    console.log('Transactions: ', transactions)
-  }, [transactions])
-
   const displayToast = (message: string): void => {
     toast.success(message, { position: 'top-center' })
   }

@@ -50,7 +50,6 @@ function Dashboard({ platform }: Props): React.JSX.Element {
         const data: { month: number; income: number; expense: number }[] | undefined =
           await window.api.getFullMonthlyTotal(2026)
         setFullMonthlyTotal(data)
-        console.log('Full monthly total this year:', data)
       } catch (error) {
         console.log(error)
       }
@@ -67,8 +66,6 @@ function Dashboard({ platform }: Props): React.JSX.Element {
           year: dayjs().year()
         }
         const data = await window.api.getMonthlyTotal(filters)
-        console.log('AAAAAA', data)
-        console.log('bbbbbb', dayjs().month())
         setThisMonthTotal(data)
       } catch (error) {
         console.log('Failed to fetch monthly total', error)
@@ -180,10 +177,6 @@ function Dashboard({ platform }: Props): React.JSX.Element {
 
     setStats(newStats)
   }, [thisMonthTotal, lastMonthTotal, currentBalance, lastMonthBalance])
-
-  useEffect(() => {
-    console.log('Last month total', lastMonthTotal)
-  }, [lastMonthTotal])
 
   // Determine the color for the percantage comparison
   const determineStatsColor = (trend: string, isExpense: boolean): string => {

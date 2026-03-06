@@ -62,7 +62,6 @@ function FilterTransaction({
     const fetchAvailableYears = async (): Promise<void> => {
       try {
         const data = await window.api.getAvailableYears()
-        console.log('Available Years: ', data)
         const yearsData = data.map((year) => ({ value: year?.year, label: year?.year.toString() }))
         setAvailableYears([{ value: null, label: 'All Years' }, ...yearsData])
       } catch (error) {
