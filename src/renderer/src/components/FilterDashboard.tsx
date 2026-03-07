@@ -22,10 +22,10 @@ function FilterDashboard({
   return (
     <Popover>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
-      <PopoverContent>
-        <div className="flex gap-2">
+      <PopoverContent className="w-50 translate-y-1.5">
+        <div className="flex gap-2 items-center opacity-90">
           <ChartBarIcon />
-          <h3>Chart Settings</h3>
+          <h3 className="text-sm font-mono">Chart</h3>
         </div>
         <br />
         <div className="flex grid grid-rows-1 gap-4">
@@ -34,7 +34,7 @@ function FilterDashboard({
               checked={displayIncomeChart}
               onCheckedChange={() => setDisplayIncomeChart(!displayIncomeChart)}
             />
-            <Label>Income</Label>
+            <Label className="opacity-80">Income</Label>
           </div>
           <div className="flex justify-between">
             <Switch
@@ -43,7 +43,7 @@ function FilterDashboard({
                 setDisplayExpenseChart(!displayExpenseChart)
               }}
             />
-            <Label>Expense</Label>
+            <Label className="opacity-80">Expense</Label>
           </div>
         </div>
       </PopoverContent>
