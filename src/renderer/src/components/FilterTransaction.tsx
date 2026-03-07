@@ -71,7 +71,7 @@ function FilterTransaction({
   }
 
   const handleCSVDownload = (csv: string): void => {
-    const file = new File([csv], 'transcations.csv', { type: 'text/csv' })
+    const file = new File([csv], 'transactions.csv', { type: 'text/csv' })
     saveAs(file)
   }
 
