@@ -15,6 +15,7 @@ declare global {
     month: number | null
     year: number | null
     keyword: string | null
+    category: string | null
   }
 
   interface MonthlyTotal {

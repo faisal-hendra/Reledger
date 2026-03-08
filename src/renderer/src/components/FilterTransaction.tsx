@@ -23,6 +23,28 @@ const MONTHS = [
   { value: 12, label: 'December' }
 ]
 
+const CATEGORIES = [
+  'All Categories',
+  'Food & Dining',
+  'Shopping',
+  'Transportation',
+  'Bills & Utilities',
+  'Entertainment',
+  'Healthcare',
+  'Education',
+  'Travel',
+  'Salary',
+  'Investment',
+  'Gift',
+  'Loan',
+  'Insurance',
+  'Savings',
+  'Donation',
+  'Freelance',
+  'Gift Card',
+  'Other'
+] as const
+
 interface Props {
   children: React.ReactNode
   transactions: Transaction[]
@@ -30,6 +52,7 @@ interface Props {
     month: number | null
     year: number | null
     keyword: string | null
+    category: string | null
   }) => void
   onTransactionFiltered?: () => void
 }
@@ -42,6 +65,7 @@ function FilterTransaction({
   const [selectedMonth, setSelectedMonth] = useState<number | null>(null)
   const [selectedYear, setSelectedYear] = useState<number | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('')
   const [availableYears, setAvailableYears] = useState<{ value: number | null; label: string }[]>([
     { value: null, label: 'All Years' }
   ])
@@ -49,17 +73,43 @@ function FilterTransaction({
   const handleMonthChange = (value: string): void => {
     const monthValue = value === 'null' ? null : Number(value)
     setSelectedMonth(monthValue)
-    onFilterChange?.({ month: monthValue, year: selectedYear, keyword: searchTerm || null })
+    onFilterChange?.({
+      month: monthValue,
+      year: selectedYear,
+      keyword: searchTerm || null,
+      category: selectedCategory || null
+    })
   }
 
   const handleYearChange = (value: number | null): void => {
     setSelectedYear(value)
-    onFilterChange?.({ month: selectedMonth, year: value, keyword: searchTerm || null })
+    onFilterChange?.({
+      month: selectedMonth,
+      year: value,
+      keyword: searchTerm || null,
+      category: selectedCategory || null
+    })
   }
 
   const handleSearchChange = (value: string): void => {
     setSearchTerm(value)
-    onFilterChange?.({ month: selectedMonth, year: selectedYear, keyword: value || null })
+    onFilterChange?.({
+      month: selectedMonth,
+      year: selectedYear,
+      keyword: value || null,
+      category: selectedCategory || null
+    })
+  }
+
+  const handleCategoryChange = (value: string | null): void => {
+    const categoryValue = value === 'All Categories' ? null : value
+    setSelectedCategory(categoryValue || '')
+    onFilterChange?.({
+      month: selectedMonth,
+      year: selectedYear,
+      keyword: searchTerm || null,
+      category: categoryValue
+    })
   }
 
   const handleCSVExport = (): void => {
@@ -149,6 +199,26 @@ function FilterTransaction({
                     value={year.value?.toString() || 'null'}
                   >
                     {year.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        <div className="pt-4">
+          <Label>Category</Label>
+          <div className="pt-2">
+            <Select
+              value={selectedCategory || 'All Categories'}
+              onValueChange={handleCategoryChange}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select a category" />
+              </SelectTrigger>
+              <SelectContent>
+                {CATEGORIES.map((category) => (
+                  <SelectItem key={category} value={category}>
+                    {category}
                   </SelectItem>
                 ))}
               </SelectContent>

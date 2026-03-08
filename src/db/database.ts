@@ -101,9 +101,13 @@ class AppDatabase {
       if (filters.keyword) {
         query += ' AND name LIKE ?'
         params.push(`%${filters.keyword}%`)
-      } else {
-        query += ' ORDER BY date(date) DESC'
       }
+      if (filters.category) {
+        query += ' AND category = ?'
+        params.push(filters.category)
+      }
+
+      query += ' ORDER BY date(date) DESC'
 
       const stmt = this.db.prepare(query)
       return stmt.all(...params) as Transaction[]
