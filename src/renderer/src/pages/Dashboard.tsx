@@ -42,28 +42,31 @@ function Dashboard({ platform }: Props): React.JSX.Element {
     { month: number; income: number; expense: number }[] | undefined
   >(undefined)
 
+  const [dataYear, setDataYear] = useState(dayjs().year())
+  const [dataMonth, setDataMonth] = useState(dayjs().month() + 1)
+
   // Get full breakdown of this year
   // Will be used for visualization
   useEffect(() => {
     const loadFullMonthlyTotal = async (): Promise<void> => {
       try {
         const data: { month: number; income: number; expense: number }[] | undefined =
-          await window.api.getFullMonthlyTotal(dayjs().year())
+          await window.api.getFullMonthlyTotal(dataYear)
         setFullMonthlyTotal(data)
       } catch (error) {
         console.log(error)
       }
     }
     loadFullMonthlyTotal()
-  }, [])
+  }, [dataYear, dataMonth])
 
   // Load this month total
   useEffect(() => {
     const loadThisMonthTotal = async (): Promise<void> => {
       try {
         const filters = {
-          month: dayjs().month() + 1,
-          year: dayjs().year()
+          month: dataMonth,
+          year: dataYear
         }
         const data = await window.api.getMonthlyTotal(filters)
         setThisMonthTotal(data)
@@ -72,15 +75,15 @@ function Dashboard({ platform }: Props): React.JSX.Element {
       }
     }
     loadThisMonthTotal()
-  }, [])
+  }, [dataYear, dataMonth])
 
   // Load last month total
   useEffect(() => {
     const loadLastMonthTotal = async (): Promise<void> => {
       try {
         const filters = {
-          month: dayjs().month(),
-          year: dayjs().year()
+          month: dataMonth - 1,
+          year: dataYear
         }
         const data = await window.api.getMonthlyTotal(filters)
         setLastMonthTotal(data)
@@ -89,7 +92,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
       }
     }
     loadLastMonthTotal()
-  }, [])
+  }, [dataYear, dataMonth])
 
   // Get recent transactions
   // Customizable by changing th rowCount const
@@ -197,6 +200,10 @@ function Dashboard({ platform }: Props): React.JSX.Element {
           displayExpenseChart={displayExpenseChart}
           setDisplayIncomeChart={setDisplayIncomeChart}
           setDisplayExpenseChart={setDisplayExpenseChart}
+          year={dataYear}
+          setYear={setDataYear}
+          month={dataMonth}
+          setMonth={setDataMonth}
         >
           <Button variant="outline">
             <FunnelIcon />
@@ -232,6 +239,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
             data={fullMonthlyTotal}
             displayIncomeChart={displayIncomeChart}
             displayExpenseChart={displayExpenseChart}
+            year={dataYear}
           />
         </div>
         <div className="pt-6">

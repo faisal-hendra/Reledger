@@ -144,7 +144,7 @@ class AppDatabase {
   getMonthlyTotal(filters: MonthlyTotalFilters): MonthlyTotal | null {
     try {
       let query = `
-      SELECT 
+      SELECT
         SUM(CASE WHEN transaction_type = 'income' THEN amount ELSE 0 END) as income,
         SUM(CASE WHEN transaction_type = 'expense' THEN amount ELSE 0 END) as expense
       FROM transactions
@@ -178,7 +178,7 @@ class AppDatabase {
   ): { month: number; income: number; expense: number }[] | undefined {
     try {
       const query = `
-      SELECT 
+      SELECT
         month.month as month,
         COALESCE(total.income, 0) as income,
         COALESCE(total.expense, 0) as expense
@@ -197,7 +197,7 @@ class AppDatabase {
         SELECT 12 as month
       ) as month
       LEFT JOIN (
-        SELECT 
+        SELECT
           CAST(strftime('%m', date) AS INTEGER) as month,
           SUM(CASE WHEN transaction_type = 'income' THEN amount ELSE 0 END) as income,
           SUM(CASE WHEN transaction_type = 'expense' THEN amount ELSE 0 END) as expense
@@ -217,9 +217,9 @@ class AppDatabase {
   getAvailableYears(): GetYear[] {
     try {
       const stmt = this.db.prepare(`
-      SELECT DISTINCT CAST(strftime('%Y', date) AS INTEGER) AS year 
-      FROM transactions 
-      ORDER BY year
+      SELECT DISTINCT CAST(strftime('%Y', date) AS INTEGER) AS year
+      FROM transactions
+      ORDER BY year DESC
     `)
       return stmt.all() as GetYear[]
     } catch (error) {

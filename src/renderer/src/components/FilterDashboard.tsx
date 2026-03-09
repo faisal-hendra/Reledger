@@ -1,8 +1,17 @@
 import React from 'react'
+import { useState, useEffect } from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { ChartBarIcon } from 'lucide-react'
+import { ChartBarIcon, DatabaseIcon } from 'lucide-react'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
+import dayjs from 'dayjs'
 
 interface Props {
   children: React.ReactNode
@@ -10,40 +19,130 @@ interface Props {
   setDisplayIncomeChart: (value: boolean) => void
   displayExpenseChart: boolean
   setDisplayExpenseChart: (value: boolean) => void
+  year: number
+  setYear: (value: number) => void
+  month: number
+  setMonth: (value: number) => void
 }
+
+const MONTHS = [
+  { value: 1, label: 'January' },
+  { value: 2, label: 'February' },
+  { value: 3, label: 'March' },
+  { value: 4, label: 'April' },
+  { value: 5, label: 'May' },
+  { value: 6, label: 'June' },
+  { value: 7, label: 'July' },
+  { value: 8, label: 'August' },
+  { value: 9, label: 'September' },
+  { value: 10, label: 'October' },
+  { value: 11, label: 'November' },
+  { value: 12, label: 'December' }
+]
 
 function FilterDashboard({
   children,
   displayIncomeChart,
   setDisplayIncomeChart,
   displayExpenseChart,
-  setDisplayExpenseChart
+  setDisplayExpenseChart,
+  year,
+  setYear,
+  month,
+  setMonth
 }: Props): React.JSX.Element {
+  const [availableYears, setAvailableYears] = useState<number[]>([dayjs().year()])
+
+  useEffect(() => {
+    const fetchAvailableYears = async (): Promise<void> => {
+      try {
+        const data = await window.api.getAvailableYears()
+        const yearsData = data.filter((year) => year?.year !== dayjs().year())
+        const yearsArray = yearsData.map((year) => year?.year)
+        setAvailableYears([...availableYears, ...yearsArray])
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchAvailableYears()
+  }, [])
+
   return (
     <Popover>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
-      <PopoverContent className="w-50 translate-y-1.5">
-        <div className="flex gap-2 items-center opacity-90">
-          <ChartBarIcon />
-          <h3 className="text-sm font-mono">Chart</h3>
-        </div>
-        <br />
-        <div className="flex grid grid-rows-1 gap-4">
-          <div className="flex justify-between">
-            <Switch
-              checked={displayIncomeChart}
-              onCheckedChange={() => setDisplayIncomeChart(!displayIncomeChart)}
-            />
-            <Label className="opacity-80">Income</Label>
+      <PopoverContent sideOffset={10}>
+        <div>
+          <div className="flex items-center gap-2 text-muted-foreground pb-2">
+            <DatabaseIcon className="w-4 h-4" />
+            <Label>Database</Label>
           </div>
-          <div className="flex justify-between">
-            <Switch
-              checked={displayExpenseChart}
-              onCheckedChange={() => {
-                setDisplayExpenseChart(!displayExpenseChart)
-              }}
-            />
-            <Label className="opacity-80">Expense</Label>
+          <div className="flex items-center gap-2 pt-2">
+            <div>
+              <Label className="pb-2">By Month</Label>
+              <Select
+                value={month.toString()}
+                onValueChange={(e) => {
+                  setMonth(Number(e))
+                }}
+              >
+                <SelectTrigger className="w-30.5">
+                  <SelectValue placeholder="Select month" />
+                </SelectTrigger>
+                <SelectContent>
+                  {MONTHS.map((month) => (
+                    <SelectItem
+                      key={month.value?.toString() || 'null'}
+                      value={month.value?.toString() || 'null'}
+                    >
+                      {month.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label className="pb-2">By Year</Label>
+              <Select
+                onValueChange={(value) => {
+                  setYear(Number(value))
+                }}
+                value={year.toString()}
+              >
+                <SelectTrigger className="grow w-30.5">
+                  <SelectValue placeholder="Select Year" />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableYears.map((year) => (
+                    <SelectItem key={year} value={year.toString()}>
+                      {year}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
+
+        <div className="pt-4">
+          <div className="flex items-center gap-2 text-muted-foreground pb-2">
+            <ChartBarIcon className="w-4 h-4" />
+            <Label>Chart</Label>
+          </div>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label className="text-sm text-muted-foreground">Income</Label>
+              <Switch
+                checked={displayIncomeChart}
+                onCheckedChange={() => setDisplayIncomeChart(!displayIncomeChart)}
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <Label className="text-sm text-muted-foreground">Expense</Label>
+              <Switch
+                checked={displayExpenseChart}
+                onCheckedChange={() => setDisplayExpenseChart(!displayExpenseChart)}
+              />
+            </div>
           </div>
         </div>
       </PopoverContent>
