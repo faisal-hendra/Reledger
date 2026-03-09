@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { ChartBarIcon, DatabaseIcon } from 'lucide-react'
+import { ChartBarIcon, DatabaseIcon, RefreshCwIcon } from 'lucide-react'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import {
@@ -12,6 +12,7 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import dayjs from 'dayjs'
+import { Button } from './ui/button'
 
 interface Props {
   children: React.ReactNode
@@ -67,14 +68,29 @@ function FilterDashboard({
     fetchAvailableYears()
   }, [])
 
+  const onReset = (): void => {
+    setMonth(dayjs().month() + 1)
+    setYear(dayjs().year())
+  }
+
   return (
     <Popover>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
       <PopoverContent sideOffset={10}>
         <div>
-          <div className="flex items-center gap-2 text-muted-foreground pb-2">
-            <DatabaseIcon className="w-4 h-4" />
-            <Label>Database</Label>
+          <div className="flex items-center gap-2 text-muted-foreground pb-2 justify-between">
+            <div className="flex gap-2">
+              <DatabaseIcon className="w-4 h-4" />
+              <Label>Database</Label>
+            </div>
+            <Button
+              variant="ghost"
+              onClick={() => {
+                onReset()
+              }}
+            >
+              <RefreshCwIcon className="w-4 h-4" />
+            </Button>
           </div>
           <div className="flex items-center gap-2 pt-2">
             <div>
@@ -123,12 +139,12 @@ function FilterDashboard({
           </div>
         </div>
 
-        <div className="pt-4">
+        <div className="pt-8">
           <div className="flex items-center gap-2 text-muted-foreground pb-2">
             <ChartBarIcon className="w-4 h-4" />
             <Label>Chart</Label>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2 pt-2">
             <div className="flex items-center justify-between">
               <Label className="text-sm text-muted-foreground">Income</Label>
               <Switch
@@ -136,7 +152,7 @@ function FilterDashboard({
                 onCheckedChange={() => setDisplayIncomeChart(!displayIncomeChart)}
               />
             </div>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between pt-2">
               <Label className="text-sm text-muted-foreground">Expense</Label>
               <Switch
                 checked={displayExpenseChart}

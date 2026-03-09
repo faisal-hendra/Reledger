@@ -42,8 +42,8 @@ function Dashboard({ platform }: Props): React.JSX.Element {
     { month: number; income: number; expense: number }[] | undefined
   >(undefined)
 
-  const [dataYear, setDataYear] = useState(dayjs().year())
-  const [dataMonth, setDataMonth] = useState(dayjs().month() + 1)
+  const [activeYear, setActiveYear] = useState(dayjs().year())
+  const [activeMonth, setActiveMonth] = useState(dayjs().month() + 1)
 
   // Get full breakdown of this year
   // Will be used for visualization
@@ -51,22 +51,22 @@ function Dashboard({ platform }: Props): React.JSX.Element {
     const loadFullMonthlyTotal = async (): Promise<void> => {
       try {
         const data: { month: number; income: number; expense: number }[] | undefined =
-          await window.api.getFullMonthlyTotal(dataYear)
+          await window.api.getFullMonthlyTotal(activeYear)
         setFullMonthlyTotal(data)
       } catch (error) {
         console.log(error)
       }
     }
     loadFullMonthlyTotal()
-  }, [dataYear, dataMonth])
+  }, [activeYear, activeMonth])
 
   // Load this month total
   useEffect(() => {
     const loadThisMonthTotal = async (): Promise<void> => {
       try {
         const filters = {
-          month: dataMonth,
-          year: dataYear
+          month: activeMonth,
+          year: activeYear
         }
         const data = await window.api.getMonthlyTotal(filters)
         setThisMonthTotal(data)
@@ -75,15 +75,15 @@ function Dashboard({ platform }: Props): React.JSX.Element {
       }
     }
     loadThisMonthTotal()
-  }, [dataYear, dataMonth])
+  }, [activeMonth, activeYear])
 
   // Load last month total
   useEffect(() => {
     const loadLastMonthTotal = async (): Promise<void> => {
       try {
         const filters = {
-          month: dataMonth - 1,
-          year: dataYear
+          month: activeMonth - 1,
+          year: activeYear
         }
         const data = await window.api.getMonthlyTotal(filters)
         setLastMonthTotal(data)
@@ -92,7 +92,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
       }
     }
     loadLastMonthTotal()
-  }, [dataYear, dataMonth])
+  }, [activeMonth, activeYear])
 
   // Get recent transactions
   // Customizable by changing th rowCount const
@@ -200,10 +200,10 @@ function Dashboard({ platform }: Props): React.JSX.Element {
           displayExpenseChart={displayExpenseChart}
           setDisplayIncomeChart={setDisplayIncomeChart}
           setDisplayExpenseChart={setDisplayExpenseChart}
-          year={dataYear}
-          setYear={setDataYear}
-          month={dataMonth}
-          setMonth={setDataMonth}
+          year={activeYear}
+          setYear={setActiveYear}
+          month={activeMonth}
+          setMonth={setActiveMonth}
         >
           <Button variant="outline">
             <FunnelIcon />
@@ -239,7 +239,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
             data={fullMonthlyTotal}
             displayIncomeChart={displayIncomeChart}
             displayExpenseChart={displayExpenseChart}
-            year={dataYear}
+            year={activeYear}
           />
         </div>
         <div className="pt-6">
