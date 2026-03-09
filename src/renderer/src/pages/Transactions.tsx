@@ -3,11 +3,12 @@ import { DataTable } from '@/components/DataTable'
 import { useState, useEffect } from 'react'
 import PageHeader from '@/components/PageHeader'
 import { Button } from '@/components/ui/button'
-import { FunnelIcon, PlusIcon } from 'lucide-react'
+import { FunnelIcon, PlusIcon, FileSpreadsheetIcon } from 'lucide-react'
 import { ButtonGroup } from '@/components/ui/button-group'
 import { AddTransaction } from '@/components/AddTransaction'
 import { toast } from 'sonner'
 import FilterTransaction from '@/components/FilterTransaction'
+import { saveAs } from 'file-saver'
 
 interface Props {
   platform: string
@@ -63,6 +64,21 @@ function Transactions({ platform }: Props): React.JSX.Element {
     handleFilterChange()
   }, [filters])
 
+  const handleCSVExport = (): void => {
+    const csvContent = [
+      ['Date', 'Name', 'Amount', 'Category', 'Type'],
+      ...transactions.map((t) => [t.date, t.name, t.amount, t.category, t.transaction_type])
+    ]
+      .map((row) => row.join(','))
+      .join('\n')
+    handleCSVDownload(csvContent)
+  }
+
+  const handleCSVDownload = (csv: string): void => {
+    const file = new File([csv], 'transactions.csv', { type: 'text/csv' })
+    saveAs(file)
+  }
+
   return (
     <>
       <PageHeader>
@@ -76,6 +92,14 @@ function Transactions({ platform }: Props): React.JSX.Element {
               <FunnelIcon />
             </Button>
           </FilterTransaction>
+          <Button
+            variant="outline"
+            onClick={() => {
+              handleCSVExport()
+            }}
+          >
+            <FileSpreadsheetIcon />
+          </Button>
           <AddTransaction
             onTransactionAdded={loadTransactions}
             editMode={false}

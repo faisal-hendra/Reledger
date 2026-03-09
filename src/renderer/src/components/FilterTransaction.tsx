@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { SearchIcon, SaveIcon, RefreshCwIcon, FunnelIcon } from 'lucide-react'
+import { SearchIcon, RefreshCwIcon, FunnelIcon } from 'lucide-react'
 import { InputGroup, InputGroupAddon, InputGroupInput } from './ui/input-group'
 import { Label } from './ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 import { Button } from './ui/button'
-import { saveAs } from 'file-saver'
 import { FILTER_CATEGORIES as CATEGORIES } from '@/constants/categories'
 import { TRANSACTION_MONTHS as MONTHS } from '@/constants/months'
 
@@ -22,7 +21,6 @@ interface Props {
 }
 function FilterTransaction({
   children,
-  transactions,
   onFilterChange,
   onTransactionFiltered
 }: Props): React.JSX.Element {
@@ -74,21 +72,6 @@ function FilterTransaction({
       keyword: searchTerm || null,
       category: categoryValue
     })
-  }
-
-  const handleCSVExport = (): void => {
-    const csvContent = [
-      ['Date', 'Name', 'Amount', 'Category', 'Type'],
-      ...transactions.map((t) => [t.date, t.name, t.amount, t.category, t.transaction_type])
-    ]
-      .map((row) => row.join(','))
-      .join('\n')
-    handleCSVDownload(csvContent)
-  }
-
-  const handleCSVDownload = (csv: string): void => {
-    const file = new File([csv], 'transactions.csv', { type: 'text/csv' })
-    saveAs(file)
   }
 
   useEffect(() => {
@@ -214,21 +197,6 @@ function FilterTransaction({
                 ))}
               </SelectContent>
             </Select>
-          </div>
-        </div>
-        <div className="pt-4">
-          <Label>Data</Label>
-          <div className="flex w-full pt-2">
-            <Button
-              className="grow"
-              variant="outline"
-              onClick={() => {
-                handleCSVExport()
-              }}
-            >
-              <SaveIcon />
-              Export CSV
-            </Button>
           </div>
         </div>
       </PopoverContent>
