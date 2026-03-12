@@ -68,6 +68,14 @@ export function DataTable<TData, TValue>({
     }
   }, [rowCountOption])
 
+  const getPageNumber = (): number => {
+    return table.getState().pagination.pageIndex + 1
+  }
+
+  const getTotalPage = (): number => {
+    return table.getPageCount()
+  }
+
   return (
     <div>
       <div className="overflow-hidden rounded-md border">
@@ -110,7 +118,7 @@ export function DataTable<TData, TValue>({
       </div>
       <div className="flex justify-between space-x-2 py-4 gap-2 items-center">
         <Label className="text-xs opacity-70">
-          Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+          {getTotalPage() > 1 ? `Page ${getPageNumber()} of ${getTotalPage()}` : `End of Page`}
         </Label>
         <div className="flex gap-2">
           <Select
