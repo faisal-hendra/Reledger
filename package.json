@@ -1,7 +1,7 @@
 {
   "name": "Relegder",
-  "version": "1.0.0",
-  "description": "An Electron application with React and TypeScript",
+  "version": "0.1.0",
+  "description": "A simple personal ledger app built with Electron and TypeScript.",
   "main": "./out/main/index.js",
   "author": "faisalhendra.com",
   "scripts": {

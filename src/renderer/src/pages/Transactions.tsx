@@ -9,6 +9,8 @@ import { AddTransaction } from '@/components/AddTransaction'
 import { toast } from 'sonner'
 import FilterTransaction from '@/components/FilterTransaction'
 import { saveAs } from 'file-saver'
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
+import { Spinner } from '@/components/ui/spinner'
 
 interface Props {
   platform: string
@@ -24,13 +26,17 @@ const INITIAL_FILTER = {
 function Transactions({ platform }: Props): React.JSX.Element {
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [filters, setFilters] = useState<TransactionFilters>(INITIAL_FILTER)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   const loadTransactions = async (): Promise<void> => {
     try {
+      setIsLoading(true)
       const data = await window.api.getTransactions(filters)
       setTransactions(data)
     } catch (error) {
       console.error('Failed to load transactions:', error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -79,6 +85,36 @@ function Transactions({ platform }: Props): React.JSX.Element {
     saveAs(file)
   }
 
+  const RenderDataTable = (): React.ReactNode => {
+    return (
+      <div>
+        {transactions.length > 0 ? (
+          <DataTable columns={createColumns(loadTransactions, displayToast)} data={transactions} />
+        ) : (
+          <div className="w-full text-center opacity-70 text-sm">No data to display</div>
+        )}
+      </div>
+    )
+  }
+
+  const RenderSpinner = (): React.ReactNode => {
+    return (
+      <div>
+        <Empty className="w-full">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <Spinner />
+            </EmptyMedia>
+            <EmptyTitle>Processing your table</EmptyTitle>
+            <EmptyDescription>
+              Please wait while we process your transactions history.
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      </div>
+    )
+  }
+
   return (
     <>
       <PageHeader>
@@ -115,11 +151,7 @@ function Transactions({ platform }: Props): React.JSX.Element {
       <div
         className={`space-y-6 flex-1 overflow-auto p-6 ${platform === 'win32' && `hover:scrollbar-thumb-[#4b4e52] scrollbar-active:scrollbar-thumb-[#696E78] h-32 scrollbar`}`}
       >
-        {transactions.length > 0 ? (
-          <DataTable columns={createColumns(loadTransactions, displayToast)} data={transactions} />
-        ) : (
-          <div className="w-full text-center opacity-70 text-sm">No data to display</div>
-        )}
+        {!isLoading ? <RenderDataTable /> : <RenderSpinner />}
       </div>
     </>
   )
