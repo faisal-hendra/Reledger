@@ -12,7 +12,7 @@ function App(): React.JSX.Element {
   return (
     <>
       {/* For development only dark mode will be used, theme switch will be added later */}
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
         <TooltipProvider>
           <div className="flex flex-col h-screen overflow-hidden">
             <div

@@ -6,6 +6,16 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: 450;
+  src: url('../../../../resources/fonts/Montserrat.ttf');
+}
+
+@theme {
+  --font-montserrat: 'Montserrat';
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -45,6 +55,8 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-main-content: var(--main-content);
+  --color-highlight: var(--highlight);
 }
 
 :root {
@@ -81,6 +93,8 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --main-content: #ffffff;
+  --highlight: #e1e1e1;
 }
 
 .dark {
@@ -115,6 +129,8 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --main-content: #191919;
+  --highlight: #2a2a2a;
 }
 
 @layer base {

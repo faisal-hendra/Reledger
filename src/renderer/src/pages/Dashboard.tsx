@@ -235,7 +235,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
           {stats.map((stat) => (
             <Card key={stat.label}>
               <CardHeader>
-                <CardTitle className="text-gray-400">{stat.label}</CardTitle>
+                <CardTitle className="">{stat.label}</CardTitle>
                 <CardAction>
                   <div className={`flex items-center justify-center`}>
                     <stat.icon className="w-4 h-4" />
@@ -244,7 +244,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-between mb-3"></div>
-                <div className="text-2xl font-semibold text-white mb-1">{stat.value}</div>
+                <div className="text-2xl font-semibold  mb-1">{stat.value}</div>
                 <div className={`text-xs ${determineStatsColor(stat.trend, stat.isExpense)}`}>
                   {stat.change} from last month
                 </div>
