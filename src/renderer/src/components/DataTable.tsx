@@ -1,6 +1,6 @@
 'use client'
-
 import * as React from 'react'
+import { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { ButtonGroup } from '@/components/ui/button-group'
 import {
@@ -60,8 +60,12 @@ export function DataTable<TData, TValue>({
     }
   })
 
-  React.useEffect(() => {
-    setPagination({ ...pagination, pageSize: Number(rowCountOption) })
+  useEffect(() => {
+    if (rowCountOption === 'all-rows') {
+      setPagination({ ...pagination, pageSize: 999999999999999 })
+    } else {
+      setPagination({ ...pagination, pageSize: Number(rowCountOption) })
+    }
   }, [rowCountOption])
 
   return (
@@ -124,6 +128,7 @@ export function DataTable<TData, TValue>({
                 <SelectItem value="15">15 Rows</SelectItem>
                 <SelectItem value="25">25 Rows</SelectItem>
                 <SelectItem value="50">50 Rows</SelectItem>
+                <SelectItem value="all-rows">All Rows</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
