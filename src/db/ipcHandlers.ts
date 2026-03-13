@@ -91,4 +91,12 @@ export default function setUpHandlers(db: AppDatabase): void {
       throw error
     }
   })
+
+  ipcMain.handle('resetTable', async () => {
+    try {
+      return await db.resetTable()
+    } catch (error) {
+      console.error(error)
+    }
+  })
 }

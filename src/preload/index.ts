@@ -22,7 +22,8 @@ const api = {
   getFullMonthlyTotal: (year: number) => ipcRenderer.invoke('getFullMonthlyTotal', year),
   getAvailableYears: () => ipcRenderer.invoke('getAvailableYears'),
   getCategoryPercentage: (filters: CategoryPerecentageFilters) =>
-    ipcRenderer.invoke('getCategoryPercentage', filters)
+    ipcRenderer.invoke('getCategoryPercentage', filters),
+  resetTable: () => ipcRenderer.invoke('resetTable')
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

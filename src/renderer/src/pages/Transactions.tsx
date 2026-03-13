@@ -54,7 +54,7 @@ function Transactions({ platform }: Props): React.JSX.Element {
   }, [])
 
   const displayToast = (message: string): void => {
-    toast.success(message, { position: 'top-center' })
+    toast.success(message, { position: 'bottom-right' })
   }
 
   useEffect(() => {

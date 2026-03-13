@@ -136,7 +136,7 @@ class AppDatabase {
       const stmt = this.db.prepare(query)
       return stmt.all(limit) as Transaction[]
     } catch (error) {
-      console.log('Failed to get recent transaction: ', error)
+      console.error('Failed to get recent transaction: ', error)
       throw error
     }
   }
@@ -209,7 +209,7 @@ class AppDatabase {
       const stmt = this.db.prepare(query)
       return stmt.all(year.toString()) as { month: number; income: number; expense: number }[]
     } catch (error) {
-      console.log('Failed to fetch full monthly total', error)
+      console.error('Failed to fetch full monthly total', error)
       throw error
     }
   }
@@ -223,7 +223,7 @@ class AppDatabase {
     `)
       return stmt.all() as GetYear[]
     } catch (error) {
-      console.log('Failed to fetch years: ', error)
+      console.error('Failed to fetch years: ', error)
       throw error
     }
   }
@@ -274,11 +274,19 @@ class AppDatabase {
     }
   }
 
+  resetTable(): void {
+    try {
+      this.db.exec(`DELETE FROM transactions`)
+    } catch (error) {
+      console.error('Failed to reset table: ', error)
+    }
+  }
+
   close(): void {
     try {
       this.db.close()
     } catch (error) {
-      console.log('Failed to close the database: ', error)
+      console.error('Failed to close the database: ', error)
     }
   }
 }

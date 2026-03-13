@@ -61,6 +61,7 @@ declare global {
     getCategoryPercentage: (
       filters: CategoryPerecentageFilters
     ) => Promise<CategoryPercentage[] | null>
+    resetTable: () => Promise<void>
   }
 
   interface Window {
