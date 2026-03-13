@@ -1,4 +1,4 @@
-import { createColumns } from '@/components/Columns'
+import { useColumns } from '@/components/Columns'
 import { DataTable } from '@/components/DataTable'
 import { useState, useEffect } from 'react'
 import PageHeader from '@/components/PageHeader'
@@ -86,10 +86,11 @@ function Transactions({ platform }: Props): React.JSX.Element {
   }
 
   const RenderDataTable = (): React.ReactNode => {
+    const columns = useColumns(loadTransactions, displayToast)
     return (
       <div>
         {transactions.length > 0 ? (
-          <DataTable columns={createColumns(loadTransactions, displayToast)} data={transactions} />
+          <DataTable columns={columns} data={transactions} />
         ) : (
           <div className="w-full text-center opacity-70 text-sm">No data to display</div>
         )}

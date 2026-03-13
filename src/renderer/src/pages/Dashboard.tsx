@@ -8,12 +8,14 @@ import { TrendChart } from '@/components/TrendChart'
 import FilterDashboard from '@/components/FilterDashboard'
 import { Button } from '@/components/ui/button'
 import BreakdownChart from '@/components/BreakdownChart'
+import { useCurrency } from '@/components/ui/use-currency'
 
 interface Props {
   platform: string
 }
 
 function Dashboard({ platform }: Props): React.JSX.Element {
+  const { currency } = useCurrency()
   const [displayExpenseChart, setDisplayExpenseChart] = useState(true)
   const [displayIncomeChart, setDisplayIncomeChart] = useState(true)
 
@@ -147,7 +149,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
 
     // Format currency
     const formatCurrency = (amount: number): string => {
-      return `$${amount?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) ?? '0.00'}`
+      return `${currency.symbol}${amount?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) ?? '0.00'}`
     }
 
     // Calculate stats

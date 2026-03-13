@@ -44,6 +44,12 @@ declare global {
     type: 'income' | 'expense'
   }
 
+  export type Currency = {
+    code: string
+    symbol: string
+    name: string
+  }
+
   interface WindowAPI {
     platform: NodeJS.Platform
     dimTitlebar: (isDimmed: boolean) => void
