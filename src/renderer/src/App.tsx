@@ -17,9 +17,9 @@ function App(): React.JSX.Element {
         <TooltipProvider>
           <div className="flex flex-col h-screen overflow-hidden">
             <div
-              className={`dragable ${platform === 'win32' ? 'h-8' : 'h-8'} bg-[#1b1b1b] flex items-center justify-center border-b border-[#292929] shrink-0`}
+              className={`dragable ${platform === 'win32' ? 'h-8' : 'h-8'} bg-titlebar flex items-center justify-center border-b border-border shrink-0`}
             >
-              <p className="text-xs text-white select-none">Reledger</p>
+              <p className="text-xs select-none">Reledger</p>
             </div>
             <AppSidebar>
               <Routes>
