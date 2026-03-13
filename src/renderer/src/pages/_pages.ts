@@ -1,4 +1,4 @@
-import { BsHouseDoor, BsArrowDownUp } from 'react-icons/bs'
+import { BsHouseDoor, BsArrowDownUp, BsGear, BsGearFill } from 'react-icons/bs'
 import { BsFillHouseDoorFill } from 'react-icons/bs'
 
 export const navItems = [
@@ -13,5 +13,11 @@ export const navItems = [
     label: 'Transactions',
     icon: BsArrowDownUp,
     activeIcon: BsArrowDownUp
+  },
+  {
+    path: '/settings',
+    label: 'Settings',
+    icon: BsGear,
+    activeIcon: BsGearFill
   }
 ]

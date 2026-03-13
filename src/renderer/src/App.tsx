@@ -3,6 +3,7 @@ import { ThemeProvider } from '@/components/ui/theme-provider'
 import AppSidebar from './components/AppSidebar'
 import Dashboard from './pages/Dashboard'
 import Transactions from './pages/Transactions'
+import Settings from './pages/Settings'
 import { TooltipProvider } from '@/components/ui/tooltip'
 
 // Fetch platform name
@@ -24,6 +25,7 @@ function App(): React.JSX.Element {
               <Routes>
                 <Route path="/" element={<Dashboard platform={platform} />} />
                 <Route path="/transactions" element={<Transactions platform={platform} />} />
+                <Route path="/settings" element={<Settings />} />
               </Routes>
             </AppSidebar>
           </div>
