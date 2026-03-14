@@ -101,6 +101,8 @@ class AppDatabase {
       if (filters.keyword) {
         query += ' AND name LIKE ?'
         params.push(`%${filters.keyword}%`)
+        query += ' OR description LIKE ?'
+        params.push(`%${filters.keyword}%`)
       }
       if (filters.category) {
         query += ' AND category = ?'
