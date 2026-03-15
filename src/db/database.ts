@@ -235,9 +235,9 @@ class AppDatabase {
       const stmt = this.db.prepare(`
         SELECT
           category,
-          COUNT(*) AS category_count,
-          COUNT(*) * 100.0 / (
-            SELECT COUNT(*)
+          SUM(amount) AS category_total,
+          SUM(amount) * 100.0 / (
+            SELECT SUM(amount)
             FROM transactions
             WHERE
               strftime('%Y', date) = ?
