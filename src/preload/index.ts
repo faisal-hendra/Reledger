@@ -7,7 +7,11 @@ const api = {
   platform: process.platform, // 'win32' | 'darwin' | 'linux'
 
   // Controlbox dimming on windows
-  dimTitlebar: (isDimmed) => ipcRenderer.send('dim-titlebar', isDimmed),
+  dimTitlebar: (isDimmed: boolean, theme: 'light' | 'dark') =>
+    ipcRenderer.send('dim-titlebar', isDimmed, theme),
+
+  // Set titlebar theme on windows (non-dimmed state)
+  setTitlebarTheme: (theme: 'light' | 'dark') => ipcRenderer.send('set-titlebar-theme', theme),
 
   // Databse operations
   getTransactions: (filters: TransactionFilters) => ipcRenderer.invoke('getTransactions', filters),

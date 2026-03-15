@@ -7,7 +7,8 @@ declare global {
     electron: ElectronAPI
     api: {
       platform: string
-      dimTitlebar: (isDimmed) => void
+      dimTitlebar: (isDimmed: boolean, theme: 'light' | 'dark') => void
+      setTitlebarTheme: (theme: 'light' | 'dark') => void
       getTransactions: (filters: TransactionFilters) => Promise<Transaction[]>
       addTransaction: (transaction: Transaction) => Promise<void>
       deleteTransaction: (transactionId: string) => Promise<void>

@@ -9,6 +9,15 @@ import setUpHandlers from '../db/ipcHandlers'
 let db: AppDatabase
 
 function createWindow(): void {
+  // Helper to apply titlebar colors based on theme
+  const applyTitlebarTheme = (theme: 'light' | 'dark', isDimmed = false): void => {
+    if (process.platform !== 'win32') return
+    const isLight = theme === 'light'
+    mainWindow.setTitleBarOverlay({
+      color: isDimmed ? (isLight ? '#E5E5E5' : '#0D0D0D') : isLight ? '#FFFFFF' : '#1B1B1B',
+      symbolColor: isDimmed ? (isLight ? '#999999' : '#555555') : isLight ? '#000000' : '#FFFFFF'
+    })
+  }
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 900,
@@ -53,12 +62,9 @@ function createWindow(): void {
   }
 
   // Disable controlbox on windows
-  ipcMain.on('dim-titlebar', (event, isDimmed) => {
+  ipcMain.on('dim-titlebar', (_event, isDimmed, theme: 'light' | 'dark' = 'dark') => {
     const dimTitlebar = (): void => {
-      mainWindow.setTitleBarOverlay({
-        color: isDimmed ? '#0D0D0D' : '#1B1B1B', // dim or restore
-        symbolColor: isDimmed ? '#555555' : '#FFFFFF' // dim or restore icons
-      })
+      applyTitlebarTheme(theme, isDimmed)
 
       // Disable control box control when dimmed
       mainWindow.setClosable(isDimmed ? false : true)
@@ -70,6 +76,11 @@ function createWindow(): void {
     setTimeout(() => {
       process.platform === 'win32' && dimTitlebar()
     }, 65)
+  })
+
+  // Set titlebar theme on initialization or theme change
+  ipcMain.on('set-titlebar-theme', (_event, theme: 'light' | 'dark') => {
+    applyTitlebarTheme(theme, false)
   })
 }
 

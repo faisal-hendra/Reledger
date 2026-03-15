@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useTheme } from '@/components/ui/theme-provider'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -56,6 +57,7 @@ export function AddTransaction({
   idToEdit,
   alert
 }: Props): React.JSX.Element {
+  const { theme } = useTheme()
   const [open, setOpen] = useState(false)
   const [formData, setFormData] = useState(INITIAL_FORM)
 
@@ -139,7 +141,13 @@ export function AddTransaction({
       open={open}
       onOpenChange={(isOpen) => {
         setOpen(isOpen)
-        window.api.dimTitlebar(isOpen)
+        const resolvedTheme =
+          theme === 'system'
+            ? window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light'
+            : theme
+        window.api.dimTitlebar(isOpen, resolvedTheme)
       }}
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
