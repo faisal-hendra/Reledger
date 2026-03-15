@@ -251,7 +251,10 @@ class AppDatabase {
           AND strftime('%m', date) = ?
           AND transaction_type = ?
         GROUP BY
-          category;`)
+          category
+        ORDER BY
+          percentage DESC;
+          `)
       console.log(
         stmt.all(
           filters.year.toString(),

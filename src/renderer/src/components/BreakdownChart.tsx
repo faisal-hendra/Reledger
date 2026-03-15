@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Pie, PieChart } from 'recharts'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
-import {
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent
-} from '@/components/ui/chart'
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 import { chartConfig } from '@/constants/piechart-config'
 
 interface Props {
@@ -17,6 +11,10 @@ interface Props {
 function BreakdownChart({ data }: Props): React.JSX.Element {
   const [formattedData, setFormattedData] = useState<object[] | undefined>([])
 
+  function toFixedIfNecessary(value, dp): number {
+    return +parseFloat(value).toFixed(dp)
+  }
+
   useEffect(() => {
     const formatData = (): void => {
       const formatted =
@@ -24,7 +22,7 @@ function BreakdownChart({ data }: Props): React.JSX.Element {
           category: d.category,
           slug: d.category.toLowerCase().replace(/[^A-Z0-9]+/gi, '_'),
           count: d.category_count,
-          percentage: d.percentage,
+          percentage: toFixedIfNecessary(d.percentage, 2),
           fill: `var(--color-${d.category.toLowerCase().replace(/[^A-Z0-9]+/gi, '_')})`
         })) || undefined
       setFormattedData(formatted)
@@ -41,11 +39,7 @@ function BreakdownChart({ data }: Props): React.JSX.Element {
         >
           <PieChart>
             <ChartTooltip cursor={true} content={<ChartTooltipContent hideLabel />} />
-            <Pie data={formattedData} dataKey="percentage" nameKey="slug" innerRadius={50} />
-            <ChartLegend
-              content={<ChartLegendContent nameKey="slug" />}
-              className="-translate-y-2 flex-wrap gap-2 *:basis-1/4 *:justify-center"
-            />
+            <Pie data={formattedData} dataKey="percentage" nameKey="slug" label innerRadius={50} />
           </PieChart>
         </ChartContainer>
       </CardContent>

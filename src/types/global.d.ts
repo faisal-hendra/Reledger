@@ -19,6 +19,7 @@ declare global {
   }
 
   interface MonthlyTotal {
+    month: number
     income: number
     expense: number
   }

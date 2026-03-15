@@ -8,6 +8,7 @@ import { TrendChart } from '@/components/TrendChart'
 import FilterDashboard from '@/components/FilterDashboard'
 import { Button } from '@/components/ui/button'
 import BreakdownChart from '@/components/BreakdownChart'
+import QuickStats from '@/components/QuickStats'
 import { useCurrency } from '@/components/ui/use-currency'
 
 interface Props {
@@ -18,16 +19,6 @@ function Dashboard({ platform }: Props): React.JSX.Element {
   const { currency } = useCurrency()
   const [displayExpenseChart, setDisplayExpenseChart] = useState(true)
   const [displayIncomeChart, setDisplayIncomeChart] = useState(true)
-
-  const [recentTransactions, setRecentTransactions] = useState<Transaction[]>([])
-  const [thisMonthTotal, setThisMonthTotal] = useState<MonthlyTotal>({
-    income: 0,
-    expense: 0
-  })
-  const [lastMonthTotal, setLastMonthTotal] = useState<MonthlyTotal>({
-    income: 0,
-    expense: 0
-  })
   const [currentBalance, setCurrentBalance] = useState<number>(0)
   const [lastMonthBalance, setLastMonthBalance] = useState<number>(0)
   const [stats, setStats] = useState<
@@ -41,12 +32,22 @@ function Dashboard({ platform }: Props): React.JSX.Element {
     }>
   >([])
 
-  const [fullMonthlyTotal, setFullMonthlyTotal] = useState<
-    { month: number; income: number; expense: number }[] | undefined
-  >(undefined)
+  const [fullMonthlyTotal, setFullMonthlyTotal] = useState<MonthlyTotal[]>([])
 
   const [activeYear, setActiveYear] = useState(dayjs().year())
   const [activeMonth, setActiveMonth] = useState(dayjs().month() + 1)
+
+  const [recentTransactions, setRecentTransactions] = useState<Transaction[]>([])
+  const [thisMonthTotal, setThisMonthTotal] = useState<MonthlyTotal>({
+    month: activeMonth,
+    income: 0,
+    expense: 0
+  })
+  const [lastMonthTotal, setLastMonthTotal] = useState<MonthlyTotal>({
+    month: activeMonth - 1,
+    income: 0,
+    expense: 0
+  })
 
   //
   const [categoryBreakdown, setCategoryBreakdown] = useState<CategoryPercentage[] | null>([])
@@ -56,15 +57,15 @@ function Dashboard({ platform }: Props): React.JSX.Element {
   useEffect(() => {
     const loadFullMonthlyTotal = async (): Promise<void> => {
       try {
-        const data: { month: number; income: number; expense: number }[] | undefined =
-          await window.api.getFullMonthlyTotal(activeYear)
-        setFullMonthlyTotal(data)
+        const data = await window.api.getFullMonthlyTotal(activeYear)
+        setFullMonthlyTotal(data || [])
       } catch (error) {
         console.error('Failed to load full monthly total:', error)
+        setFullMonthlyTotal([])
       }
     }
     loadFullMonthlyTotal()
-  }, [activeYear])
+  }, [activeMonth, activeYear])
 
   // Load this month total
   useEffect(() => {
@@ -207,8 +208,31 @@ function Dashboard({ platform }: Props): React.JSX.Element {
       }
       const data = await window.api.getCategoryPercentage(filters)
       setCategoryBreakdown(data)
+      console.log('Category breakdown', data)
     }
     getCategory()
+  }, [activeMonth, activeYear])
+
+  const [thisMonthTransactions, setThisMonthTransactions] = useState<Transaction[] | undefined>(
+    undefined
+  )
+
+  useEffect(() => {
+    console.log('from dash', thisMonthTotal)
+  }, [thisMonthTotal])
+
+  useEffect(() => {
+    const fetchThisMonthTransactions = async (): Promise<void> => {
+      const filters: TransactionFilters = {
+        month: activeMonth,
+        year: activeYear,
+        keyword: null,
+        category: null
+      }
+      const data = await window.api.getTransactions(filters)
+      setThisMonthTransactions(data)
+    }
+    fetchThisMonthTransactions()
   }, [activeMonth, activeYear])
 
   return (
@@ -253,8 +277,8 @@ function Dashboard({ platform }: Props): React.JSX.Element {
             </Card>
           ))}
         </div>
-        <div className="flex grid grid-cols-1 lg:grid-cols-5 gap-6 pt-6 overflow-visible">
-          <div className="lg:col-span-4">
+        <div className="flex grid grid-cols-1 lg:grid-cols-3 gap-6 pt-6 overflow-visible">
+          <div className="lg:col-span-2">
             <TrendChart
               data={fullMonthlyTotal}
               displayIncomeChart={displayIncomeChart}
@@ -265,6 +289,15 @@ function Dashboard({ platform }: Props): React.JSX.Element {
           <div className="lg:col-span-1">
             <BreakdownChart data={categoryBreakdown} />
           </div>
+        </div>
+        <div className="pt-6">
+          {thisMonthTransactions && (
+            <QuickStats
+              transactions={thisMonthTransactions}
+              thisMonthTotal={thisMonthTotal}
+              topCategory={categoryBreakdown?.[0]}
+            />
+          )}
         </div>
         <div className="pt-6">
           <RecentTransactions recentTransactions={recentTransactions} />
