@@ -131,14 +131,20 @@ function Transactions({ platform }: Props): React.JSX.Element {
               <FunnelIcon />
             </Button>
           </FilterTransaction>
-          <Button
-            variant="outline"
-            onClick={() => {
-              handleCSVExport()
-            }}
-          >
-            <FileSpreadsheetIcon />
-          </Button>
+          {transactions.length === 0 ? (
+            <Button variant="outline" disabled>
+              <FileSpreadsheetIcon />
+            </Button>
+          ) : (
+            <Button
+              variant="outline"
+              onClick={() => {
+                handleCSVExport()
+              }}
+            >
+              <FileSpreadsheetIcon />
+            </Button>
+          )}
           <AddTransaction
             onTransactionAdded={loadTransactions}
             editMode={false}
