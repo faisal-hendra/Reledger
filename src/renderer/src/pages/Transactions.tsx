@@ -3,13 +3,20 @@ import { DataTable } from '@/components/DataTable'
 import { useState, useEffect } from 'react'
 import PageHeader from '@/components/PageHeader'
 import { Button } from '@/components/ui/button'
-import { FunnelIcon, PlusIcon, FileSpreadsheetIcon } from 'lucide-react'
+import { FunnelIcon, PlusIcon, FileSpreadsheetIcon, Table2Icon } from 'lucide-react'
 import { ButtonGroup } from '@/components/ui/button-group'
 import { AddTransaction } from '@/components/AddTransaction'
 import { toast } from 'sonner'
 import FilterTransaction from '@/components/FilterTransaction'
 import { saveAs } from 'file-saver'
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle
+} from '@/components/ui/empty'
 import { Spinner } from '@/components/ui/spinner'
 
 interface Props {
@@ -86,15 +93,28 @@ function Transactions({ platform }: Props): React.JSX.Element {
     saveAs(file)
   }
 
+  const NoData = (): React.ReactNode => {
+    return (
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <Table2Icon />
+          </EmptyMedia>
+          <EmptyDescription>
+            No transactions found for the selected period or category. To get started, click the Add
+            button in the top-right corner.
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent className="flex-row justify-center gap-2"></EmptyContent>
+      </Empty>
+    )
+  }
+
   const RenderDataTable = (): React.ReactNode => {
     const columns = useColumns(loadTransactions, displayToast)
     return (
       <div>
-        {transactions.length > 0 ? (
-          <DataTable columns={columns} data={transactions} />
-        ) : (
-          <div className="w-full text-center opacity-70 text-sm">No data to display</div>
-        )}
+        {transactions.length > 0 ? <DataTable columns={columns} data={transactions} /> : <NoData />}
       </div>
     )
   }

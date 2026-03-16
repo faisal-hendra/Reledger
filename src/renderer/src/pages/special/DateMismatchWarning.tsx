@@ -29,7 +29,7 @@ function DateMismatchWarning({ onReload, isLoading }: Props): React.JSX.Element 
               </EmptyMedia>
               <EmptyTitle>System Date Mismatch Detected</EmptyTitle>
               <EmptyDescription>
-                Your device`s date or time does not match the verified current time for your
+                Your device&apos;s date or time does not match the verified current time for your
                 timezone. This application requires an accurate date to function correctly. Please
                 correct your device settings to continue.
               </EmptyDescription>

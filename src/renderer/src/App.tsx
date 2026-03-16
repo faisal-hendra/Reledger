@@ -30,6 +30,7 @@ function App(): React.JSX.Element {
       setIsDateMatched(compareDate)
     } catch (error) {
       console.error('Failed to sync time: ', error)
+      setIsDateMatched(false)
     } finally {
       setIsLoading(false)
     }

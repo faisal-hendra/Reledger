@@ -3,6 +3,7 @@ import { Pie, PieChart, Cell, ResponsiveContainer } from 'recharts'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 import { chartConfig } from '@/constants/piechart-config'
+import { Label } from './ui/label'
 
 interface Props {
   data: CategoryPercentage[] | null
@@ -32,7 +33,6 @@ function BreakdownChart({ data }: Props): React.JSX.Element {
 
   const renderLegend = () => {
     if (!formattedData || formattedData.length === 0) return null
-
     return (
       <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs mt-2 px-2 pt-2 border-t">
         {formattedData.map((entry: any, index: number) => (
@@ -51,44 +51,55 @@ function BreakdownChart({ data }: Props): React.JSX.Element {
     )
   }
 
+  useEffect(() => {
+    console.log('formatted data: ', formattedData)
+  }, [formattedData])
+
   return (
     <Card className="flex flex-col w-full h-full">
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-semibold">Spending Breakdown</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col">
-        <div className="flex-1 min-h-[200px]">
-          <ChartContainer
-            config={chartConfig}
-            className="w-full h-full aspect-square max-h-[280px]"
-          >
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <ChartTooltip cursor={true} content={<ChartTooltipContent />} />
-                <Pie
-                  data={formattedData}
-                  dataKey="percentage"
-                  nameKey="slug"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius="70%"
-                  innerRadius="45%"
-                  paddingAngle={2}
-                  label={({ percentage }) => (percentage > 5 ? `${percentage}%` : '')}
-                  labelLine={false}
-                >
-                  {formattedData?.map((entry: any, index: number) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={entry.fill.startsWith('var') ? entry.fill : entry.fill}
-                      stroke="none"
-                    />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-          </ChartContainer>
-        </div>
+        {formattedData !== undefined && formattedData.length >= 1 ? (
+          <div className="flex-1 min-h-[200px]">
+            <ChartContainer
+              config={chartConfig}
+              className="w-full h-full aspect-square max-h-[280px]"
+            >
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <ChartTooltip cursor={true} content={<ChartTooltipContent />} />
+                  <Pie
+                    data={formattedData}
+                    dataKey="percentage"
+                    nameKey="slug"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius="70%"
+                    innerRadius="45%"
+                    paddingAngle={2}
+                    label={({ percentage }) => (percentage > 5 ? `${percentage}%` : '')}
+                    labelLine={false}
+                  >
+                    {formattedData?.map((entry: any, index: number) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={entry.fill.startsWith('var') ? entry.fill : entry.fill}
+                        stroke="none"
+                      />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+            </ChartContainer>
+          </div>
+        ) : (
+          <div className="flex p-10 h-full justify-center">
+            <Label className="opacity-50 -translate-y-6">No breakdown available.</Label>
+          </div>
+        )}
+
         {renderLegend()}
       </CardContent>
     </Card>
