@@ -56,7 +56,7 @@ function BreakdownChart({ data }: Props): React.JSX.Element {
   }, [formattedData])
 
   return (
-    <Card className="flex flex-col w-full h-full">
+    <Card className="flex flex-col w-full h-full shadow-none">
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-semibold">Spending Breakdown</CardTitle>
       </CardHeader>

@@ -22,7 +22,7 @@ function RecentTransactions({ recentTransactions }: Props): React.JSX.Element {
   }
 
   return (
-    <div className="bg-card rounded-xl shadow-sm">
+    <div className="bg-card rounded-xl shadow-none">
       <div className="border rounded-xl border-border  overflow-hidden">
         {recentTransactions.length > 0 ? (
           <>

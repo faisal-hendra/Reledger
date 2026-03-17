@@ -253,7 +253,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {stats.map((stat) => (
-            <Card key={stat.label}>
+            <Card key={stat.label} className="shadow-none">
               <CardHeader>
                 <CardTitle className="">{stat.label}</CardTitle>
                 <CardAction>

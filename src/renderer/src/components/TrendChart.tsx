@@ -34,7 +34,7 @@ export function TrendChart({
   year
 }: Props): React.JSX.Element {
   return (
-    <Card className="px-6">
+    <Card className="px-6 shadow-none">
       <div className="relative">
         <div className="absolute font-bold text-5xl text-right right-3 top-7 opacity-30 font-mono">
           {year}

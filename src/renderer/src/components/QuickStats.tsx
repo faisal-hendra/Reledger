@@ -17,7 +17,7 @@ function QuickStats({ transactions, thisMonthTotal, topCategory }: Props): React
   }
 
   return (
-    <Card>
+    <Card className="shadow-none">
       <CardHeader>
         <CardTitle className="text-lg">Quick Stats</CardTitle>
       </CardHeader>

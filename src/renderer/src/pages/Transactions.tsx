@@ -178,7 +178,7 @@ function Transactions({ platform }: Props): React.JSX.Element {
         </ButtonGroup>
       </PageHeader>
       <div
-        className={`space-y-6 flex-1 overflow-auto p-6 ${platform === 'win32' && `hover:scrollbar-thumb-[#4b4e52] scrollbar-active:scrollbar-thumb-[#696E78] h-32 scrollbar`}`}
+        className={`space-y-6 flex-1 overflow-auto p-4 ${platform === 'win32' && `hover:scrollbar-thumb-[#4b4e52] scrollbar-active:scrollbar-thumb-[#696E78] h-32 scrollbar`}`}
       >
         {!isLoading ? <RenderDataTable /> : <RenderSpinner />}
       </div>

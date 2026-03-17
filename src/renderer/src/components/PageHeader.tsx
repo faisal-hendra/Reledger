@@ -8,7 +8,7 @@ interface Props {
 function PageHeader({ children }: Props): React.JSX.Element {
   const location = useLocation()
   return (
-    <header className="h-14 flex items-center px-6 border-b border-border shrink-0 justify-between">
+    <header className="h-14 flex items-center px-4 border-b border-border shrink-0 justify-between">
       <h2 className="text-lg font-medium font-montserrat">
         {location.pathname === '/'
           ? 'Dashboard'
