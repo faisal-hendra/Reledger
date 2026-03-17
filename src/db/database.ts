@@ -170,7 +170,7 @@ class AppDatabase {
       const stmt = this.db.prepare(query)
       return stmt.get(...params) as MonthlyTotal
     } catch (error) {
-      console.log('Failed to fetch monthly total', error)
+      console.error('Failed to fetch monthly total', error)
       throw error
     }
   }
@@ -255,16 +255,6 @@ class AppDatabase {
         ORDER BY
           percentage DESC;
           `)
-      console.log(
-        stmt.all(
-          filters.year.toString(),
-          filters.month.toString().padStart(2, '0'),
-          filters.type,
-          filters.year.toString(),
-          filters.month.toString().padStart(2, '0'),
-          filters.type
-        ) as CategoryPercentage[]
-      )
       return stmt.all(
         filters.year.toString(),
         filters.month.toString().padStart(2, '0'),
