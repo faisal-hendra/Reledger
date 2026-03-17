@@ -285,7 +285,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
             <BreakdownChart data={categoryBreakdown} />
           </div>
         </div>
-        <div className="pt-6">
+        <div className="pt-4">
           {thisMonthTransactions && (
             <QuickStats
               transactions={thisMonthTransactions}
@@ -294,7 +294,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
             />
           )}
         </div>
-        <div className="pt-6">
+        <div className="pt-4">
           <RecentTransactions recentTransactions={recentTransactions} />
         </div>
       </div>
