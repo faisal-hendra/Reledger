@@ -25,6 +25,7 @@ function QuickStats({ transactions, thisMonthTotal, topCategory }: Props): React
 
     return {
       transactionCount: transactions?.length || 0,
+      // Calculate average daily expense by dividing monthly total by current day of month
       avgDailyExpense: thisMonthTotal
         ? formatCurrency(thisMonthTotal.expense / dayjs().date())
         : '0.00',

@@ -53,6 +53,8 @@ export function DataTable<TData, TValue>({
 
   const pageCount = Math.ceil(totalCount / pagination.pageSize)
 
+  // Sync dropdown selection with pagination state only on initial mount
+  // Prevents resetting user selection during subsequent renders
   React.useEffect(() => {
     if (!isInitialized.current) {
       isInitialized.current = true
@@ -85,6 +87,7 @@ export function DataTable<TData, TValue>({
       const newSorting = typeof updater === 'function' ? updater(sorting) : updater
       onSortingChange(newSorting)
     },
+    // Server-side pagination and sorting - data is fetched from backend with these params
     manualPagination: true,
     manualSorting: true
   })

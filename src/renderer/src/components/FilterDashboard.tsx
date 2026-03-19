@@ -47,6 +47,7 @@ function FilterDashboard({
 }: Props): React.JSX.Element {
   const [availableYears, setAvailableYears] = useState<number[]>([dayjs().year()])
 
+  // Fetch years that have transaction data, excluding current year (added separately)
   useEffect(() => {
     const fetchAvailableYears = async (): Promise<void> => {
       try {

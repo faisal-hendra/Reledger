@@ -19,6 +19,8 @@ interface FormattedDataEntry {
 }
 
 function BreakdownChart({ data, transactionType }: Props): React.JSX.Element {
+  // Transform API data into chart format with CSS variable color references
+  // Slug converts category names to valid CSS variable names (e.g., "Food & Drink" → "food_drink")
   const formattedData = useMemo((): FormattedDataEntry[] | undefined => {
     if (!data || data.length === 0) return undefined
 
@@ -74,6 +76,7 @@ function BreakdownChart({ data, transactionType }: Props): React.JSX.Element {
                 outerRadius="70%"
                 innerRadius="45%"
                 paddingAngle={2}
+                // Only show percentage label on slices > 5% to avoid visual clutter
                 label={({ percentage }) => (percentage > 5 ? `${percentage.toFixed(2)}%` : '')}
                 labelLine={false}
               >

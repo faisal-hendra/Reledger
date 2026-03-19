@@ -114,6 +114,7 @@ export function useColumns(
       cell: ({ row }) => {
         const transaction = row.original
 
+        // Formats transaction data for clipboard copy in key-value format
         const getTransactionsInfo = (): string => {
           return (
             `id: ${transaction.id}\n` +
@@ -140,6 +141,8 @@ export function useColumns(
                 <CopyIcon />
                 Copy
               </DropdownMenuItem>
+              // Embeds AddTransaction component in edit mode - onSelect prevents dropdown from
+              closing
               <AddTransaction
                 onTransactionAdded={() => {
                   onRefresh?.()

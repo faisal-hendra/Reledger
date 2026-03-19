@@ -32,7 +32,8 @@ function DeleteTransaction({ children, id, onRefresh, alert }: Props): React.JSX
     }
   }
 
-  // Dimming for ttlebar in windows
+  // Apply titlebar dimming effect when dialog opens (Windows-specific)
+  // Resolves system theme preference to determine correct dimming color
   const { theme } = useTheme()
   const applyDim = (isOpen: boolean): void => {
     const resolvedTheme =

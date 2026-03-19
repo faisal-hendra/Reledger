@@ -8,7 +8,7 @@ interface Props {
 }
 
 function RecentTransactions({ recentTransactions }: Props): React.JSX.Element {
-  // Display transaction date whether if it's Today, Yesterday, or other date
+  // Returns human-readable date: 'Today', 'Yesterday', or full date format
   const displayTransactionDate = (trDate): string => {
     const todayDate = dayjs().format('YYYY-MM-DD')
     const yesterdayDate = dayjs().subtract(1, 'day').format('YYYY-MM-DD')
@@ -37,6 +37,7 @@ function RecentTransactions({ recentTransactions }: Props): React.JSX.Element {
                   className="flex items-center justify-between px-5 py-3 hover:bg-highlight transition-colors"
                 >
                   <div className="flex items-center gap-3">
+                    {/* Icon direction: income shows downward arrow (money coming in), expense shows upward (money going out) */}
                     <div
                       className={`w-8 h-8 rounded-full flex items-center justify-center ${
                         tx.transaction_type === 'income'

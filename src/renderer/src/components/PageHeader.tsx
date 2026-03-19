@@ -12,7 +12,8 @@ function PageHeader({ children }: Props): React.JSX.Element {
       <h2 className="text-lg font-medium font-montserrat">
         {location.pathname === '/'
           ? 'Dashboard'
-          : location.pathname.replace(/\//, '').charAt(0).toUpperCase() +
+          : // Transform route path to title case (e.g., '/transactions' → 'Transactions')
+            location.pathname.replace(/\//, '').charAt(0).toUpperCase() +
             location.pathname.replace(/\//, '').slice(1)}
       </h2>
       <div className="flex gap-2">{children && <>{children}</>}</div>

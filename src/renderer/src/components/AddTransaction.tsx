@@ -57,6 +57,7 @@ export function AddTransaction({
   const [formData, setFormData] = useState(INITIAL_FORM)
   const [selectedType, setSelectedType] = useState('')
 
+  // Generic setter that handles both direct string values and input change events
   const set = (field: string) => (value: string | React.ChangeEvent<HTMLInputElement>) =>
     setFormData((prev) => ({
       ...prev,
@@ -132,7 +133,8 @@ export function AddTransaction({
     }
   }, [idToEdit])
 
-  // Dimming for ttlebar in windows
+  // Apply titlebar dimming effect when dialog opens (Windows-specific)
+  // Resolves system theme preference to determine correct dimming color
   const { theme } = useTheme()
   const applyDim = (isOpen: boolean): void => {
     const resolvedTheme =

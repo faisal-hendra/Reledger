@@ -65,6 +65,7 @@ function FilterTransaction({
     })
   }
 
+  // Convert 'All Categories' selection to null for backend query
   const handleCategoryChange = (value: string | null): void => {
     const categoryValue = value === 'All Categories' ? null : value
     setSelectedCategory(categoryValue || '')
@@ -89,6 +90,7 @@ function FilterTransaction({
     fetchAvailableYears()
   }, [])
 
+  // Trigger filter callback whenever any filter criteria changes
   useEffect(() => {
     onTransactionFiltered?.()
     setIsFiltering(true)
