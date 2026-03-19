@@ -28,6 +28,7 @@ const INITIAL_FILTER = {
   month: null,
   year: null,
   keyword: null,
+  transaction_type: null,
   category: null
 }
 
@@ -41,6 +42,7 @@ function Transactions({ platform }: Props): React.JSX.Element {
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: DEFAULT_PAGE_SIZE })
   const [sorting, setSorting] = useState<SortingState>([{ id: 'date', desc: true }])
   const [totalCount, setTotalCount] = useState(0)
+  const [transactionType, setTransactionType] = useState<'income' | 'expense' | null>(null)
 
   const loadTransactions = useCallback(async (): Promise<void> => {
     try {
@@ -140,6 +142,8 @@ function Transactions({ platform }: Props): React.JSX.Element {
             onFilterChange={setFilters}
             onTransactionFiltered={loadTransactions}
             setIsFiltering={setIsfiltering}
+            transactionType={transactionType}
+            setTransactionType={setTransactionType}
           >
             <Button variant="outline">
               <FunnelIcon />

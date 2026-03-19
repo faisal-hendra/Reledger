@@ -156,6 +156,13 @@ class AppDatabase {
         params.push(keywordVal, keywordVal)
         countParams.push(keywordVal, keywordVal)
       }
+      if (filters.transaction_type) {
+        const typeCondition = ' AND transaction_type = ?'
+        query += typeCondition
+        countQuery += typeCondition
+        params.push(filters.transaction_type)
+        countParams.push(filters.transaction_type)
+      }
       if (filters.category) {
         const categoryCondition = ' AND category = ?'
         query += categoryCondition

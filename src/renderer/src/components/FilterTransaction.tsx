@@ -7,6 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Button } from './ui/button'
 import { FILTER_CATEGORIES as CATEGORIES } from '@/constants/categories'
 import { TRANSACTION_MONTHS as MONTHS } from '@/constants/months'
+import { TRANSACTION_TYPES } from '@/constants/transaction-types'
+import { Badge } from './ui/badge'
 
 interface Props {
   children: React.ReactNode
@@ -16,15 +18,20 @@ interface Props {
     year: number | null
     keyword: string | null
     category: string | null
+    transaction_type: 'income' | 'expense' | null
   }) => void
   onTransactionFiltered?: () => void
   setIsFiltering: (value: boolean) => void
+  transactionType: 'income' | 'expense' | null
+  setTransactionType: (value: 'income' | 'expense' | null) => void
 }
 function FilterTransaction({
   children,
   onFilterChange,
   onTransactionFiltered,
-  setIsFiltering
+  setIsFiltering,
+  transactionType,
+  setTransactionType
 }: Props): React.JSX.Element {
   const [selectedMonth, setSelectedMonth] = useState<number | null>(null)
   const [selectedYear, setSelectedYear] = useState<number | null>(null)
@@ -33,6 +40,7 @@ function FilterTransaction({
   const [availableYears, setAvailableYears] = useState<{ value: number | null; label: string }[]>([
     { value: null, label: 'All Years' }
   ])
+  const [selectedType, setSelectedType] = useState<'income' | 'expense' | null>(null)
 
   const handleMonthChange = (value: string): void => {
     const monthValue = value === 'null' ? null : Number(value)
@@ -41,6 +49,7 @@ function FilterTransaction({
       month: monthValue,
       year: selectedYear,
       keyword: searchTerm || null,
+      transaction_type: selectedType || null,
       category: selectedCategory || null
     })
   }
@@ -51,6 +60,7 @@ function FilterTransaction({
       month: selectedMonth,
       year: value,
       keyword: searchTerm || null,
+      transaction_type: selectedType || null,
       category: selectedCategory || null
     })
   }
@@ -61,11 +71,11 @@ function FilterTransaction({
       month: selectedMonth,
       year: selectedYear,
       keyword: value || null,
+      transaction_type: selectedType || null,
       category: selectedCategory || null
     })
   }
 
-  // Convert 'All Categories' selection to null for backend query
   const handleCategoryChange = (value: string | null): void => {
     const categoryValue = value === 'All Categories' ? null : value
     setSelectedCategory(categoryValue || '')
@@ -73,7 +83,20 @@ function FilterTransaction({
       month: selectedMonth,
       year: selectedYear,
       keyword: searchTerm || null,
+      transaction_type: selectedType || null,
       category: categoryValue
+    })
+  }
+  const handleTypeChange = (val: 'income' | 'expense' | 'all'): void => {
+    const newType = val === 'all' ? null : val
+    setSelectedType(newType)
+    setTransactionType(newType)
+    onFilterChange?.({
+      month: selectedMonth,
+      year: selectedYear,
+      keyword: searchTerm || null,
+      transaction_type: newType,
+      category: selectedCategory || null
     })
   }
 
@@ -94,17 +117,20 @@ function FilterTransaction({
   useEffect(() => {
     onTransactionFiltered?.()
     setIsFiltering(true)
-  }, [selectedMonth, selectedYear, searchTerm])
+  }, [selectedMonth, selectedYear, searchTerm, selectedType])
 
   const handleReset = (): void => {
     setSelectedMonth(null)
     setSelectedYear(null)
     setSearchTerm('')
     setSelectedCategory(null)
+    setSelectedType(null)
+    setTransactionType(null)
     onFilterChange?.({
       month: null,
       year: null,
       keyword: null,
+      transaction_type: null,
       category: null
     })
   }
@@ -178,6 +204,40 @@ function FilterTransaction({
                     value={year.value?.toString() || 'null'}
                   >
                     {year.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        <div>
+          <Label className="pb-2 pt-4">Type</Label>
+          <div className="flex w-full">
+            <Select onValueChange={handleTypeChange} value={selectedType || 'all'}>
+              <SelectTrigger className="grow w-30.5">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem key={'all'} value={'all'}>
+                  <Badge
+                    className="bg-gray-50 text-gray-300 dark:bg-gray-950 dark:text-gray-300"
+                    variant="outline"
+                  >
+                    All
+                  </Badge>
+                </SelectItem>
+                {TRANSACTION_TYPES.map((type) => (
+                  <SelectItem key={type.value} value={type.value}>
+                    <Badge
+                      className={
+                        type.value === 'income'
+                          ? 'bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300'
+                          : 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300'
+                      }
+                      variant="outline"
+                    >
+                      {type.label}
+                    </Badge>
                   </SelectItem>
                 ))}
               </SelectContent>

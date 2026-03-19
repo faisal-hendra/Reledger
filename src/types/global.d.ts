@@ -31,6 +31,8 @@ declare global {
     year: number | null
     /** Search keyword for name/description fields */
     keyword: string | null
+    // TX type
+    transaction_type: 'income' | 'expense' | null
     /** Filter by specific category */
     category: string | null
     /** Maximum number of results (pagination) */
