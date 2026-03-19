@@ -22,24 +22,21 @@ interface Props {
   }) => void
   onTransactionFiltered?: () => void
   setIsFiltering: (value: boolean) => void
-  transactionType: 'income' | 'expense' | null
-  setTransactionType: (value: 'income' | 'expense' | null) => void
 }
 function FilterTransaction({
   children,
   onFilterChange,
   onTransactionFiltered,
-  setIsFiltering,
-  setTransactionType
+  setIsFiltering
 }: Props): React.JSX.Element {
   const [selectedMonth, setSelectedMonth] = useState<number | null>(null)
   const [selectedYear, setSelectedYear] = useState<number | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
+  const [selectedType, setSelectedType] = useState<'income' | 'expense' | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [availableYears, setAvailableYears] = useState<{ value: number | null; label: string }[]>([
     { value: null, label: 'All Years' }
   ])
-  const [selectedType, setSelectedType] = useState<'income' | 'expense' | null>(null)
 
   const handleMonthChange = (value: string): void => {
     const monthValue = value === 'null' ? null : Number(value)
@@ -78,7 +75,6 @@ function FilterTransaction({
   const handleTypeChange = (val: 'income' | 'expense' | 'all'): void => {
     const newType = val === 'all' ? null : val
     setSelectedType(newType)
-    setTransactionType(newType)
     onFilterChange?.({
       month: selectedMonth,
       year: selectedYear,
@@ -125,7 +121,6 @@ function FilterTransaction({
     setSearchTerm('')
     setSelectedCategory(null)
     setSelectedType(null)
-    setTransactionType(null)
     onFilterChange?.({
       month: null,
       year: null,
