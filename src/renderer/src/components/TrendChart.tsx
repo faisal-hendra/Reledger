@@ -32,7 +32,7 @@ export function TrendChart({
   displayExpenseChart
 }: Props): React.JSX.Element {
   return (
-    <Card className="px-6 shadow-none h-full">
+    <Card className="px-6 shadow-none h-100">
       <ChartContainer config={chartConfig} className="h-full w-full">
         <BarChart accessibilityLayer data={data}>
           <ChartTooltip content={<ChartTooltipContent hideLabel />} />
