@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { ChartBarIcon, ArrowUpDownIcon, RefreshCwIcon } from 'lucide-react'
+import { ChartBarIcon, ArrowUpDownIcon, RefreshCwIcon, PieChartIcon } from 'lucide-react'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import {
@@ -11,9 +11,12 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
+import { Badge } from './ui/badge'
 import dayjs from 'dayjs'
 import { Button } from './ui/button'
 import { MONTHS } from '@/constants/months'
+import { Separator } from './ui/separator'
+import { TRANSACTION_TYPES } from '@/constants/transaction-types'
 
 interface Props {
   children: React.ReactNode
@@ -25,6 +28,8 @@ interface Props {
   setYear: (value: number) => void
   month: number
   setMonth: (value: number) => void
+  transactionType: 'income' | 'expense'
+  setTransactionType: (value: 'income' | 'expense') => void
 }
 
 function FilterDashboard({
@@ -36,7 +41,9 @@ function FilterDashboard({
   year,
   setYear,
   month,
-  setMonth
+  setMonth,
+  transactionType,
+  setTransactionType
 }: Props): React.JSX.Element {
   const [availableYears, setAvailableYears] = useState<number[]>([dayjs().year()])
 
@@ -125,10 +132,11 @@ function FilterDashboard({
           </div>
         </div>
 
-        <div className="pt-8">
-          <div className="flex items-center gap-2 text-muted-foreground pb-2">
+        <div className="pt-6">
+          <Separator />
+          <div className="pt-2 flex items-center gap-2 text-muted-foreground pb-2">
             <ChartBarIcon className="w-4 h-4" />
-            <Label>Chart</Label>
+            <Label>Trend</Label>
           </div>
           <div className="space-y-2 pt-2">
             <div className="flex items-center justify-between">
@@ -144,6 +152,42 @@ function FilterDashboard({
                 checked={displayExpenseChart}
                 onCheckedChange={() => setDisplayExpenseChart(!displayExpenseChart)}
               />
+            </div>
+          </div>
+        </div>
+
+        <div className="pt-6">
+          <Separator />
+          <div className="flex grid grid-rows-2 items-center gap-2 text-muted-foreground pb-2">
+            <div className="flex gap-2">
+              <PieChartIcon className="w-4 h-4" />
+              <Label>Breakdown</Label>
+            </div>
+            <div className="flex">
+              <Select
+                onValueChange={(val: 'income' | 'expense') => setTransactionType(val)}
+                value={transactionType}
+              >
+                <SelectTrigger className="grow w-30.5">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {TRANSACTION_TYPES.map((type) => (
+                    <SelectItem key={type.value} value={type.value}>
+                      <Badge
+                        className={
+                          type.value === 'income'
+                            ? 'bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300'
+                            : 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300'
+                        }
+                        variant="outline"
+                      >
+                        {type.label}
+                      </Badge>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </div>

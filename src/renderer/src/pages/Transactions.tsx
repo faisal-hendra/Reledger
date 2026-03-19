@@ -1,6 +1,6 @@
 import { useColumns } from '@/components/Columns'
 import { DataTable } from '@/components/DataTable'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import PageHeader from '@/components/PageHeader'
 import { Button } from '@/components/ui/button'
 import { FunnelIcon, PlusIcon, FileSpreadsheetIcon, Table2Icon } from 'lucide-react'
@@ -42,7 +42,7 @@ function Transactions({ platform }: Props): React.JSX.Element {
   const [sorting, setSorting] = useState<SortingState>([{ id: 'date', desc: true }])
   const [totalCount, setTotalCount] = useState(0)
 
-  const loadTransactions = async (): Promise<void> => {
+  const loadTransactions = useCallback(async (): Promise<void> => {
     try {
       !isFiltering && setIsLoading(true)
       const offset = pagination.pageIndex * pagination.pageSize
@@ -62,7 +62,11 @@ function Transactions({ platform }: Props): React.JSX.Element {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [filters, pagination.pageIndex, pagination.pageSize, sorting, isFiltering])
+
+  const displayToast = useCallback((message: string): void => {
+    toast.success(message, { position: 'bottom-right' })
+  }, [])
 
   useEffect(() => {
     const initializeTransactions = async (): Promise<void> => {
@@ -82,10 +86,6 @@ function Transactions({ platform }: Props): React.JSX.Element {
 
     initializeTransactions()
   }, [])
-
-  const displayToast = (message: string): void => {
-    toast.success(message, { position: 'bottom-right' })
-  }
 
   useEffect(() => {
     const offset = pagination.pageIndex * pagination.pageSize
@@ -114,7 +114,7 @@ function Transactions({ platform }: Props): React.JSX.Element {
     setPagination((prev) => ({ ...prev, pageIndex: 0 }))
   }, [filters])
 
-  const handleCSVExport = (): void => {
+  const handleCSVExport = useCallback((): void => {
     const csvContent = [
       ['Date', 'Name', 'Amount', 'Category', 'Type'],
       ...transactions.map((t) => [t.date, t.name, t.amount, t.category, t.transaction_type])
@@ -122,68 +122,14 @@ function Transactions({ platform }: Props): React.JSX.Element {
       .map((row) => row.join(','))
       .join('\n')
     handleCSVDownload(csvContent)
-  }
+  }, [transactions])
 
-  const handleCSVDownload = (csv: string): void => {
+  const handleCSVDownload = useCallback((csv: string): void => {
     const file = new File([csv], 'transactions.csv', { type: 'text/csv' })
     saveAs(file)
-  }
+  }, [])
 
-  const NoData = (): React.ReactNode => {
-    return (
-      <Empty>
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <Table2Icon />
-          </EmptyMedia>
-          <EmptyDescription>
-            No transactions found for the selected period or category. To get started, click the Add
-            button in the top-right corner.
-          </EmptyDescription>
-        </EmptyHeader>
-        <EmptyContent className="flex-row justify-center gap-2"></EmptyContent>
-      </Empty>
-    )
-  }
-
-  const RenderDataTable = (): React.ReactNode => {
-    const columns = useColumns(loadTransactions, displayToast)
-    return (
-      <div>
-        {transactions.length > 0 || totalCount > 0 ? (
-          <DataTable
-            columns={columns}
-            data={transactions}
-            pagination={pagination}
-            onPaginationChange={setPagination}
-            totalCount={totalCount}
-            sorting={sorting}
-            onSortingChange={setSorting}
-          />
-        ) : (
-          <NoData />
-        )}
-      </div>
-    )
-  }
-
-  const RenderSpinner = (): React.ReactNode => {
-    return (
-      <div>
-        <Empty className="w-full">
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <Spinner />
-            </EmptyMedia>
-            <EmptyTitle>Processing your table</EmptyTitle>
-            <EmptyDescription>
-              Please wait while we process your transactions history.
-            </EmptyDescription>
-          </EmptyHeader>
-        </Empty>
-      </div>
-    )
-  }
+  const columns = useColumns(loadTransactions, displayToast)
 
   return (
     <>
@@ -228,7 +174,42 @@ function Transactions({ platform }: Props): React.JSX.Element {
       <div
         className={`space-y-6 flex-1 overflow-auto p-4 ${platform === 'win32' && `hover:scrollbar-thumb-[#4b4e52] scrollbar-active:scrollbar-thumb-[#696E78] h-32 scrollbar`}`}
       >
-        {!isLoading ? <RenderDataTable /> : <RenderSpinner />}
+        {isLoading ? (
+          <Empty className="w-full">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <Spinner />
+              </EmptyMedia>
+              <EmptyTitle>Processing your table</EmptyTitle>
+              <EmptyDescription>
+                Please wait while we process your transactions history.
+              </EmptyDescription>
+            </EmptyHeader>
+          </Empty>
+        ) : transactions.length > 0 || totalCount > 0 ? (
+          <DataTable
+            columns={columns}
+            data={transactions}
+            pagination={pagination}
+            onPaginationChange={setPagination}
+            totalCount={totalCount}
+            sorting={sorting}
+            onSortingChange={setSorting}
+          />
+        ) : (
+          <Empty>
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <Table2Icon />
+              </EmptyMedia>
+              <EmptyDescription>
+                No transactions found for the selected period or category. To get started, click the
+                Add button in the top-right corner.
+              </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent className="flex-row justify-center gap-2"></EmptyContent>
+          </Empty>
+        )}
       </div>
     </>
   )

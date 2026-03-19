@@ -25,6 +25,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { ChevronDownIcon, CalendarIcon } from 'lucide-react'
 import { Badge } from './ui/badge'
 import { INCOME_CATEGORIES, EXPENSE_CATEGORIES } from '@/constants/categories'
+import { TRANSACTION_TYPES } from '@/constants/transaction-types'
 
 import dayjs from 'dayjs'
 
@@ -35,11 +36,6 @@ interface Props {
   editMode: boolean
   idToEdit?: number
 }
-
-const TRANSACTION_TYPES = [
-  { value: 'expense', label: 'Expense' },
-  { value: 'income', label: 'Income' }
-]
 
 const INITIAL_FORM = {
   transaction_type: 'expense',
@@ -147,6 +143,11 @@ export function AddTransaction({
         : theme
     window.api.dimTitlebar(isOpen, resolvedTheme)
   }
+
+  // Reset category select when transaction type is changed
+  useEffect(() => {
+    set('category')('')
+  }, [selectedType])
 
   return (
     <Dialog
