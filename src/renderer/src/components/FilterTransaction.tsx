@@ -30,7 +30,6 @@ function FilterTransaction({
   onFilterChange,
   onTransactionFiltered,
   setIsFiltering,
-  transactionType,
   setTransactionType
 }: Props): React.JSX.Element {
   const [selectedMonth, setSelectedMonth] = useState<number | null>(null)

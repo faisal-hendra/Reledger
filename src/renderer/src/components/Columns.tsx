@@ -141,8 +141,6 @@ export function useColumns(
                 <CopyIcon />
                 Copy
               </DropdownMenuItem>
-              // Embeds AddTransaction component in edit mode - onSelect prevents dropdown from
-              closing
               <AddTransaction
                 onTransactionAdded={() => {
                   onRefresh?.()
