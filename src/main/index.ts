@@ -5,11 +5,27 @@ import icon from '../../resources/icon.png?asset'
 import AppDatabase from '../db/database'
 import setUpHandlers from '../db/ipcHandlers'
 
+// Global database instance - initialized once when app starts
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 let db: AppDatabase
 
+/**
+ * Creates and configures the main application window.
+ *
+ * Handles:
+ * - Window creation with platform-specific settings
+ * - Titlebar theming for Windows
+ * - Loading the renderer (React app)
+ * - IPC handlers for titlebar control
+ */
 function createWindow(): void {
-  // Helper to apply titlebar colors based on theme
+  /**
+   * Applies theme colors to the Windows titlebar overlay.
+   * The titlebar overlay allows custom title bar rendering on Windows 11+.
+   *
+   * @param theme - 'light' or 'dark' theme
+   * @param isDimmed - If true, applies dimmed colors (used during dialogs/modals)
+   */
   const applyTitlebarTheme = (theme: 'light' | 'dark', isDimmed = false): void => {
     if (process.platform !== 'win32') return
     const isLight = theme === 'light'
@@ -61,6 +77,14 @@ function createWindow(): void {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 
+  /**
+   * IPC handler: dim-titlebar
+   * Dims the window controls during modal/dialog display to prevent interaction.
+   * Only applies to Windows platform with titlebar overlay.
+   *
+   * @param isDimmed - Whether to dim (true) or restore (false) the titlebar
+   * @param theme - Current theme for color calculation
+   */
   // Disable controlbox on windows
   ipcMain.on('dim-titlebar', (_event, isDimmed, theme: 'light' | 'dark' = 'dark') => {
     const dimTitlebar = (): void => {

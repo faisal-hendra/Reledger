@@ -2,6 +2,13 @@ import { app } from 'electron'
 import path from 'node:path'
 import Database from 'better-sqlite3'
 
+/**
+ * AppDatabase - SQLite database manager for Reledger
+ *
+ * Handles all local data persistence using SQLite via better-sqlite3.
+ * Database file is stored in the user's app data directory.
+ * Uses WAL (Write-Ahead Logging) mode for better concurrency and performance.
+ */
 class AppDatabase {
   db: Database.Database
 
@@ -12,6 +19,12 @@ class AppDatabase {
     this.setUpDatabase()
   }
 
+  /**
+   * Initializes the database schema by creating required tables if they don't exist.
+   * Creates the 'transactions' table with all necessary columns for storing financial data.
+   *
+   * @throws {Error} If database initialization fails
+   */
   setUpDatabase(): void {
     try {
       this.db.exec(`
@@ -33,6 +46,12 @@ class AppDatabase {
     }
   }
 
+  /**
+   * Inserts a new transaction into the database.
+   *
+   * @param transaction - The transaction object containing type, name, amount, category, description, and date
+   * @throws {Error} If the insert operation fails
+   */
   addTransaction(transaction: Transaction): void {
     try {
       const stmt = this.db.prepare(`
@@ -53,6 +72,12 @@ class AppDatabase {
     }
   }
 
+  /**
+   * Updates an existing transaction in the database.
+   *
+   * @param transaction - The transaction object with updated values, must include id
+   * @throws {Error} If the update operation fails
+   */
   updateTransaction(transaction: Transaction): void {
     try {
       const stmt = this.db.prepare(`
@@ -73,6 +98,12 @@ class AppDatabase {
     }
   }
 
+  /**
+   * Deletes a transaction from the database by its ID.
+   *
+   * @param transactionId - The unique identifier of the transaction to delete
+   * @throws {Error} If the delete operation fails
+   */
   deleteTransaction(transactionId: number): void {
     try {
       const stmt = this.db.prepare(`
@@ -85,6 +116,15 @@ class AppDatabase {
     }
   }
 
+  /**
+   * Retrieves paginated transactions with optional filtering.
+   * Supports filtering by month, year, keyword (name/description), and category.
+   * Returns both the filtered transactions and total count for pagination.
+   *
+   * @param filters - Filter options including month, year, keyword, category, and pagination params
+   * @returns Object containing array of transactions and total count
+   * @throws {Error} If the query fails
+   */
   getTransactions(filters: TransactionFilters): { transactions: Transaction[]; total: number } {
     try {
       let query = 'SELECT * FROM transactions WHERE 1=1'
@@ -156,6 +196,13 @@ class AppDatabase {
     }
   }
 
+  /**
+   * Retrieves a single transaction by its ID.
+   *
+   * @param transactionId - The unique identifier of the transaction
+   * @returns The transaction object or null if not found
+   * @throws {Error} If the query fails
+   */
   getTransactionById(transactionId: number): Transaction | null {
     try {
       const stmt = this.db.prepare(`
@@ -168,6 +215,14 @@ class AppDatabase {
     }
   }
 
+  /**
+   * Retrieves the most recent transactions ordered by date descending.
+   * Used for displaying recent activity on the dashboard.
+   *
+   * @param limit - Maximum number of transactions to return
+   * @returns Array of recent transactions or null if none exist
+   * @throws {Error} If the query fails
+   */
   getRecentTransactions(limit: number): Transaction[] | null {
     try {
       const query = `SELECT * FROM transactions ORDER BY date(date) DESC LIMIT ?`
@@ -179,6 +234,14 @@ class AppDatabase {
     }
   }
 
+  /**
+   * Calculates total income and expenses for a given month/year.
+   * Used for dashboard summary cards showing financial totals.
+   *
+   * @param filters - Object containing month and year to aggregate
+   * @returns Object with income and expense totals (may be null if no data)
+   * @throws {Error} If the query fails
+   */
   getMonthlyTotal(filters: MonthlyTotalFilters): MonthlyTotal | null {
     try {
       let query = `
@@ -211,6 +274,16 @@ class AppDatabase {
     }
   }
 
+  /**
+   * Calculates income and expenses for all 12 months of a given year.
+   * Uses a LEFT JOIN with a months table to ensure all months are represented,
+   * even those with no transactions (returns 0 for those months).
+   * Used for the yearly trend chart on the dashboard.
+   *
+   * @param year - The year to aggregate data for
+   * @returns Array of 12 objects with month, income, and expense values
+   * @throws {Error} If the query fails
+   */
   getFullMonthlyTotal(
     year: number
   ): { month: number; income: number; expense: number }[] | undefined {
@@ -252,6 +325,13 @@ class AppDatabase {
     }
   }
 
+  /**
+   * Retrieves all years that have transactions in the database.
+   * Used to populate the year filter dropdown with only relevant options.
+   *
+   * @returns Array of year objects sorted in descending order
+   * @throws {Error} If the query fails
+   */
   getAvailableYears(): GetYear[] {
     try {
       const stmt = this.db.prepare(`
@@ -266,6 +346,15 @@ class AppDatabase {
     }
   }
 
+  /**
+   * Calculates the percentage breakdown of expenses/income by category.
+   * Used for the category pie chart on the dashboard.
+   * Each category's amount is expressed as a percentage of total for that month.
+   *
+   * @param filters - Object containing year, month, and transaction type
+   * @returns Array of category objects with name, total amount, and percentage
+   * @throws {Error} If the query fails
+   */
   getCategoryPercentage(filters: CategoryPerecentageFilters): CategoryPercentage[] | null {
     try {
       const stmt = this.db.prepare(`
@@ -305,6 +394,11 @@ class AppDatabase {
     }
   }
 
+  /**
+   * Deletes all transactions from the database.
+   * Used in Settings to reset all user data.
+   * Note: This is a destructive operation and cannot be undone.
+   */
   resetTable(): void {
     try {
       this.db.exec(`DELETE FROM transactions`)
@@ -313,6 +407,10 @@ class AppDatabase {
     }
   }
 
+  /**
+   * Closes the database connection.
+   * Should be called when the application is shutting down.
+   */
   close(): void {
     try {
       this.db.close()

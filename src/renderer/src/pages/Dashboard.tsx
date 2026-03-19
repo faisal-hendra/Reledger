@@ -11,7 +11,12 @@ import BreakdownChart from '@/components/BreakdownChart'
 import QuickStats from '@/components/QuickStats'
 import { useCurrency } from '@/components/ui/use-currency'
 
+/**
+ * Props interface for the Dashboard page
+ * Defines the platform-specific context for rendering
+ */
 interface Props {
+  /** Platform identifier (e.g., 'win32') for platform-specific styling */
   platform: string
 }
 
@@ -153,6 +158,13 @@ function Dashboard({ platform }: Props): React.JSX.Element {
   }, [activeMonth, activeYear])
 
   const calculatePercentageChange = useCallback(
+    /**
+     * Calculates the percentage change between current and previous values.
+     * Handles edge cases where either value is zero.
+     * @param current - Current value to compare
+     * @param previous - Previous value for comparison
+     * @returns Object containing formatted change percentage and trend direction
+     */
     (current: number, previous: number): { change: string; trend: 'up' | 'down' } => {
       if (previous === 0 || current === 0) {
         return { change: current > 0 ? '+100%' : '0%', trend: current >= 0 ? 'up' : 'down' }
@@ -172,6 +184,9 @@ function Dashboard({ platform }: Props): React.JSX.Element {
   )
 
   const formatCurrency = useCallback(
+    /**
+     * Formats a numeric amount as currency string.
+     */
     (amount: number): string => {
       return `${currency.symbol}${
         amount?.toLocaleString('en-US', {
@@ -183,18 +198,32 @@ function Dashboard({ platform }: Props): React.JSX.Element {
     [currency.symbol]
   )
 
-  const determineStatsColor = useCallback((trend: string, isExpense: boolean): string => {
-    if (!isExpense) {
-      return trend === 'up' ? 'text-green-400' : 'text-red-400'
-    }
-    return trend === 'up' ? 'text-red-400' : 'text-green-400'
-  }, [])
+  const determineStatsColor = useCallback(
+    /**
+     * Determines appropriate color for statistical trend display.
+     * Inverts color for expenses (up=bad, down=good).
+     * @param trend - Trend direction ('up' or 'down')
+     * @param isExpense - Whether this stat represents an expense
+     * @returns Tailwind CSS color class name
+     */
+    (trend: string, isExpense: boolean): string => {
+      if (!isExpense) {
+        return trend === 'up' ? 'text-green-400' : 'text-red-400'
+      }
+      return trend === 'up' ? 'text-red-400' : 'text-green-400'
+    },
+    []
+  )
 
   const stats = useMemo(() => {
     const incomeChange = calculatePercentageChange(thisMonthTotal.income, lastMonthTotal.income)
     const expenseChange = calculatePercentageChange(thisMonthTotal.expense, lastMonthTotal.expense)
     const balanceChange = calculatePercentageChange(currentBalance, lastMonthBalance)
 
+    /**
+     * Returns array of statistical metric cards to display.
+     * Each card shows Total Balance, Income, and Expenses with month-over-month change.
+     */
     return [
       {
         label: 'Total Balance',
