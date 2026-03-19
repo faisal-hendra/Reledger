@@ -114,6 +114,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
         month: activeMonth,
         year: activeYear,
         keyword: null,
+        transaction_type: null,
         category: null,
         limit: 1000,
         offset: 0
