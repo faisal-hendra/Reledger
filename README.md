@@ -4,7 +4,7 @@
   <p>A personal ledger and financial journaling desktop application built with Electron, React, and TypeScript.</p>
 </div>
 
-<img width="auto" height="auto" alt="Image" src="https://github.com/user-attachments/assets/eb61faba-83bf-44f5-96ee-46143ffa89a5" />
+<img width="auto" height="auto" alt="Image" src="https://github.com/user-attachments/assets/e402fd40-281b-41a1-a101-37c3ec508857" />
 
 > **Note**: This project is currently in early public testing. Core features are functional, but additional features and improvements are being added. Expect bugs and/or incomplete implementations.
 
