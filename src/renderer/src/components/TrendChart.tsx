@@ -43,18 +43,18 @@ export function TrendChart({
             axisLine={false}
             tickFormatter={(value) =>
               dayjs()
-                .month(value - 1)
+                .month(value - 1) // dayjs months are 0-indexed (0=Jan), but data uses 1-indexed (1=Jan)
                 .format('MMM')
             }
           />
           <CartesianGrid vertical={false} />
 
           {displayIncomeChart && (
-            <Bar dataKey="income" fill="var(--color-income)" radius={[0, 0, 4, 4]} stackId="a" />
+            <Bar dataKey="income" fill="var(--color-income)" radius={[0, 0, 4, 4]} stackId="a" /> // radius order: [top-left, top-right, bottom-right, bottom-left]
           )}
 
           {displayExpenseChart && (
-            <Bar dataKey="expense" fill="var(--color-expense)" radius={[4, 4, 0, 0]} stackId="a" />
+            <Bar dataKey="expense" fill="var(--color-expense)" radius={[4, 4, 0, 0]} stackId="a" /> // stackId="a" stacks bars; radius rounding matches their position in the stack
           )}
         </BarChart>
       </ChartContainer>
