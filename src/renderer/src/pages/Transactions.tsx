@@ -38,7 +38,7 @@ function Transactions({ platform }: Props): React.JSX.Element {
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [filters, setFilters] = useState<TransactionFilters>(INITIAL_FILTER)
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [isFiltering, setIsfiltering] = useState<boolean>(false)
+  const [isFiltering, setIsFiltering] = useState<boolean>(false)
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: DEFAULT_PAGE_SIZE })
   const [sorting, setSorting] = useState<SortingState>([{ id: 'date', desc: true }])
   const [totalCount, setTotalCount] = useState(0)
@@ -140,7 +140,7 @@ function Transactions({ platform }: Props): React.JSX.Element {
             transactions={transactions}
             onFilterChange={setFilters}
             onTransactionFiltered={loadTransactions}
-            setIsFiltering={setIsfiltering}
+            setIsFiltering={setIsFiltering}
           >
             <Button variant="outline">
               <FunnelIcon />
