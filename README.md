@@ -2,19 +2,34 @@
   <img width=10% alt="Image" src="https://github.com/user-attachments/assets/70df47ef-b16c-43be-b9ec-246d07089683" />
   <h1>Reledger</h1>
   <p>A personal ledger and financial journaling desktop application built with Electron, React, and TypeScript.</p>
+    <p>
+    <img src="https://img.shields.io/badge/Electron-191970?style=for-the-badge&logo=electron&logoColor=white" alt="Electron" />
+    <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+    <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+    <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
+    <img src="https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite" />
+  </p>
+ 
+  <p>
+    <img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS-lightgrey?style=flat-square" alt="Platform" />
+    <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License" />
+    <img src="https://img.shields.io/badge/status-early%20public%20testing-orange?style=flat-square" alt="Status" />
+  </p>
 </div>
 
 <img width="auto" height="auto" alt="Image" src="https://github.com/user-attachments/assets/e402fd40-281b-41a1-a101-37c3ec508857" />
 
-> **Note**: This project is currently in early public testing. Core features are functional, but additional features and improvements are being added. Expect bugs and/or incomplete implementations.
+> [!NOTE]
+> This project is currently in early public testing. Core features are functional, but additional features and improvements are being added. Expect bugs and/or incomplete implementations.
 
 ## Motivation
 
 This project started as a way form me to learn React, TypeScript, and Electron. I wanted something simpler than a spreadsheet for tracking my personal finances. Most apps in this space are either mostly for mobile or require an internet connection. Reledger is 100% local, lightweight (for an Electron app), and does exactly what I need.
 
-## Features
+## ✨ Features
 
-### Dashboard
+<details>
+<summary><strong>📊 Dashboard</strong></summary>
 
 - **Financial Overview**: View total balance, income, and expenses at a glance
 
@@ -28,7 +43,10 @@ This project started as a way form me to learn React, TypeScript, and Electron. 
 
 - **Filtering**: Filter data by year and month
 
-### Transactions
+</details>
+
+<details>
+<summary><strong>💸 Transactions</strong></summary>
 
 - **CRUD Operations**: Add, view, edit, and delete transactions
 
@@ -48,7 +66,9 @@ This project started as a way form me to learn React, TypeScript, and Electron. 
 
 - **CSV Export**: Download filtered or full transaction history as a CSV file
 
-## Current Limitations
+</details>
+
+## 🚧 Current Limitations
 
 - [ ] Spending targets / budget limits (planned for future release)
 
@@ -58,39 +78,38 @@ This project started as a way form me to learn React, TypeScript, and Electron. 
 
 On **Windows 11**, when a date mismatch warning occurs, the application may not detect the correction immediately after you update your system date. Please wait a few moments before clicking Retry to continue.
 
-## Tech Stack
+---
 
-- **Framework**: Electron, Vite
+## 🛠️ Tech Stack
 
-- **Frontend**: React 19, TypeScript
+<div align="center">
 
-- **UI**: Radix UI, Tailwind CSS, shadcn/ui components
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/electron/electron-original.svg" width="48"/> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg" width="48"/> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" width="48"/> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" width="48"/> |
+|:---:|:---:|:---:|:---:|
+| **Electron** | **Vite** | **React 19** | **TypeScript** |
+| Desktop runtime | Lightning-fast dev server | UI framework | Type-safe JS |
 
-- **Database**: Better-SQLite3 (SQLite)
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-plain.svg" width="48"/> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg" width="48"/> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" width="48"/> |
+|:---:|:---:|:---:|
+| **Tailwind CSS** | **SQLite** | **Node.js** |
+| Utility-first styling | Local database | Runtime |
 
-- **Routing**: React Router DOM
+</div>
 
-- **Charts**: Recharts
+---
 
-- **Icons**: Lucide React, React Icons
+## 📦 Installation
 
-- **Date Handling**: Day.js
+Download the latest release from the **[Releases page](https://github.com/faisal-hendra/reledger/releases/latest)**.
 
-## Installation
-Download the latest version for your platform from the [Releases](https://github.com/faisal-hendra/reledger/releases/latest) page.
+<div align="center">
 
-### Windows
-1. Download the `.exe` installer, make sure you download the one that fits your CPU architecture (AArch64 or x86_64)
-2. Run the installer
-3. Launch the app from the start menu and that's it!
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows8/windows8-original.svg" width="48"/> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg" width="48"/> | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" width="48"/> |
+|:---:|:---:|:---:|
+| **Windows** | **macOS** | **Linux** |
+| Download the `.exe` installer for your CPU architecture (AArch64 or x86_64), run it, and launch from the Start menu. | Download the `.dmg` file *(Apple Silicon only)*, drag **Reledger** into your Applications folder, and launch. | No prebuilt package yet. Build from source — see the [Development](#-development) section below. |
 
-### macOS
-1. Download the `.dmg` file (This release currently supports Apple Silicon Macs only)
-2. Open the DMG and drag the app icon into your **Applications** folder
-3. Launch the app from your Applications folder, as simple as that!
-
-### Linux: 
-No prebuilt package is available yet. If you'd like to run the app on Linux, you can build it from source — see the Development section below for instructions.
+</div>
 
 ## Development
 
@@ -135,32 +154,29 @@ npm  run  build:mac
 npm  run  build:linux
 ```
 
-## Database Schema
+## 🗄️ Database Schema
 
 Transactions are stored in a local SQLite database with the following fields:
 
-- `id`: Auto-incrementing primary key
-
-- `transaction_type`: "expense" or "income"
-
-- `name`: Transaction name
-
-- `amount`: Numeric amount
-
-- `category`: Category label
-
-- `description`: Optional notes
-
-- `date`: Transaction date
-
-- `created_at`: Auto-generated timestamp
+| Field | Type | Description |
+|---|---|---|
+| `id` | `INTEGER` `PK` | Auto-incrementing primary key |
+| `transaction_type` | `TEXT` | `"expense"` or `"income"` |
+| `name` | `TEXT` | Transaction name |
+| `amount` | `NUMERIC` | Transaction amount |
+| `category` | `TEXT` | Category label |
+| `description` | `TEXT` | Optional notes |
+| `date` | `TEXT` | Transaction date |
+| `created_at` | `TEXT` | Auto-generated timestamp |
 
 The file that stores the database itself is named `reledger.sqlite`
 
 ## Recommended IDE Setup
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+[VSCode](https://code.visualstudio.com/) with the following extensions:
+- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+- [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
-## License
+## 📜 License
 
 MIT License
