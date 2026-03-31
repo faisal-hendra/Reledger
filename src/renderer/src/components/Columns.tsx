@@ -1,5 +1,3 @@
-'use client'
-
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
 import { Button } from './ui/button'
@@ -16,6 +14,7 @@ import {
 import { AddTransaction } from './AddTransaction'
 import { useCurrency } from '@/components/ui/use-currency'
 import dayjs from 'dayjs'
+import { copyTransactionInfo } from '@/modules/clipboard'
 
 export function useColumns(
   onRefresh?: () => void,
@@ -114,18 +113,6 @@ export function useColumns(
       cell: ({ row }) => {
         const transaction = row.original
 
-        // Formats transaction data for clipboard copy in key-value format
-        const getTransactionsInfo = (): string => {
-          return (
-            `id: ${transaction.id}\n` +
-            `type: ${transaction.transaction_type}\n` +
-            `date: ${transaction.date}\n` +
-            `name: ${transaction.name}\n` +
-            `cat: ${transaction.category}\n` +
-            `desc: ${transaction.description}\n` +
-            `amount: ${currency.symbol}${transaction.amount}\n`
-          )
-        }
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -135,9 +122,7 @@ export function useColumns(
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(getTransactionsInfo())}
-              >
+              <DropdownMenuItem onClick={() => copyTransactionInfo(transaction, currency)}>
                 <CopyIcon />
                 Copy
               </DropdownMenuItem>

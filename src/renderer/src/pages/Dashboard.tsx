@@ -11,7 +11,7 @@ import BreakdownChart from '@/components/BreakdownChart'
 import QuickStats from '@/components/QuickStats'
 import { useCurrency } from '@/components/ui/use-currency'
 import { BigNumber } from '@/constants/bignumber'
-import Greeting from '@/components/Greeting'
+import WelcomeMessage from '@/components/WelcomeMessage'
 
 /**
  * Props interface for the Dashboard page
@@ -373,7 +373,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
         </div>
       ) : (
         // If transaction is empty for first time users
-        <Greeting />
+        <WelcomeMessage />
       )}
     </>
   )

@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/empty'
 import { Link } from 'react-router-dom'
 
-function Greeting(): React.JSX.Element {
+function WelcomeMessage(): React.JSX.Element {
   return (
     <Empty className="animate-in fade-in slide-in-from-bottom-4 duration-500">
       <EmptyHeader>
@@ -24,4 +24,4 @@ function Greeting(): React.JSX.Element {
   )
 }
 
-export default Greeting
+export default WelcomeMessage
