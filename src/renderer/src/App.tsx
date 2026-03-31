@@ -7,7 +7,6 @@ import Transactions from './pages/Transactions'
 import Settings from './pages/Settings'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 import dayjs from 'dayjs'
 import DateMismatchWarning from './pages/special/DateMismatchWarning'
 
@@ -27,7 +26,8 @@ function App(): React.JSX.Element {
 
     try {
       setIsLoading(true)
-      const { data } = await axios.get<TimeResponse>(url)
+      const response = await fetch(url)
+      const data = await response.json()
       const realDate = data.datetime.toString().substring(0, 10)
       const systemDate = dayjs().format('YYYY-MM-DD')
 
