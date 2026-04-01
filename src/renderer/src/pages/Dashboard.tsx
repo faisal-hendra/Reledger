@@ -371,10 +371,10 @@ function Dashboard({ platform }: Props): React.JSX.Element {
             <RecentTransactions recentTransactions={recentTransactions} />
           </div>
         </div>
-      ) : (
+      ) : isTransactionEmpty === true ? (
         // If transaction is empty for first time users
         <WelcomeMessage />
-      )}
+      ) : null}
     </>
   )
 }
