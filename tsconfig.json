@@ -10,10 +10,6 @@
   ],
   "compilerOptions": {
     "composite": true,
-    "types": [
-      "electron-vite/node"
-    ],
-    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
       "@/*": [
@@ -34,7 +30,11 @@
     ]
   },
   "include": [
+    "electron.vite.config.*",
+    "src/main/**/*",
+    "src/preload/**/*",
+    "src/db/**/*.ts",
     "src/**/*",
     "src/types/global.d.ts"
-  ]
+  ],
 }
