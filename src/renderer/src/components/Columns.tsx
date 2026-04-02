@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { AddTransaction } from './AddTransaction'
-import { useCurrency } from '@/components/ui/use-currency'
+import { useCurrency } from '@/stores/use-currency'
 import dayjs from 'dayjs'
 import { copyTransactionInfo } from '@/modules/clipboard'
 

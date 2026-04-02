@@ -1,6 +1,6 @@
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card'
 import { TrendingDown, Receipt, Trophy } from 'lucide-react'
-import { useCurrency } from '@/components/ui/use-currency'
+import { useCurrency } from '@/stores/use-currency'
 import dayjs from 'dayjs'
 import { useMemo } from 'react'
 

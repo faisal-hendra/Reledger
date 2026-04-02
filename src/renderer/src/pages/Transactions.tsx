@@ -12,6 +12,7 @@ import { SortingState } from '@tanstack/react-table'
 import TableLoading from '@/components/TableLoading'
 import TableEmpty from '@/components/TableEmpty'
 import { handleCSVExport } from '@/modules/csv-export'
+import { useCsvSeparator } from '@/stores/use-csvseparator'
 
 interface Props {
   platform: string
@@ -61,6 +62,8 @@ function Transactions({ platform }: Props): React.JSX.Element {
   const displayToast = useCallback((message: string): void => {
     toast.success(message, { position: 'bottom-right' })
   }, [])
+
+  const { csvSeparator } = useCsvSeparator()
 
   useEffect(() => {
     const initializeTransactions = async (): Promise<void> => {
@@ -132,7 +135,7 @@ function Transactions({ platform }: Props): React.JSX.Element {
             <Button
               variant="outline"
               onClick={() => {
-                handleCSVExport(transactions)
+                handleCSVExport(transactions, csvSeparator)
               }}
             >
               <FileSpreadsheetIcon />

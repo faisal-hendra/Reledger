@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import { ThemeProvider } from '@/components/ui/theme-provider'
-import { CurrencyProvider } from '@/components/ui/currency-provider'
+import { CurrencyProvider } from '@/contexts/currency-provider'
+import { CsvSeparatorProvider } from '@/contexts/csv-separator-provider'
 import AppSidebar from './components/AppSidebar'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import React, { useEffect, useState, Suspense } from 'react'
@@ -55,37 +56,42 @@ function App(): React.JSX.Element {
     <>
       <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
         <CurrencyProvider>
-          <TooltipProvider>
-            {isDateMatched ? (
-              <div className="flex flex-col h-screen overflow-hidden">
-                {/* Platform-aware window title bar */}
-                <div
-                  className={`dragable ${platform === 'win32' ? 'h-8' : 'h-8'} bg-titlebar flex items-center justify-center border-b border-border shrink-0`}
-                >
-                  <p className="text-xs select-none">Reledger</p>
-                </div>
-
-                {/* Sidebar navigation and route definitions */}
-                <AppSidebar>
-                  <Suspense
-                    fallback={
-                      <div className="w-full h-full flex justify-center items-center">
-                        <Spinner className="h-8 w-8" />
-                      </div>
-                    }
+          <CsvSeparatorProvider>
+            <TooltipProvider>
+              {isDateMatched ? (
+                <div className="flex flex-col h-screen overflow-hidden">
+                  {/* Platform-aware window title bar */}
+                  <div
+                    className={`dragable ${platform === 'win32' ? 'h-8' : 'h-8'} bg-titlebar flex items-center justify-center border-b border-border shrink-0`}
                   >
-                    <Routes>
-                      <Route path="/" element={<Dashboard platform={platform} />} />
-                      <Route path="/transactions" element={<Transactions platform={platform} />} />
-                      <Route path="/settings" element={<Settings />} />
-                    </Routes>
-                  </Suspense>
-                </AppSidebar>
-              </div>
-            ) : (
-              <DateMismatchWarning onReload={fetchTime} isLoading={isLoading} />
-            )}
-          </TooltipProvider>
+                    <p className="text-xs select-none">Reledger</p>
+                  </div>
+
+                  {/* Sidebar navigation and route definitions */}
+                  <AppSidebar>
+                    <Suspense
+                      fallback={
+                        <div className="w-full h-full flex justify-center items-center">
+                          <Spinner className="h-8 w-8" />
+                        </div>
+                      }
+                    >
+                      <Routes>
+                        <Route path="/" element={<Dashboard platform={platform} />} />
+                        <Route
+                          path="/transactions"
+                          element={<Transactions platform={platform} />}
+                        />
+                        <Route path="/settings" element={<Settings />} />
+                      </Routes>
+                    </Suspense>
+                  </AppSidebar>
+                </div>
+              ) : (
+                <DateMismatchWarning onReload={fetchTime} isLoading={isLoading} />
+              )}
+            </TooltipProvider>
+          </CsvSeparatorProvider>
         </CurrencyProvider>
       </ThemeProvider>
     </>

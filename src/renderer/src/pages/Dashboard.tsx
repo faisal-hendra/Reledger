@@ -9,7 +9,7 @@ import FilterDashboard from '@/components/FilterDashboard'
 import { Button } from '@/components/ui/button'
 import BreakdownChart from '@/components/BreakdownChart'
 import QuickStats from '@/components/QuickStats'
-import { useCurrency } from '@/components/ui/use-currency'
+import { useCurrency } from '@/stores/use-currency'
 import { BigNumber } from '@/constants/bignumber'
 import WelcomeMessage from '@/components/WelcomeMessage'
 
