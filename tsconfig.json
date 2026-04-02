@@ -1,18 +1,40 @@
 {
   "files": [],
-  "references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.web.json" }],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.web.json"
+    }
+  ],
   "compilerOptions": {
     "composite": true,
-    "types": ["electron-vite/node"],
+    "types": [
+      "electron-vite/node"
+    ],
+    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/renderer/src/*"],
-      "@": ["./src/renderer/src/*"],
-      "@renderer": ["./src/renderer/src/*"]
+      "@/*": [
+        "./src/renderer/src/*"
+      ],
+      "@": [
+        "./src/renderer/src/*"
+      ],
+      "@renderer": [
+        "./src/renderer/src/*"
+      ]
     },
     "lib": [
-      "es5", "es6", "dom", "dom.iterable"
+      "es5",
+      "es6",
+      "dom",
+      "dom.iterable"
     ]
   },
-  "include": ["src/**/*", "src/types/global.d.ts"]
+  "include": [
+    "src/**/*",
+    "src/types/global.d.ts"
+  ]
 }

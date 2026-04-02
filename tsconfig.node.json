@@ -1,20 +1,40 @@
 {
   "extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
-  "include": ["electron.vite.config.*", "src/main/**/*", "src/preload/**/*", "src/db/**/*.ts"],
+  "include": [
+    "electron.vite.config.*",
+    "src/main/**/*",
+    "src/preload/**/*",
+    "src/db/**/*.ts"
+  ],
   "compilerOptions": {
     "module": "es2020",
     "composite": true,
-    "types": ["electron-vite/node"],
+    "types": [
+      "electron-vite/node"
+    ],
+    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/renderer/src/*"],
-      "@": ["./src/renderer/src/*"],
-      "@renderer": ["./src/renderer/src/*"]
+      "@/*": [
+        "./src/renderer/src/*"
+      ],
+      "@": [
+        "./src/renderer/src/*"
+      ],
+      "@renderer": [
+        "./src/renderer/src/*"
+      ]
     },
     "moduleResolution": "bundler",
     "lib": [
-      "es5", "es6", "dom", "dom.iterable"
+      "es5",
+      "es6",
+      "dom",
+      "dom.iterable"
     ]
   },
-    "include": ["src/**/*", "src/types/global.d.ts"]
+  "include": [
+    "src/**/*",
+    "src/types/global.d.ts"
+  ]
 }
