@@ -252,6 +252,14 @@ export function AddTransaction({
             <FieldGroup>
               <Field className="pt-4">
                 <Label htmlFor="category">Category</Label>
+                {/* Hidden input to trigger required validation, since shadcn Select doesn't support the required attribute natively */}
+                <input
+                  tabIndex={-1}
+                  className="absolute opacity-0 pointer-events-none translate-y-9 -translate-x-20"
+                  value={formData.category}
+                  required
+                  onChange={() => null}
+                />
                 <Select value={formData.category} onValueChange={(value) => set('category')(value)}>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select a category" />
