@@ -10,13 +10,12 @@ setupApp();
 
 app.whenReady().then(() => {
   db = new AppDatabase();
-  const mainWindow = createWindow();
-  registerAllHandlers(db, mainWindow);
+  registerAllHandlers(db);
+  createWindow();
 
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) {
-      const newWindow = createWindow();
-      registerAllHandlers(db, newWindow);
+      createWindow();
     }
   });
 });
