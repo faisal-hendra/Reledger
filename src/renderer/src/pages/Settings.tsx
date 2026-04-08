@@ -1,33 +1,33 @@
-import { ModeToggle } from '@/components/ui/mode-toggle'
-import { useCurrency } from '@/stores/use-currency'
-import { useCsvSeparator } from '@/stores/use-csvseparator'
-import { CURRENCIES } from '@/constants/currencies'
-import { CSV_SEPARATORS } from '@/constants/csv-separators'
+import { ModeToggle } from "@/components/ui/mode-toggle";
+import { useCurrency } from "@/stores/use-currency";
+import { useCsvSeparator } from "@/stores/use-csvseparator";
+import { CURRENCIES } from "@/constants/currencies";
+import { CSV_SEPARATORS } from "@/constants/csv-separators";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
-import PageHeader from '@/components/PageHeader'
-import SettingCard from '@/components/SettingCard'
-import { toast } from 'sonner'
-import ResetDialog from '@/components/ResetDialog'
+  SelectValue,
+} from "@/components/ui/select";
+import PageHeader from "@/components/PageHeader";
+import SettingCard from "@/components/SettingCard";
+import { toast } from "sonner";
+import ResetDialog from "@/components/ResetDialog";
 
 const handleReset = async (): Promise<void> => {
   try {
-    window.api.resetTable()
+    window.api.resetTable();
   } catch (error) {
-    console.error(error)
+    console.error(error);
   } finally {
-    toast('Ledger has been reset')
+    toast("Ledger has been reset");
   }
-}
+};
 
 function Settings(): React.JSX.Element {
-  const { currency, setCurrency } = useCurrency()
-  const { csvSeparator, setCsvSeparator } = useCsvSeparator()
+  const { currency, setCurrency } = useCurrency();
+  const { csvSeparator, setCsvSeparator } = useCsvSeparator();
 
   return (
     <>
@@ -43,8 +43,8 @@ function Settings(): React.JSX.Element {
               <Select
                 value={currency.code}
                 onValueChange={(value) => {
-                  const selected = CURRENCIES.find((c) => c.code === value)
-                  if (selected) setCurrency(selected)
+                  const selected = CURRENCIES.find((c) => c.code === value);
+                  if (selected) setCurrency(selected);
                 }}
               >
                 <SelectTrigger className="min-w-30 max-w-full min-h-12">
@@ -91,7 +91,10 @@ function Settings(): React.JSX.Element {
                       className="group px-3 py-2.5 cursor-pointer rounded-none focus:bg-accent/60 data-[state=checked]:bg-primary/8"
                     >
                       <div className="flex items-center gap-3 w-full">
-                        {s === ',' ? 'Comma ' : 'Semicolon '}( {` ${s} `} )
+                        <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-muted flex items-center justify-center text-sm font-bold text-foreground group-focus:bg-primary/10">
+                          {s}
+                        </span>
+                        {s === "," ? "Comma " : "Semicolon "}
                       </div>
                     </SelectItem>
                   ))}
@@ -102,7 +105,10 @@ function Settings(): React.JSX.Element {
 
           <section className="space-y-4">
             <h3 className="text-lg font-semibold">Appearance</h3>
-            <SettingCard title="Theme" description="Customize the appearance of the app">
+            <SettingCard
+              title="Theme"
+              description="Customize the appearance of the app"
+            >
               <ModeToggle />
             </SettingCard>
           </section>
@@ -119,7 +125,7 @@ function Settings(): React.JSX.Element {
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default Settings
+export default Settings;
