@@ -1,25 +1,15 @@
 {
   "extends": "@electron-toolkit/tsconfig/tsconfig.web.json",
-  "include": [
-    "electron.vite.config.*",
-    "src/main/**/*",
-    "src/preload/**/*",
-    "src/db/**/*.ts",
-    "src/**/*",
-    "src/types/global.d.ts"
-  ],
+  "include": ["src/renderer/**/*", "src/common/**/*"],
   "compilerOptions": {
     "module": "es2020",
     "composite": true,
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@renderer/*": [
-        "src/renderer/src/*"
-      ],
-      "@/*": [
-        "src/renderer/src/*"
-      ]
+      "@renderer/*": ["src/renderer/src/*"],
+      "@common/*": ["src/common/*"],
+      "@/*": ["src/renderer/src/*"]
     }
   }
 }
