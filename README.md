@@ -173,9 +173,7 @@ The file that stores the database itself is named `reledger.sqlite`
 
 ## Recommended IDE Setup
 
-[VSCode](https://code.visualstudio.com/) with the following extensions:
-- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
-- [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+[Zed](https://zed.dev/) with [Biome](https://biomejs.dev/), an all-in-one formatter and linter that replaces ESLint and Prettier.
 
 ## 📜 License
 
