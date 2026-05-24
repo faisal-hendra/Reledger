@@ -1,17 +1,23 @@
-import { Wallet, ArrowUpRight, ArrowDownLeft, FunnelIcon } from 'lucide-react'
-import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import RecentTransactions from '@/components/RecentTransactions'
-import { useEffect, useState, useCallback, useMemo } from 'react'
-import dayjs from 'dayjs'
-import PageHeader from '@/components/PageHeader'
-import { TrendChart } from '@/components/TrendChart'
-import FilterDashboard from '@/components/FilterDashboard'
-import { Button } from '@/components/ui/button'
-import BreakdownChart from '@/components/BreakdownChart'
-import QuickStats from '@/components/QuickStats'
-import { useCurrency } from '@/stores/use-currency'
-import { BigNumber } from '@/constants/bignumber'
-import WelcomeMessage from '@/components/WelcomeMessage'
+import { Wallet, ArrowUpRight, ArrowDownLeft, FunnelIcon } from "lucide-react";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import RecentTransactions from "@/components/RecentTransactions";
+import { useEffect, useState, useCallback, useMemo } from "react";
+import dayjs from "dayjs";
+import PageHeader from "@/components/PageHeader";
+import { TrendChart } from "@/components/TrendChart";
+import FilterDashboard from "@/components/FilterDashboard";
+import { Button } from "@/components/ui/button";
+import BreakdownChart from "@/components/BreakdownChart";
+import QuickStats from "@/components/QuickStats";
+import { useCurrency } from "@/stores/use-currency";
+import { BigNumber } from "@/constants/bignumber";
+import WelcomeMessage from "@/components/WelcomeMessage";
 
 /**
  * Props interface for the Dashboard page
@@ -19,43 +25,51 @@ import WelcomeMessage from '@/components/WelcomeMessage'
  */
 interface Props {
   /** Platform identifier (e.g., 'win32') for platform-specific styling */
-  platform: string
+  platform: string;
 }
 
 function Dashboard({ platform }: Props): React.JSX.Element {
-  const { currency } = useCurrency()
-  const [isTransactionEmpty, setIsTransactionEmpty] = useState<boolean | null>(null)
-  const [displayExpenseChart, setDisplayExpenseChart] = useState(true)
-  const [displayIncomeChart, setDisplayIncomeChart] = useState(true)
-  const [fullMonthlyTotal, setFullMonthlyTotal] = useState<MonthlyTotal[]>([])
-  const [activeYear, setActiveYear] = useState(dayjs().year())
-  const [activeMonth, setActiveMonth] = useState(dayjs().month() + 1)
-  const [recentTransactions, setRecentTransactions] = useState<Transaction[]>([])
+  const { currency } = useCurrency();
+  const [isTransactionEmpty, setIsTransactionEmpty] = useState<boolean | null>(
+    null,
+  );
+  const [displayExpenseChart, setDisplayExpenseChart] = useState(true);
+  const [displayIncomeChart, setDisplayIncomeChart] = useState(true);
+  const [fullMonthlyTotal, setFullMonthlyTotal] = useState<MonthlyTotal[]>([]);
+  const [activeYear, setActiveYear] = useState(dayjs().year());
+  const [activeMonth, setActiveMonth] = useState(dayjs().month() + 1);
+  const [recentTransactions, setRecentTransactions] = useState<Transaction[]>(
+    [],
+  );
   const [thisMonthTotal, setThisMonthTotal] = useState<MonthlyTotal>({
     month: activeMonth,
     income: 0,
-    expense: 0
-  })
+    expense: 0,
+  });
   const [lastMonthTotal, setLastMonthTotal] = useState<MonthlyTotal>({
-    month: activeMonth - 1,
+    month: activeMonth > 1 ? activeMonth - 1 : 12,
     income: 0,
-    expense: 0
-  })
-  const [categoryBreakdown, setCategoryBreakdown] = useState<CategoryPercentage[] | null>([])
-  const [categroyBreakdownType, setCategoryBreakdownType] = useState<'income' | 'expense'>(
-    'expense'
-  )
-  const [thisMonthTransactions, setThisMonthTransactions] = useState<Transaction[] | undefined>(
-    undefined
-  )
+    expense: 0,
+  });
+  const [categoryBreakdown, setCategoryBreakdown] = useState<
+    CategoryPercentage[] | null
+  >([]);
+  const [categroyBreakdownType, setCategoryBreakdownType] = useState<
+    "income" | "expense"
+  >("expense");
+  const [thisMonthTransactions, setThisMonthTransactions] = useState<
+    Transaction[] | undefined
+  >(undefined);
 
   const topExpense = useMemo(() => {
-    if (!thisMonthTransactions?.length) return undefined
-    const expenses = thisMonthTransactions.filter((t) => t.transaction_type === 'expense')
-    if (!expenses.length) return undefined
-    const maxAmount = Math.max(...expenses.map((t) => t.amount))
-    return thisMonthTransactions.find((t) => t.amount === maxAmount)
-  }, [thisMonthTransactions])
+    if (!thisMonthTransactions?.length) return undefined;
+    const expenses = thisMonthTransactions.filter(
+      (t) => t.transaction_type === "expense",
+    );
+    if (!expenses.length) return undefined;
+    const maxAmount = Math.max(...expenses.map((t) => t.amount));
+    return thisMonthTransactions.find((t) => t.amount === maxAmount);
+  }, [thisMonthTransactions]);
 
   const checkIsTransactionEmpty = useCallback(async (): Promise<void> => {
     try {
@@ -64,79 +78,83 @@ function Dashboard({ platform }: Props): React.JSX.Element {
         year: null,
         keyword: null,
         transaction_type: null,
-        category: null
-      }
-      const data = await window.api.getTransactions(filters)
-      const transactions = data.transactions
+        category: null,
+      };
+      const data = await window.api.getTransactions(filters);
+      const transactions = data.transactions;
       if (transactions.length === 0) {
-        setIsTransactionEmpty(true)
+        setIsTransactionEmpty(true);
       } else {
-        setIsTransactionEmpty(false)
+        setIsTransactionEmpty(false);
       }
     } catch (error) {
-      console.error('Failed to fetch transactions', error)
+      console.error("Failed to fetch transactions", error);
     }
-  }, [])
+  }, []);
 
   const loadFullMonthlyTotal = useCallback(async (): Promise<void> => {
     try {
-      const data = await window.api.getFullMonthlyTotal(activeYear)
-      setFullMonthlyTotal(data || [])
+      const data = await window.api.getFullMonthlyTotal(activeYear);
+      setFullMonthlyTotal(data || []);
     } catch (error) {
-      console.error('Failed to load full monthly total:', error)
-      setFullMonthlyTotal([])
+      console.error("Failed to load full monthly total:", error);
+      setFullMonthlyTotal([]);
     }
-  }, [activeYear])
+  }, [activeYear]);
 
   const loadThisMonthTotal = useCallback(async (): Promise<void> => {
     try {
-      const filters = {
+      const filters = { month: activeMonth, year: activeYear };
+      const data = await window.api.getMonthlyTotal(filters);
+      setThisMonthTotal({
         month: activeMonth,
-        year: activeYear
-      }
-      const data = await window.api.getMonthlyTotal(filters)
-      setThisMonthTotal(data)
+        income: data?.income ?? 0,
+        expense: data?.expense ?? 0,
+      });
     } catch (error) {
-      console.error('Failed to fetch monthly total:', error)
+      console.error("Failed to fetch monthly total:", error);
     }
-  }, [activeMonth, activeYear])
+  }, [activeMonth, activeYear]);
 
   const loadLastMonthTotal = useCallback(async (): Promise<void> => {
     try {
-      const filters = {
-        month: activeMonth - 1,
-        year: activeYear
-      }
-      const data = await window.api.getMonthlyTotal(filters)
-      setLastMonthTotal(data)
+      const lastMonth = activeMonth === 1 ? 12 : activeMonth - 1;
+      const lastMonthYear = activeMonth === 1 ? activeYear - 1 : activeYear;
+      const filters = { month: lastMonth, year: lastMonthYear };
+      const data = await window.api.getMonthlyTotal(filters);
+      setLastMonthTotal({
+        month: lastMonth,
+        income: data?.income ?? 0,
+        expense: data?.expense ?? 0,
+      });
     } catch (error) {
-      console.error('Failed to fetch last month total:', error)
+      console.error("Failed to fetch last month total:", error);
     }
-  }, [activeMonth, activeYear])
+  }, [activeMonth, activeYear]);
 
   const loadRecentTransactions = useCallback(async (): Promise<void> => {
     try {
-      const rowCount = 5
-      const data = await window.api.getRecentTransactions(rowCount)
-      setRecentTransactions(data)
+      const rowCount = 5;
+      const data = await window.api.getRecentTransactions(rowCount);
+      setRecentTransactions(data);
     } catch (error) {
-      console.error('Failed to fetch recent transactions:', error)
+      console.error("Failed to fetch recent transactions:", error);
     }
-  }, [])
+  }, []);
 
   const loadCategoryBreakdown = useCallback(async (): Promise<void> => {
     try {
       const filters: CategoryPerecentageFilters = {
         year: activeYear,
         month: activeMonth,
-        type: categroyBreakdownType
-      }
-      const data = await window.api.getCategoryPercentage(filters)
-      setCategoryBreakdown(data)
+        type: categroyBreakdownType,
+      };
+      const data = await window.api.getCategoryPercentage(filters);
+      setCategoryBreakdown(data);
     } catch (error) {
-      console.error('Failed to fetch category breakdown:', error)
+      console.error("Failed to fetch category breakdown:", error);
     }
-  }, [activeYear, activeMonth, categroyBreakdownType])
+  }, [activeYear, activeMonth, categroyBreakdownType]);
 
   const fetchThisMonthTransactions = useCallback(async (): Promise<void> => {
     try {
@@ -147,75 +165,76 @@ function Dashboard({ platform }: Props): React.JSX.Element {
         transaction_type: null,
         category: null,
         limit: BigNumber(),
-        offset: 0
-      }
-      const data = await window.api.getTransactions(filters)
-      setThisMonthTransactions(data.transactions)
+        offset: 0,
+      };
+      const data = await window.api.getTransactions(filters);
+      setThisMonthTransactions(data.transactions);
     } catch (error) {
-      console.error('Failed to fetch this month transactions:', error)
+      console.error("Failed to fetch this month transactions:", error);
     }
-  }, [activeMonth, activeYear])
+  }, [activeMonth, activeYear]);
 
   useEffect(() => {
-    loadFullMonthlyTotal()
-  }, [activeYear])
+    loadFullMonthlyTotal();
+  }, [activeYear]);
 
   useEffect(() => {
-    loadThisMonthTotal()
-  }, [activeMonth, activeYear])
+    loadThisMonthTotal();
+  }, [activeMonth, activeYear]);
 
   useEffect(() => {
-    loadLastMonthTotal()
-  }, [activeMonth, activeYear])
+    loadLastMonthTotal();
+  }, [activeMonth, activeYear]);
 
   useEffect(() => {
-    loadRecentTransactions()
-    checkIsTransactionEmpty()
-  }, [])
+    loadRecentTransactions();
+    checkIsTransactionEmpty();
+  }, []);
 
   const currentBalance = useMemo(
     () => thisMonthTotal.income - thisMonthTotal.expense,
-    [thisMonthTotal.income, thisMonthTotal.expense]
-  )
+    [thisMonthTotal.income, thisMonthTotal.expense],
+  );
 
   const lastMonthBalance = useMemo(
     () => lastMonthTotal.income - lastMonthTotal.expense,
-    [lastMonthTotal.income, lastMonthTotal.expense]
-  )
+    [lastMonthTotal.income, lastMonthTotal.expense],
+  );
 
   useEffect(() => {
-    loadCategoryBreakdown()
-  }, [activeMonth, activeYear, categroyBreakdownType])
+    loadCategoryBreakdown();
+  }, [activeMonth, activeYear, categroyBreakdownType]);
 
   useEffect(() => {
-    fetchThisMonthTransactions()
-  }, [activeMonth, activeYear])
+    fetchThisMonthTransactions();
+  }, [activeMonth, activeYear]);
 
   const calculatePercentageChange = useCallback(
-    /**
-     * Calculates the percentage change between current and previous values.
-     * Handles edge cases where either value is zero.
-     * @param current - Current value to compare
-     * @param previous - Previous value for comparison
-     * @returns Object containing formatted change percentage and trend direction
-     */
-    (current: number, previous: number): { change: string; trend: 'up' | 'down' } => {
-      if (previous === 0 || current === 0) {
-        return { change: current > 0 ? '+100%' : '0%', trend: current >= 0 ? 'up' : 'down' }
+    (
+      current: number,
+      previous: number,
+    ): { change: string; trend: "up" | "down" } => {
+      if (previous === 0) {
+        if (current === 0) return { change: "0%", trend: "up" };
+        return { change: "+100%", trend: "up" };
       }
 
-      const change = (current - previous) / previous
+      if (current === 0) {
+        return { change: "-100%", trend: "down" };
+      }
+
+      const change = (current - previous) / Math.abs(previous);
       if (isFinite(change)) {
         return {
-          change: `${change >= 0 ? '+' : ''}${(change * 100).toFixed(1)}%`,
-          trend: change >= 0 ? 'up' : 'down'
-        }
+          change: `${change >= 0 ? "+" : ""}${(change * 100).toFixed(1)}%`,
+          trend: change >= 0 ? "up" : "down",
+        };
       }
 
-      return { change: '0%', trend: 'down' }
+      return { change: "0%", trend: "down" };
     },
-    []
-  )
+    [],
+  );
 
   const formatCurrency = useCallback(
     /**
@@ -223,14 +242,14 @@ function Dashboard({ platform }: Props): React.JSX.Element {
      */
     (amount: number): string => {
       return `${currency.symbol}${
-        amount?.toLocaleString('en-US', {
+        amount?.toLocaleString("en-US", {
           minimumFractionDigits: 2,
-          maximumFractionDigits: 2
-        }) ?? '0.00'
-      }`
+          maximumFractionDigits: 2,
+        }) ?? "0.00"
+      }`;
     },
-    [currency.symbol]
-  )
+    [currency.symbol],
+  );
 
   const determineStatsColor = useCallback(
     /**
@@ -242,17 +261,26 @@ function Dashboard({ platform }: Props): React.JSX.Element {
      */
     (trend: string, isExpense: boolean): string => {
       if (!isExpense) {
-        return trend === 'up' ? 'text-green-400' : 'text-red-400'
+        return trend === "up" ? "text-green-400" : "text-red-400";
       }
-      return trend === 'up' ? 'text-red-400' : 'text-green-400'
+      return trend === "up" ? "text-red-400" : "text-green-400";
     },
-    []
-  )
+    [],
+  );
 
   const stats = useMemo(() => {
-    const incomeChange = calculatePercentageChange(thisMonthTotal.income, lastMonthTotal.income)
-    const expenseChange = calculatePercentageChange(thisMonthTotal.expense, lastMonthTotal.expense)
-    const balanceChange = calculatePercentageChange(currentBalance, lastMonthBalance)
+    const incomeChange = calculatePercentageChange(
+      thisMonthTotal.income,
+      lastMonthTotal.income,
+    );
+    const expenseChange = calculatePercentageChange(
+      thisMonthTotal.expense,
+      lastMonthTotal.expense,
+    );
+    const balanceChange = calculatePercentageChange(
+      currentBalance,
+      lastMonthBalance,
+    );
 
     /**
      * Returns array of statistical metric cards to display.
@@ -260,38 +288,38 @@ function Dashboard({ platform }: Props): React.JSX.Element {
      */
     return [
       {
-        label: 'Total Balance',
+        label: "Balance",
         value: formatCurrency(currentBalance),
         change: balanceChange.change,
         trend: balanceChange.trend,
         isExpense: false,
-        icon: Wallet
+        icon: Wallet,
       },
       {
-        label: 'Income',
+        label: "Income",
         value: formatCurrency(thisMonthTotal.income),
         change: incomeChange.change,
         trend: incomeChange.trend,
         isExpense: false,
-        icon: ArrowDownLeft
+        icon: ArrowDownLeft,
       },
       {
-        label: 'Expenses',
+        label: "Expenses",
         value: formatCurrency(thisMonthTotal.expense),
         change: expenseChange.change,
         trend: expenseChange.trend,
         isExpense: true,
-        icon: ArrowUpRight
-      }
-    ]
+        icon: ArrowUpRight,
+      },
+    ];
   }, [
     thisMonthTotal,
     lastMonthTotal,
     currentBalance,
     lastMonthBalance,
     calculatePercentageChange,
-    formatCurrency
-  ])
+    formatCurrency,
+  ]);
 
   return (
     <>
@@ -315,7 +343,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
       </PageHeader>
       {!isTransactionEmpty && isTransactionEmpty !== null ? (
         <div
-          className={`space-y-6 flex-1 overflow-auto p-4 ${platform === 'win32' && `hover:scrollbar-thumb-[#4b4e52] scrollbar-active:scrollbar-thumb-[#696E78] h-32 scrollbar`}`}
+          className={`space-y-6 flex-1 overflow-auto p-4 ${platform === "win32" && `hover:scrollbar-thumb-[#4b4e52] scrollbar-active:scrollbar-thumb-[#696E78] h-32 scrollbar`}`}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {stats.map((stat) => (
@@ -330,8 +358,12 @@ function Dashboard({ platform }: Props): React.JSX.Element {
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-between mb-3"></div>
-                  <div className="text-2xl font-semibold mb-1">{stat.value}</div>
-                  <div className={`text-xs ${determineStatsColor(stat.trend, stat.isExpense)}`}>
+                  <div className="text-2xl font-semibold mb-1">
+                    {stat.value}
+                  </div>
+                  <div
+                    className={`text-xs ${determineStatsColor(stat.trend, stat.isExpense)}`}
+                  >
                     {stat.change} from last month
                   </div>
                 </CardContent>
@@ -347,7 +379,10 @@ function Dashboard({ platform }: Props): React.JSX.Element {
               />
             </div>
             <div className="lg:col-span-1">
-              <BreakdownChart data={categoryBreakdown} transactionType={categroyBreakdownType} />
+              <BreakdownChart
+                data={categoryBreakdown}
+                transactionType={categroyBreakdownType}
+              />
             </div>
           </div>
           <div className="pt-4">
@@ -368,7 +403,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
         <WelcomeMessage />
       ) : null}
     </>
-  )
+  );
 }
 
-export default Dashboard
+export default Dashboard;

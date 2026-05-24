@@ -9,6 +9,7 @@ declare global {
     category: string;
     description?: string;
     date: string;
+    running_balance?: number;
   }
 
   interface TransactionFilters {

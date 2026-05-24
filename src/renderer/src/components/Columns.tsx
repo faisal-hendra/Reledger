@@ -1,117 +1,143 @@
-import { ColumnDef } from '@tanstack/react-table'
-import { ArrowUpDown } from 'lucide-react'
-import { Button } from './ui/button'
-import { Badge } from '@/components/ui/badge'
-import { MoreHorizontal, CopyIcon, PenIcon, TrashIcon } from 'lucide-react'
-import DeleteTransaction from './DeleteTransaction'
+import { ColumnDef } from "@tanstack/react-table";
+import { ArrowUpDown } from "lucide-react";
+import { Button } from "./ui/button";
+import { Badge } from "@/components/ui/badge";
+import { MoreHorizontal, CopyIcon, PenIcon, TrashIcon } from "lucide-react";
+import DeleteTransaction from "./DeleteTransaction";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
-import { AddTransaction } from './AddTransaction'
-import { useCurrency } from '@/stores/use-currency'
-import dayjs from 'dayjs'
-import { copyTransactionInfo } from '@/modules/clipboard'
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { AddTransaction } from "./AddTransaction";
+import { useCurrency } from "@/stores/use-currency";
+import dayjs from "dayjs";
+import { copyTransactionInfo } from "@/modules/clipboard";
 
 export function useColumns(
   onRefresh?: () => void,
-  displayToast?: (message: string) => void
+  displayToast?: (message: string) => void,
 ): ColumnDef<Transaction, unknown>[] {
-  const { currency } = useCurrency()
+  const { currency } = useCurrency();
 
   return [
     {
-      accessorKey: 'transaction_type',
-      header: 'Type',
+      accessorKey: "transaction_type",
+      header: "Type",
       cell: ({ row }) => {
-        const type: string = row.getValue('transaction_type')
-        const formatted: string = type.charAt(0).toUpperCase() + type.substring(1)
+        const type: string = row.getValue("transaction_type");
+        const formatted: string =
+          type.charAt(0).toUpperCase() + type.substring(1);
         return (
           <Badge
             className={
-              type === 'income'
-                ? 'bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300'
-                : 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300'
+              type === "income"
+                ? "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
+                : "bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300"
             }
             variant="outline"
           >
             {formatted}
           </Badge>
-        )
-      }
+        );
+      },
     },
     {
-      accessorKey: 'date',
+      accessorKey: "date",
       header: ({ column }) => {
         return (
           <div className="flex">
             <Button
               variant="ghost"
-              onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
             >
               Date
               <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
           </div>
-        )
+        );
       },
       cell: ({ row }) => {
-        const date: string = row.getValue('date')
-        return <div className="px-3">{dayjs(date).format('DD MMMM YYYY')}</div>
-      }
+        const date: string = row.getValue("date");
+        return <div className="px-3">{dayjs(date).format("DD MMMM YYYY")}</div>;
+      },
     },
     {
-      accessorKey: 'name',
-      header: 'Name'
+      accessorKey: "name",
+      header: "Name",
     },
     {
-      accessorKey: 'category',
-      header: 'Category'
+      accessorKey: "category",
+      header: "Category",
     },
     {
-      accessorKey: 'description',
-      header: 'Description',
+      accessorKey: "description",
+      header: "Description",
       cell: ({ row }) => {
-        const desc = row.getValue('description')
+        const desc = row.getValue("description");
         if (desc) {
-          return <div>{`${desc}`}</div>
+          return <div>{`${desc}`}</div>;
         } else {
-          return <div>-</div>
+          return <div>-</div>;
         }
-      }
+      },
     },
     {
-      accessorKey: 'amount',
+      accessorKey: "amount",
       header: ({ column }) => {
         return (
           <div className="flex grow justify-end">
             <Button
               variant="ghost"
-              onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
             >
               Amount
               <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
           </div>
-        )
+        );
       },
       cell: ({ row }) => {
-        const amount = parseFloat(row.getValue('amount'))
-        const formatted = new Intl.NumberFormat('en-US', {
-          style: 'currency',
-          currency: currency.code
-        }).format(amount)
+        const amount = parseFloat(row.getValue("amount"));
+        const formatted = new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: currency.code,
+        }).format(amount);
 
-        return <div className="text-right font-medium px-3">{formatted}</div>
-      }
+        return <div className="text-right font-medium px-3">{formatted}</div>;
+      },
     },
     {
-      id: 'actions',
+      accessorKey: "running_balance",
+      header: () => (
+        <div className="text-right -translate-x-3">Running Balance</div>
+      ),
       cell: ({ row }) => {
-        const transaction = row.original
+        const balance = row.getValue("running_balance");
+        if (balance === undefined) return null;
+        const formatted = new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: currency.code,
+        }).format(balance as number);
+        return (
+          <div
+            className={`text-right font-medium px-3 ${(balance as number) < 0 ? "text-destructive" : ""}`}
+          >
+            {formatted}
+          </div>
+        );
+      },
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => {
+        const transaction = row.original;
 
         return (
           <DropdownMenu>
@@ -122,17 +148,19 @@ export function useColumns(
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => copyTransactionInfo(transaction, currency)}>
+              <DropdownMenuItem
+                onClick={() => copyTransactionInfo(transaction, currency)}
+              >
                 <CopyIcon />
                 Copy
               </DropdownMenuItem>
               <AddTransaction
                 onTransactionAdded={() => {
-                  onRefresh?.()
+                  onRefresh?.();
                 }}
                 editMode={true}
                 idToEdit={transaction.id}
-                alert={() => displayToast?.('Transaction edited successfully')}
+                alert={() => displayToast?.("Transaction edited successfully")}
               >
                 <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                   <PenIcon />
@@ -141,19 +169,22 @@ export function useColumns(
               </AddTransaction>
               <DropdownMenuSeparator />
               <DeleteTransaction
-                id={transaction.id?.toString() || ''}
+                id={transaction.id?.toString() || ""}
                 onRefresh={onRefresh}
-                alert={() => displayToast?.('Transaction deleted successfuly')}
+                alert={() => displayToast?.("Transaction deleted successfuly")}
               >
-                <DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
+                <DropdownMenuItem
+                  variant="destructive"
+                  onSelect={(e) => e.preventDefault()}
+                >
                   <TrashIcon />
                   Delete
                 </DropdownMenuItem>
               </DeleteTransaction>
             </DropdownMenuContent>
           </DropdownMenu>
-        )
-      }
-    }
-  ]
+        );
+      },
+    },
+  ];
 }

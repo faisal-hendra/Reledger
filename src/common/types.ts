@@ -6,6 +6,7 @@ export interface Transaction {
   category: string;
   description?: string;
   date: string;
+  running_balance?: number;
 }
 
 export interface TransactionFilters {

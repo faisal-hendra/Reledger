@@ -96,68 +96,73 @@ class AppDatabase {
 
   getTransactions(filters: TransactionFilters): { transactions: Transaction[]; total: number } {
     try {
-      let query = 'SELECT * FROM transactions WHERE 1=1';
-      let countQuery = 'SELECT COUNT(*) as count FROM transactions WHERE 1=1';
+      let whereClause = 'WHERE 1=1';
       const params: (string | number)[] = [];
       const countParams: (string | number)[] = [];
 
       if (filters.month) {
         const monthCondition = " AND strftime('%m', date) = ?";
-        query += monthCondition;
-        countQuery += monthCondition;
+        whereClause += monthCondition;
         const monthVal = filters.month.toString().padStart(2, '0');
         params.push(monthVal);
         countParams.push(monthVal);
       }
       if (filters.year) {
         const yearCondition = " AND strftime('%Y', date) = ?";
-        query += yearCondition;
-        countQuery += yearCondition;
+        whereClause += yearCondition;
         const yearVal = filters.year.toString();
         params.push(yearVal);
         countParams.push(yearVal);
       }
       if (filters.keyword) {
         const keywordCondition = ' AND (name LIKE ? OR description LIKE ?)';
-        query += keywordCondition;
-        countQuery += keywordCondition;
+        whereClause += keywordCondition;
         const keywordVal = `%${filters.keyword}%`;
         params.push(keywordVal, keywordVal);
         countParams.push(keywordVal, keywordVal);
       }
       if (filters.transaction_type) {
         const typeCondition = ' AND transaction_type = ?';
-        query += typeCondition;
-        countQuery += typeCondition;
+        whereClause += typeCondition;
         params.push(filters.transaction_type);
         countParams.push(filters.transaction_type);
       }
       if (filters.category) {
         const categoryCondition = ' AND category = ?';
-        query += categoryCondition;
-        countQuery += categoryCondition;
+        whereClause += categoryCondition;
         params.push(filters.category);
         countParams.push(filters.category);
       }
 
       const sortColumn = filters.sortColumn || 'date';
       const sortDirection = filters.sortDirection === 'asc' ? 'ASC' : 'DESC';
+      let orderClause = '';
       if (sortColumn === 'date') {
-        query += ` ORDER BY date(${sortColumn}) ${sortDirection}`;
+        orderClause = ` ORDER BY date(${sortColumn}) ${sortDirection}`;
       } else {
-        query += ` ORDER BY ${sortColumn} ${sortDirection}`;
+        orderClause = ` ORDER BY ${sortColumn} ${sortDirection}`;
       }
 
+      let limitClause = '';
       if (filters.limit !== undefined) {
-        query += ` LIMIT ${filters.limit}`;
+        limitClause = ` LIMIT ${filters.limit}`;
         if (filters.offset !== undefined) {
-          query += ` OFFSET ${filters.offset}`;
+          limitClause += ` OFFSET ${filters.offset}`;
         }
       }
 
-      const stmt = this.db.prepare(query);
+      const dataQuery = `SELECT *, running_balance FROM (
+          SELECT *,
+            SUM(CASE WHEN transaction_type = 'income' THEN amount ELSE -amount END)
+              OVER (ORDER BY date ASC, id ASC) as running_balance
+          FROM transactions
+          ${whereClause}
+        ) sub${orderClause}${limitClause}`;
+
+      const stmt = this.db.prepare(dataQuery);
       const transactions = stmt.all(...params) as Transaction[];
 
+      const countQuery = `SELECT COUNT(*) as count FROM transactions ${whereClause}`;
       const countStmt = this.db.prepare(countQuery);
       const countResult = countStmt.get(...countParams) as { count: number };
 
@@ -167,7 +172,6 @@ class AppDatabase {
       };
     } catch (error) {
       console.error('Failed to get all transactions:', error);
-
       throw error;
     }
   }
