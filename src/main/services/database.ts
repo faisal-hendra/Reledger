@@ -138,7 +138,7 @@ class AppDatabase {
       const sortDirection = filters.sortDirection === 'asc' ? 'ASC' : 'DESC';
       let orderClause = '';
       if (sortColumn === 'date') {
-        orderClause = ` ORDER BY date(${sortColumn}) ${sortDirection}`;
+        orderClause = ` ORDER BY date(${sortColumn}) ${sortDirection}, id ${sortDirection}`;
       } else {
         orderClause = ` ORDER BY ${sortColumn} ${sortDirection}`;
       }
@@ -190,7 +190,7 @@ class AppDatabase {
 
   getRecentTransactions(limit: number): Transaction[] | null {
     try {
-      const query = `SELECT * FROM transactions ORDER BY date(date) DESC LIMIT ?`;
+      const query = `SELECT * FROM transactions ORDER BY date(date) DESC, id DESC LIMIT ?`;
       const stmt = this.db.prepare(query);
       return stmt.all(limit) as Transaction[];
     } catch (error) {
