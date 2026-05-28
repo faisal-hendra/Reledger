@@ -46,11 +46,11 @@ declare global {
 
   interface CategoryPercentage {
     category: string;
-    category_count: number;
+    category_total: number;
     percentage: number;
   }
 
-  interface CategoryPerecentageFilters {
+  interface CategoryPercentageFilters {
     year: number;
     month: number;
     type: 'income' | 'expense';
@@ -85,7 +85,7 @@ declare global {
       ) => Promise<{ month: number; income: number; expense: number }[] | undefined>;
       getAvailableYears: () => Promise<{ year: number }[]>;
       getCategoryPercentage: (
-        filters: CategoryPerecentageFilters
+        filters: CategoryPercentageFilters
       ) => Promise<CategoryPercentage[] | null>;
       resetTable: () => Promise<void>;
     };

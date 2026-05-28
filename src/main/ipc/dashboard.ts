@@ -1,6 +1,6 @@
 import { ipcMain } from 'electron';
 import AppDatabase from '../services/database';
-import type { MonthlyTotalFilters, CategoryPerecentageFilters } from '@common/types';
+import type { MonthlyTotalFilters, CategoryPercentageFilters } from '@common/types';
 
 export function registerDashboardHandlers(db: AppDatabase): void {
   ipcMain.handle('getRecentTransactions', async (_, limit: number) => {
@@ -39,7 +39,7 @@ export function registerDashboardHandlers(db: AppDatabase): void {
     }
   });
 
-  ipcMain.handle('getCategoryPercentage', async (_, filters: CategoryPerecentageFilters) => {
+  ipcMain.handle('getCategoryPercentage', async (_, filters: CategoryPercentageFilters) => {
     try {
       return await db.getCategoryPercentage(filters);
     } catch (error) {

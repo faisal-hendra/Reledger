@@ -1,4 +1,6 @@
-export const copyTransactionInfo = (transaction, currency): void => {
+import type { Currency } from '@common/types'
+
+export const copyTransactionInfo = (transaction: Transaction, currency: Currency): void => {
   navigator.clipboard.writeText(
     `id: ${transaction.id}\n` +
       `type: ${transaction.transaction_type}\n` +

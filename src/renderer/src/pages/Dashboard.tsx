@@ -16,7 +16,8 @@ import { Button } from "@/components/ui/button";
 import BreakdownChart from "@/components/BreakdownChart";
 import QuickStats from "@/components/QuickStats";
 import { useCurrency } from "@/stores/use-currency";
-import { BigNumber } from "@/constants/bignumber";
+import { BIG_NUMBER } from "@/constants/bignumber";
+import { formatCurrency } from "@/lib/format-currency";
 import WelcomeMessage from "@/components/WelcomeMessage";
 
 /**
@@ -54,7 +55,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
   const [categoryBreakdown, setCategoryBreakdown] = useState<
     CategoryPercentage[] | null
   >([]);
-  const [categroyBreakdownType, setCategoryBreakdownType] = useState<
+  const [categoryBreakdownType, setCategoryBreakdownType] = useState<
     "income" | "expense"
   >("expense");
   const [thisMonthTransactions, setThisMonthTransactions] = useState<
@@ -144,17 +145,17 @@ function Dashboard({ platform }: Props): React.JSX.Element {
 
   const loadCategoryBreakdown = useCallback(async (): Promise<void> => {
     try {
-      const filters: CategoryPerecentageFilters = {
+      const filters: CategoryPercentageFilters = {
         year: activeYear,
         month: activeMonth,
-        type: categroyBreakdownType,
+        type: categoryBreakdownType,
       };
       const data = await window.api.getCategoryPercentage(filters);
       setCategoryBreakdown(data);
     } catch (error) {
       console.error("Failed to fetch category breakdown:", error);
     }
-  }, [activeYear, activeMonth, categroyBreakdownType]);
+  }, [activeYear, activeMonth, categoryBreakdownType]);
 
   const fetchThisMonthTransactions = useCallback(async (): Promise<void> => {
     try {
@@ -164,7 +165,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
         keyword: null,
         transaction_type: null,
         category: null,
-        limit: BigNumber(),
+        limit: BIG_NUMBER,
         offset: 0,
       };
       const data = await window.api.getTransactions(filters);
@@ -203,7 +204,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
 
   useEffect(() => {
     loadCategoryBreakdown();
-  }, [activeMonth, activeYear, categroyBreakdownType]);
+  }, [activeMonth, activeYear, categoryBreakdownType]);
 
   useEffect(() => {
     fetchThisMonthTransactions();
@@ -219,10 +220,6 @@ function Dashboard({ platform }: Props): React.JSX.Element {
         return { change: "+100%", trend: "up" };
       }
 
-      if (current === 0) {
-        return { change: "-100%", trend: "down" };
-      }
-
       const change = (current - previous) / Math.abs(previous);
       if (isFinite(change)) {
         return {
@@ -236,18 +233,8 @@ function Dashboard({ platform }: Props): React.JSX.Element {
     [],
   );
 
-  const formatCurrency = useCallback(
-    /**
-     * Formats a numeric amount as currency string.
-     */
-    (amount: number): string => {
-      return `${currency.symbol}${
-        amount?.toLocaleString("en-US", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        }) ?? "0.00"
-      }`;
-    },
+  const fmtCurrency = useCallback(
+    (amount: number): string => formatCurrency(amount, currency.symbol),
     [currency.symbol],
   );
 
@@ -259,11 +246,12 @@ function Dashboard({ platform }: Props): React.JSX.Element {
      * @param isExpense - Whether this stat represents an expense
      * @returns Tailwind CSS color class name
      */
-    (trend: string, isExpense: boolean): string => {
+    (trend: string, isExpense: boolean, change: string): string => {
+      if (change === "0%") return "text-positive";
       if (!isExpense) {
-        return trend === "up" ? "text-green-400" : "text-red-400";
+        return trend === "up" ? "text-positive" : "text-destructive";
       }
-      return trend === "up" ? "text-red-400" : "text-green-400";
+      return trend === "up" ? "text-destructive" : "text-positive";
     },
     [],
   );
@@ -289,7 +277,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
     return [
       {
         label: "Balance",
-        value: formatCurrency(currentBalance),
+        value: fmtCurrency(currentBalance),
         change: balanceChange.change,
         trend: balanceChange.trend,
         isExpense: false,
@@ -297,7 +285,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
       },
       {
         label: "Income",
-        value: formatCurrency(thisMonthTotal.income),
+        value: fmtCurrency(thisMonthTotal.income),
         change: incomeChange.change,
         trend: incomeChange.trend,
         isExpense: false,
@@ -305,7 +293,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
       },
       {
         label: "Expenses",
-        value: formatCurrency(thisMonthTotal.expense),
+        value: fmtCurrency(thisMonthTotal.expense),
         change: expenseChange.change,
         trend: expenseChange.trend,
         isExpense: true,
@@ -318,7 +306,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
     currentBalance,
     lastMonthBalance,
     calculatePercentageChange,
-    formatCurrency,
+    fmtCurrency,
   ]);
 
   return (
@@ -333,7 +321,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
           setYear={setActiveYear}
           month={activeMonth}
           setMonth={setActiveMonth}
-          transactionType={categroyBreakdownType}
+          transactionType={categoryBreakdownType}
           setTransactionType={setCategoryBreakdownType}
         >
           <Button variant="outline">
@@ -362,7 +350,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
                     {stat.value}
                   </div>
                   <div
-                    className={`text-xs ${determineStatsColor(stat.trend, stat.isExpense)}`}
+                    className={`text-xs ${determineStatsColor(stat.trend, stat.isExpense, stat.change)}`}
                   >
                     {stat.change} from last month
                   </div>
@@ -381,7 +369,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
             <div className="lg:col-span-1">
               <BreakdownChart
                 data={categoryBreakdown}
-                transactionType={categroyBreakdownType}
+                transactionType={categoryBreakdownType}
               />
             </div>
           </div>

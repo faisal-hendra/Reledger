@@ -4,124 +4,124 @@ export const chartConfig = {
   // Income
   salary: {
     label: 'Salary',
-    color: 'oklch(65% 0.20 140)'
+    color: 'oklch(62% 0.22 145)'
   },
   freelance: {
     label: 'Freelance',
-    color: 'oklch(66% 0.20 285)'
+    color: 'oklch(60% 0.25 285)'
   },
   business: {
     label: 'Business',
-    color: 'oklch(68% 0.18 160)'
+    color: 'oklch(55% 0.20 190)'
   },
   investment_return: {
     label: 'Investment Return',
-    color: 'oklch(60% 0.19 155)'
+    color: 'oklch(58% 0.22 165)'
   },
   investment: {
     label: 'Investment',
-    color: 'oklch(58% 0.17 200)'
+    color: 'oklch(52% 0.20 210)'
   },
   rental: {
     label: 'Rental',
-    color: 'oklch(67% 0.16 120)'
+    color: 'oklch(65% 0.20 130)'
   },
   interest: {
     label: 'Interest',
-    color: 'oklch(63% 0.15 145)'
+    color: 'oklch(60% 0.18 155)'
   },
   cashback: {
     label: 'Cashback',
-    color: 'oklch(72% 0.17 85)'
+    color: 'oklch(70% 0.22 95)'
   },
   refund: {
     label: 'Refund',
-    color: 'oklch(71% 0.14 95)'
+    color: 'oklch(68% 0.18 105)'
   },
   // Expenses
   food_dining: {
     label: 'Food & Dining',
-    color: 'oklch(70% 0.18 50)'
+    color: 'oklch(68% 0.22 40)'
   },
   groceries: {
     label: 'Groceries',
-    color: 'oklch(73% 0.17 65)'
+    color: 'oklch(72% 0.20 55)'
   },
   housing: {
     label: 'Housing',
-    color: 'oklch(69% 0.14 75)'
+    color: 'oklch(65% 0.18 65)'
   },
   utilities: {
     label: 'Utilities',
-    color: 'oklch(75% 0.16 95)'
+    color: 'oklch(74% 0.18 85)'
   },
   transportation: {
     label: 'Transportation',
-    color: 'oklch(68% 0.17 250)'
+    color: 'oklch(60% 0.22 240)'
   },
   healthcare: {
     label: 'Healthcare',
-    color: 'oklch(70% 0.16 145)'
+    color: 'oklch(65% 0.20 155)'
   },
   personal_care: {
     label: 'Personal Care',
-    color: 'oklch(74% 0.18 340)'
+    color: 'oklch(70% 0.22 345)'
   },
   fitness: {
     label: 'Fitness',
-    color: 'oklch(67% 0.19 165)'
+    color: 'oklch(62% 0.22 160)'
   },
   shopping: {
     label: 'Shopping',
-    color: 'oklch(72% 0.20 20)'
+    color: 'oklch(68% 0.24 25)'
   },
   entertainment: {
     label: 'Entertainment',
-    color: 'oklch(65% 0.22 300)'
+    color: 'oklch(60% 0.25 310)'
   },
   travel: {
     label: 'Travel',
-    color: 'oklch(72% 0.16 210)'
+    color: 'oklch(68% 0.20 220)'
   },
   hobbies: {
     label: 'Hobbies',
-    color: 'oklch(69% 0.18 270)'
+    color: 'oklch(64% 0.22 275)'
   },
   insurance: {
     label: 'Insurance',
-    color: 'oklch(62% 0.10 230)'
+    color: 'oklch(55% 0.12 240)'
   },
   taxes: {
     label: 'Taxes',
-    color: 'oklch(60% 0.12 220)'
+    color: 'oklch(52% 0.14 230)'
   },
   childcare: {
     label: 'Childcare',
-    color: 'oklch(74% 0.17 25)'
+    color: 'oklch(72% 0.20 30)'
   },
   education: {
     label: 'Education',
-    color: 'oklch(66% 0.15 240)'
+    color: 'oklch(60% 0.20 250)'
   },
   // Shared
   savings: {
     label: 'Savings',
-    color: 'oklch(68% 0.14 180)'
+    color: 'oklch(62% 0.20 175)'
   },
   loan: {
     label: 'Loan',
-    color: 'oklch(70% 0.18 75)'
+    color: 'oklch(68% 0.22 65)'
   },
   gift: {
     label: 'Gift',
-    color: 'oklch(72% 0.19 15)'
+    color: 'oklch(70% 0.22 10)'
   },
   gifts: {
     label: 'Gifts',
-    color: 'oklch(73% 0.19 10)'
+    color: 'oklch(71% 0.22 5)'
   },
   other: {
     label: 'Other',
-    color: 'oklch(70% 0.02 260)'
+    color: 'oklch(68% 0.04 260)'
   }
 } satisfies ChartConfig

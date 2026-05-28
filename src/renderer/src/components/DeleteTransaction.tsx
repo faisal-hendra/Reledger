@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Trash2Icon } from 'lucide-react'
 import { useTheme } from './ui/theme-provider'
+import { applyDim } from '@/lib/theme'
 
 interface Props {
   children: React.ReactNode
@@ -32,18 +33,7 @@ function DeleteTransaction({ children, id, onRefresh, alert }: Props): React.JSX
     }
   }
 
-  // Apply titlebar dimming effect when dialog opens (Windows-specific)
-  // Resolves system theme preference to determine correct dimming color
   const { theme } = useTheme()
-  const applyDim = (isOpen: boolean): void => {
-    const resolvedTheme =
-      theme === 'system'
-        ? window.matchMedia('(prefers-color-scheme: dark)').matches
-          ? 'dark'
-          : 'light'
-        : theme
-    window.api.dimTitlebar(isOpen, resolvedTheme)
-  }
 
   const [open, setOpen] = useState<boolean>(false)
 
@@ -52,7 +42,7 @@ function DeleteTransaction({ children, id, onRefresh, alert }: Props): React.JSX
       open={open}
       onOpenChange={(isOpen) => {
         setOpen(isOpen)
-        applyDim(isOpen)
+        applyDim(isOpen, theme)
       }}
     >
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
@@ -72,7 +62,7 @@ function DeleteTransaction({ children, id, onRefresh, alert }: Props): React.JSX
             variant="destructive"
             onClick={() => {
               handleDelete()
-              applyDim(false)
+              applyDim(false, theme)
             }}
           >
             Delete

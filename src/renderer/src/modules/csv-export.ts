@@ -1,6 +1,6 @@
 import { saveAs } from 'file-saver'
 
-export const handleCSVExport = (transactions: Transaction[], csvSeparator): void => {
+export const handleCSVExport = (transactions: Transaction[], csvSeparator: string): void => {
   const csvContent = [
     ['Date', 'Name', 'Amount', 'Category', 'Type'],
     ...transactions.map((t) => [t.date, t.name, t.amount, t.category, t.transaction_type])
@@ -10,7 +10,7 @@ export const handleCSVExport = (transactions: Transaction[], csvSeparator): void
   handleCSVDownload(csvContent)
 }
 
-const handleCSVDownload = (csv): void => {
+const handleCSVDownload = (csv: string): void => {
   const file = new File([csv], 'transactions.csv', { type: 'text/csv' })
   saveAs(file)
 }

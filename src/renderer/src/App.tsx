@@ -57,7 +57,7 @@ function App(): React.JSX.Element {
               <div className="flex flex-col h-screen overflow-hidden">
                 {/* Platform-aware window title bar */}
                 <div
-                  className={`dragable ${platform === 'win32' ? 'h-8' : 'h-8'} bg-titlebar flex items-center justify-center border-b border-border shrink-0`}
+                  className="dragable h-8 bg-titlebar flex items-center justify-center border-b border-border shrink-0"
                 >
                   <p className="text-xs select-none">Reledger</p>
                 </div>

@@ -105,12 +105,13 @@ export function useColumns(
       },
       cell: ({ row }) => {
         const amount = parseFloat(row.getValue("amount"));
+
         const formatted = new Intl.NumberFormat("en-US", {
           style: "currency",
           currency: currency.code,
         }).format(amount);
 
-        return <div className="text-right font-medium px-3">{formatted}</div>;
+        return <div className={`text-right font-medium px-3`}>{formatted}</div>;
       },
     },
     {
@@ -171,7 +172,7 @@ export function useColumns(
               <DeleteTransaction
                 id={transaction.id?.toString() || ""}
                 onRefresh={onRefresh}
-                alert={() => displayToast?.("Transaction deleted successfuly")}
+                alert={() => displayToast?.("Transaction deleted successfully")}
               >
                 <DropdownMenuItem
                   variant="destructive"

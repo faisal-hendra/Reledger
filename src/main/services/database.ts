@@ -8,7 +8,7 @@ import type {
   MonthlyTotalFilters,
   GetYear,
   CategoryPercentage,
-  CategoryPerecentageFilters,
+  CategoryPercentageFilters,
 } from '@common/types';
 
 class AppDatabase {
@@ -286,7 +286,7 @@ class AppDatabase {
     }
   }
 
-  getCategoryPercentage(filters: CategoryPerecentageFilters): CategoryPercentage[] | null {
+  getCategoryPercentage(filters: CategoryPercentageFilters): CategoryPercentage[] | null {
     try {
       const stmt = this.db.prepare(`
         SELECT

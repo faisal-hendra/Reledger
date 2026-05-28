@@ -1,25 +1,28 @@
-import React from 'react'
-import { ArrowUpRight, ArrowDownLeft } from 'lucide-react'
-import dayjs from 'dayjs'
-import { Label } from './ui/label'
+import React from "react";
+import { ArrowUpRight, ArrowDownLeft } from "lucide-react";
+import dayjs from "dayjs";
+import { Label } from "./ui/label";
+import { useCurrency } from "@renderer/stores/use-currency";
 
 interface Props {
-  recentTransactions: Transaction[]
+  recentTransactions: Transaction[];
 }
 
 function RecentTransactions({ recentTransactions }: Props): React.JSX.Element {
+  const { currency } = useCurrency();
+
   // Returns human-readable date: 'Today', 'Yesterday', or full date format
-  const displayTransactionDate = (trDate): string => {
-    const todayDate = dayjs().format('YYYY-MM-DD')
-    const yesterdayDate = dayjs().subtract(1, 'day').format('YYYY-MM-DD')
+  const displayTransactionDate = (trDate: string): string => {
+    const todayDate = dayjs().format("YYYY-MM-DD");
+    const yesterdayDate = dayjs().subtract(1, "day").format("YYYY-MM-DD");
     if (trDate === todayDate) {
-      return 'Today'
+      return "Today";
     } else if (trDate === yesterdayDate) {
-      return 'Yesterday'
+      return "Yesterday";
     } else {
-      return dayjs(trDate).format('dddd, D MMM YYYY')
+      return dayjs(trDate).format("dddd, D MMM YYYY");
     }
-  }
+  };
 
   return (
     <div className="bg-card rounded-xl shadow-none">
@@ -28,7 +31,9 @@ function RecentTransactions({ recentTransactions }: Props): React.JSX.Element {
           <>
             <div className="flex px-5 py-4 border-b border-border justify-between">
               <h3 className="font-semibold ">Recent Transactions</h3>
-              <h4 className="opacity-50">{displayTransactionDate(recentTransactions[0]?.date)}</h4>
+              <h4 className="opacity-50">
+                {displayTransactionDate(recentTransactions[0]?.date)}
+              </h4>
             </div>
             <div className="divide-y divide-border">
               {recentTransactions.map((tx) => (
@@ -40,12 +45,12 @@ function RecentTransactions({ recentTransactions }: Props): React.JSX.Element {
                     {/* Icon direction: income shows downward arrow (money coming in), expense shows upward (money going out) */}
                     <div
                       className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                        tx.transaction_type === 'income'
-                          ? 'bg-green-500/20 text-green-400'
-                          : 'bg-red-500/20 text-red-400'
+                        tx.transaction_type === "income"
+                          ? "bg-green-500/20 text-positive"
+                          : "bg-red-500/20 text-destructive"
                       }`}
                     >
-                      {tx.transaction_type === 'income' ? (
+                      {tx.transaction_type === "income" ? (
                         <ArrowDownLeft className="w-4 h-4" />
                       ) : (
                         <ArrowUpRight className="w-4 h-4" />
@@ -58,10 +63,13 @@ function RecentTransactions({ recentTransactions }: Props): React.JSX.Element {
                   </div>
                   <div
                     className={`text-sm font-medium ${
-                      tx.transaction_type === 'income' ? 'text-green-400' : 'text-red-400'
+                      tx.transaction_type === "income"
+                        ? "text-positive"
+                        : "text-destructive"
                     }`}
                   >
-                    {tx.transaction_type === 'income' ? '+' : ''}
+                    {tx.transaction_type === "income" ? "+ " : ""}
+                    {currency.symbol}
                     {tx.amount.toFixed(2)}
                   </div>
                 </div>
@@ -70,12 +78,14 @@ function RecentTransactions({ recentTransactions }: Props): React.JSX.Element {
           </>
         ) : (
           <div className="flex p-10 justify-center">
-            <Label className="opacity-50">No recent transaction available.</Label>
+            <Label className="opacity-50">
+              No recent transaction available.
+            </Label>
           </div>
         )}
       </div>
     </div>
-  )
+  );
 }
 
-export default RecentTransactions
+export default RecentTransactions;

@@ -4,7 +4,7 @@ import type {
   TransactionFilters,
   MonthlyTotal,
   MonthlyTotalFilters,
-  CategoryPerecentageFilters,
+  CategoryPercentageFilters,
   CategoryPercentage,
   GetYear,
 } from '../common/types';
@@ -30,7 +30,7 @@ declare global {
       ) => Promise<{ month: number; income: number; expense: number }[] | undefined>;
       getAvailableYears: () => Promise<GetYear[] | null>;
       getCategoryPercentage: (
-        filters: CategoryPerecentageFilters
+        filters: CategoryPercentageFilters
       ) => Promise<CategoryPercentage[] | null>;
       resetTable: () => Promise<void>;
     };
@@ -42,7 +42,7 @@ export type {
   TransactionFilters,
   MonthlyTotal,
   MonthlyTotalFilters,
-  CategoryPerecentageFilters,
+  CategoryPercentageFilters,
   CategoryPercentage,
   GetYear,
 };

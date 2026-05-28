@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { resolveTheme } from '@/lib/theme'
 
 type Theme = 'dark' | 'light' | 'system'
 
@@ -51,15 +52,7 @@ export function ThemeProvider({
   // Notify main process of theme changes for Windows titlebar
   useEffect(() => {
     if (window.api.platform !== 'win32') return
-
-    const resolvedTheme =
-      theme === 'system'
-        ? window.matchMedia('(prefers-color-scheme: dark)').matches
-          ? 'dark'
-          : 'light'
-        : theme
-
-    window.api.setTitlebarTheme(resolvedTheme)
+    window.api.setTitlebarTheme(resolveTheme(theme))
   }, [theme])
 
   const value = {

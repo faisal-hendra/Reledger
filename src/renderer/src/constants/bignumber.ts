@@ -1,3 +1,1 @@
-export const BigNumber = (): number => {
-  return 999999999999999
-}
+export const BIG_NUMBER = 999999999999999

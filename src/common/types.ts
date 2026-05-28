@@ -43,11 +43,11 @@ export interface GetYear {
 
 export interface CategoryPercentage {
   category: string;
-  category_count: number;
+  category_total: number;
   percentage: number;
 }
 
-export interface CategoryPerecentageFilters {
+export interface CategoryPercentageFilters {
   year: number;
   month: number;
   type: 'income' | 'expense';

@@ -1,19 +1,19 @@
-@import 'tailwindcss';
-@import './base.css';
-@import './animations.css';
-@import 'shadcn/tailwind.css';
+@import "tailwindcss";
+@import "./base.css";
+@import "./animations.css";
+@import "shadcn/tailwind.css";
 @plugin 'tailwind-scrollbar';
 
 @custom-variant dark (&:is(.dark *));
 
 @font-face {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 450;
-  src: url('../../../../resources/fonts/Montserrat.ttf');
+  src: url("../../../../resources/fonts/Montserrat.ttf");
 }
 
 @theme {
-  --font-montserrat: 'Montserrat';
+  --font-montserrat: "Montserrat";
 }
 
 @theme inline {
@@ -60,6 +60,7 @@
   --color-titlebar: var(--titlebar);
   --color-sidebar-active: var(--sidebar-active);
   --color-sidebar-hover: var(--sidebar-hover);
+  --color-positive: var(--positive);
 }
 
 :root {
@@ -101,6 +102,7 @@
   --titlebar: #ffffff;
   --sidebar-active: #171717;
   --sidebar-hover: #a0a0a0;
+  --positive: oklch(62.7% 0.194 149.214);
 }
 
 .dark {
@@ -140,6 +142,7 @@
   --titlebar: #1b1b1b;
   --sidebar-active: #414141;
   --sidebar-hover: #2a2a2a;
+  --positive: oklch(79.2% 0.209 151.711);
 }
 
 @layer base {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from './ui/theme-provider';
+import { applyDim } from '@/lib/theme';
 import {
   Dialog,
   DialogClose,
@@ -80,41 +81,26 @@ export function AddTransaction({
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     try {
-      await window.api.addTransaction({
+      const payload = {
         transaction_type: formData.transaction_type as 'expense' | 'income',
         name: formData.name,
         amount: parseFloat(formData.amount),
         category: formData.category,
         description: formData.description,
         date: formData.date,
-      });
+      };
+      if (editMode) {
+        await window.api.updateTransaction({ id: idToEdit, ...payload });
+        alert?.('Transaction edited successfully');
+      } else {
+        await window.api.addTransaction(payload);
+        alert?.('Transaction added successfully');
+      }
       setFormData(INITIAL_FORM);
       setOpen(false);
       onTransactionAdded?.();
-      alert?.('Transaction added successfully');
     } catch (error) {
-      console.error('Failed to add transaction:', error);
-    }
-  };
-
-  const handleEdit = async (e: React.FormEvent): Promise<void> => {
-    e.preventDefault();
-    try {
-      await window.api.updateTransaction({
-        id: idToEdit,
-        transaction_type: formData.transaction_type as 'expense' | 'income',
-        name: formData.name,
-        amount: parseFloat(formData.amount),
-        category: formData.category,
-        description: formData.description,
-        date: formData.date,
-      });
-      setFormData(INITIAL_FORM);
-      setOpen(false);
-      onTransactionAdded?.();
-      alert?.('Transaction edited successfully');
-    } catch (error) {
-      console.error('Failed to edit transaction:', error);
+      console.error('Failed to save transaction:', error);
     }
   };
 
@@ -146,18 +132,7 @@ export function AddTransaction({
     }
   }, [idToEdit]);
 
-  // Apply titlebar dimming effect when dialog opens (Windows-specific)
-  // Resolves system theme preference to determine correct dimming color
   const { theme } = useTheme();
-  const applyDim = (isOpen: boolean): void => {
-    const resolvedTheme =
-      theme === 'system'
-        ? window.matchMedia('(prefers-color-scheme: dark)').matches
-          ? 'dark'
-          : 'light'
-        : theme;
-    window.api.dimTitlebar(isOpen, resolvedTheme);
-  };
 
   // Reset category select when transaction type is changed
   useEffect(() => {
@@ -172,20 +147,16 @@ export function AddTransaction({
       open={open}
       onOpenChange={(isOpen) => {
         setOpen(isOpen);
-        applyDim(isOpen);
+        applyDim(isOpen, theme);
       }}
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="max-w-md">
         <form
           onSubmit={(e) => {
-            if (!editMode) {
-              handleSubmit(e);
-            } else {
-              handleEdit(e);
-            }
+            handleSubmit(e);
             setOpen(false);
-            applyDim(false);
+            applyDim(false, theme);
           }}
         >
           <DialogHeader>

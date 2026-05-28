@@ -4,7 +4,7 @@ import type {
   Transaction,
   TransactionFilters,
   MonthlyTotalFilters,
-  CategoryPerecentageFilters,
+  CategoryPercentageFilters,
 } from '@common/types';
 
 const api = {
@@ -26,7 +26,7 @@ const api = {
   getTransactionById: (id: number) => ipcRenderer.invoke('getTransactionById', id),
   getFullMonthlyTotal: (year: number) => ipcRenderer.invoke('getFullMonthlyTotal', year),
   getAvailableYears: () => ipcRenderer.invoke('getAvailableYears'),
-  getCategoryPercentage: (filters: CategoryPerecentageFilters) =>
+  getCategoryPercentage: (filters: CategoryPercentageFilters) =>
     ipcRenderer.invoke('getCategoryPercentage', filters),
   resetTable: () => ipcRenderer.invoke('resetTable'),
 };

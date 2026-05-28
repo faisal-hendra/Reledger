@@ -1,6 +1,7 @@
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card'
 import { TrendingDown, Receipt, Trophy } from 'lucide-react'
 import { useCurrency } from '@/stores/use-currency'
+import { formatCurrency } from '@/lib/format-currency'
 import dayjs from 'dayjs'
 import { useMemo } from 'react'
 
@@ -14,22 +15,13 @@ function QuickStats({ transactions, thisMonthTotal, topExpense }: Props): React.
   const { currency } = useCurrency()
 
   const stats = useMemo(() => {
-    const formatCurrency = (amount: number): string => {
-      return `${currency.symbol}${
-        amount?.toLocaleString('en-US', {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
-        }) ?? '0.00'
-      }`
-    }
-
     return {
       transactionCount: transactions?.length || 0,
       // Calculate average daily expense by dividing monthly total by current day of month
       avgDailyExpense: thisMonthTotal
-        ? formatCurrency(thisMonthTotal.expense / dayjs().date())
+        ? formatCurrency(thisMonthTotal.expense / dayjs().date(), currency.symbol)
         : '0.00',
-      topAmount: topExpense ? formatCurrency(topExpense.amount) : 'N/A'
+      topAmount: topExpense ? formatCurrency(topExpense.amount, currency.symbol) : 'N/A'
     }
   }, [transactions, thisMonthTotal, topExpense, currency.symbol])
 
