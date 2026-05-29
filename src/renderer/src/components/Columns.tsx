@@ -14,7 +14,7 @@ import {
 import { AddTransaction } from "./AddTransaction";
 import { useCurrency } from "@/stores/use-currency";
 import dayjs from "dayjs";
-import { copyTransactionInfo } from "@/modules/clipboard";
+import { copyTransactionInfo } from "@/lib/clipboard";
 
 export function useColumns(
   onRefresh?: () => void,
