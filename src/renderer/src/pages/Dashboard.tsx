@@ -62,14 +62,24 @@ function Dashboard({ platform }: Props): React.JSX.Element {
     Transaction[] | undefined
   >(undefined);
 
+  const topIncome = useMemo(() => {
+    if (!thisMonthTransactions?.length) return undefined;
+    const incomes = thisMonthTransactions.filter(
+      (t) => t.transaction_type === "income",
+    );
+    if (!incomes.length) return undefined;
+    const maxIncome = Math.max(...incomes.map((i) => i.amount));
+    return thisMonthTransactions.find((t) => t.amount === maxIncome);
+  }, [thisMonthTransactions]);
+
   const topExpense = useMemo(() => {
     if (!thisMonthTransactions?.length) return undefined;
     const expenses = thisMonthTransactions.filter(
       (t) => t.transaction_type === "expense",
     );
     if (!expenses.length) return undefined;
-    const maxAmount = Math.max(...expenses.map((t) => t.amount));
-    return thisMonthTransactions.find((t) => t.amount === maxAmount);
+    const maxExpense = Math.max(...expenses.map((e) => e.amount));
+    return thisMonthTransactions.find((t) => t.amount === maxExpense);
   }, [thisMonthTransactions]);
 
   const checkIsTransactionEmpty = useCallback(async (): Promise<void> => {
@@ -233,11 +243,6 @@ function Dashboard({ platform }: Props): React.JSX.Element {
     [],
   );
 
-  const fmtCurrency = useCallback(
-    (amount: number): string => formatCurrency(amount, currency.symbol),
-    [currency.symbol],
-  );
-
   const determineStatsColor = useCallback(
     /**
      * Determines appropriate color for statistical trend display.
@@ -277,7 +282,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
     return [
       {
         label: "Balance",
-        value: fmtCurrency(currentBalance),
+        value: formatCurrency(currentBalance, currency.symbol),
         change: balanceChange.change,
         trend: balanceChange.trend,
         isExpense: false,
@@ -285,7 +290,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
       },
       {
         label: "Income",
-        value: fmtCurrency(thisMonthTotal.income),
+        value: formatCurrency(thisMonthTotal.income, currency.symbol),
         change: incomeChange.change,
         trend: incomeChange.trend,
         isExpense: false,
@@ -293,7 +298,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
       },
       {
         label: "Expenses",
-        value: fmtCurrency(thisMonthTotal.expense),
+        value: formatCurrency(thisMonthTotal.expense, currency.symbol),
         change: expenseChange.change,
         trend: expenseChange.trend,
         isExpense: true,
@@ -306,7 +311,6 @@ function Dashboard({ platform }: Props): React.JSX.Element {
     currentBalance,
     lastMonthBalance,
     calculatePercentageChange,
-    fmtCurrency,
   ]);
 
   return (
@@ -378,6 +382,7 @@ function Dashboard({ platform }: Props): React.JSX.Element {
               <QuickStats
                 transactions={thisMonthTransactions}
                 thisMonthTotal={thisMonthTotal}
+                topIncome={topIncome}
                 topExpense={topExpense}
               />
             )}

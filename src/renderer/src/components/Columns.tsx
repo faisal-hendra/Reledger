@@ -15,6 +15,7 @@ import { AddTransaction } from "./AddTransaction";
 import { useCurrency } from "@/stores/use-currency";
 import dayjs from "dayjs";
 import { copyTransactionInfo } from "@/lib/clipboard";
+import { formatCurrency } from "@renderer/lib/format-currency";
 
 export function useColumns(
   onRefresh?: () => void,
@@ -105,12 +106,7 @@ export function useColumns(
       },
       cell: ({ row }) => {
         const amount = parseFloat(row.getValue("amount"));
-
-        const formatted = new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: currency.code,
-        }).format(amount);
-
+        const formatted = formatCurrency(amount, currency.symbol);
         return <div className={`text-right font-medium px-3`}>{formatted}</div>;
       },
     },
@@ -122,10 +118,7 @@ export function useColumns(
       cell: ({ row }) => {
         const balance = row.getValue("running_balance");
         if (balance === undefined) return null;
-        const formatted = new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: currency.code,
-        }).format(balance as number);
+        const formatted = formatCurrency(balance as number, currency.symbol);
         return (
           <div
             className={`text-right font-medium px-3 ${(balance as number) < 0 ? "text-destructive" : ""}`}
