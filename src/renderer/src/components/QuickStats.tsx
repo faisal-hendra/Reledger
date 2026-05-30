@@ -1,5 +1,11 @@
 import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
-import { TrendingDown, Receipt, Trophy } from "lucide-react";
+import {
+  TrendingDown,
+  Receipt,
+  Trophy,
+  Calculator,
+  TrendingUp,
+} from "lucide-react";
 import { useCurrency } from "@/stores/use-currency";
 import { formatCurrency } from "@/lib/format-currency";
 import dayjs from "dayjs";
@@ -53,17 +59,9 @@ function QuickStats({
               <p className="text-xl font-semibold">{stats.transactionCount}</p>
             </div>
           </div>
+
           <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
-            <TrendingDown className="h-8 w-8 text-red-400" />
-            <div>
-              <p className="text-sm text-muted-foreground">
-                Avg. Daily Expense
-              </p>
-              <p className="text-xl font-semibold">{stats.avgDailyExpense}</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
-            <Trophy className="h-8 w-8 text-green-400" />
+            <TrendingUp className="h-8 w-8 text-green-400" />
             <div>
               <p className="text-sm text-muted-foreground">Top Income</p>
               <div className="flex items-center gap-2">
@@ -79,7 +77,7 @@ function QuickStats({
             </div>
           </div>
           <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
-            <Trophy className="h-8 w-8 text-red-400" />
+            <TrendingDown className="h-8 w-8 text-red-400" />
             <div>
               <p className="text-sm text-muted-foreground">Top Expense</p>
               <div className="flex items-center gap-2">
@@ -92,6 +90,15 @@ function QuickStats({
                   )}
                 </p>
               </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+            <Calculator className="h-8 w-8 text-orange-400" />
+            <div>
+              <p className="text-sm text-muted-foreground">
+                Avg. Daily Expense
+              </p>
+              <p className="text-xl font-semibold">{stats.avgDailyExpense}</p>
             </div>
           </div>
         </div>
