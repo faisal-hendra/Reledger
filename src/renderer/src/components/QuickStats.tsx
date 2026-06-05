@@ -2,7 +2,6 @@ import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
 import {
   TrendingDown,
   Receipt,
-  Trophy,
   Calculator,
   TrendingUp,
 } from "lucide-react";
