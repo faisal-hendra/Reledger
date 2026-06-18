@@ -32,7 +32,6 @@ function Transactions({ platform }: Props): React.JSX.Element {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [filters, setFilters] = useState<TransactionFilters>(INITIAL_FILTER);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isFiltering, setIsFiltering] = useState<boolean>(false);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: DEFAULT_PAGE_SIZE,
@@ -44,7 +43,7 @@ function Transactions({ platform }: Props): React.JSX.Element {
 
   const loadTransactions = useCallback(async (): Promise<void> => {
     try {
-      !isFiltering && setIsLoading(true);
+      setIsLoading(true);
       const offset = pagination.pageIndex * pagination.pageSize;
       const sortColumn = sorting[0]?.id;
       const sortDirection = sorting[0]?.desc ? "desc" : "asc";
@@ -62,13 +61,7 @@ function Transactions({ platform }: Props): React.JSX.Element {
     } finally {
       setIsLoading(false);
     }
-  }, [
-    filters,
-    pagination.pageIndex,
-    pagination.pageSize,
-    sorting,
-    isFiltering,
-  ]);
+  }, [filters, pagination.pageIndex, pagination.pageSize, sorting]);
 
   const displayToast = useCallback((message: string): void => {
     toast.success(message, { position: "bottom-right" });
@@ -77,50 +70,12 @@ function Transactions({ platform }: Props): React.JSX.Element {
   const { csvSeparator } = useCsvSeparator();
 
   useEffect(() => {
-    const initializeTransactions = async (): Promise<void> => {
-      try {
-        const data = await window.api.getTransactions({
-          ...filters,
-          limit: pagination.pageSize,
-          offset: 0,
-        });
-        setTransactions(data.transactions);
-        setTotalCount(data.total);
-        setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-      } catch (error) {
-        console.error("Failed to initialize transactions:", error);
-      }
-    };
-
-    initializeTransactions();
-  }, []);
-
-  useEffect(() => {
-    const offset = pagination.pageIndex * pagination.pageSize;
-    const sortColumn = sorting[0]?.id;
-    const sortDirection = sorting[0]?.desc ? "desc" : "asc";
-    const fetchData = async (): Promise<void> => {
-      try {
-        const data = await window.api.getTransactions({
-          ...filters,
-          limit: pagination.pageSize,
-          offset,
-          sortColumn,
-          sortDirection,
-        });
-        setTransactions(data.transactions);
-        setTotalCount(data.total);
-      } catch (error) {
-        console.error("Failed to load transactions:", error);
-      }
-    };
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pagination, sorting]);
-
-  useEffect(() => {
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
   }, [filters]);
+
+  useEffect(() => {
+    void loadTransactions();
+  }, [loadTransactions]);
 
   const columns = useColumns(loadTransactions, displayToast);
 
@@ -132,7 +87,6 @@ function Transactions({ platform }: Props): React.JSX.Element {
             transactions={transactions}
             onFilterChange={setFilters}
             onTransactionFiltered={loadTransactions}
-            setIsFiltering={setIsFiltering}
           >
             <Button variant="outline">
               <FunnelIcon />

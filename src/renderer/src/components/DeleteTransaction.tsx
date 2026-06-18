@@ -13,7 +13,6 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Trash2Icon } from 'lucide-react'
 import { useTheme } from './ui/theme-provider'
-import { applyDim } from '@/lib/theme'
 
 interface Props {
   children: React.ReactNode
@@ -35,6 +34,13 @@ function DeleteTransaction({ children, id, onRefresh, alert }: Props): React.JSX
 
   const { theme } = useTheme()
 
+  const applyDim = (isOpen: boolean): void => {
+    const resolved = theme === 'system'
+      ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+      : theme
+    window.api.dimTitlebar(isOpen, resolved)
+  }
+
   const [open, setOpen] = useState<boolean>(false)
 
   return (
@@ -42,7 +48,7 @@ function DeleteTransaction({ children, id, onRefresh, alert }: Props): React.JSX
       open={open}
       onOpenChange={(isOpen) => {
         setOpen(isOpen)
-        applyDim(isOpen, theme)
+        applyDim(isOpen)
       }}
     >
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
@@ -62,7 +68,7 @@ function DeleteTransaction({ children, id, onRefresh, alert }: Props): React.JSX
             variant="destructive"
             onClick={() => {
               handleDelete()
-              applyDim(false, theme)
+              applyDim(false)
             }}
           >
             Delete

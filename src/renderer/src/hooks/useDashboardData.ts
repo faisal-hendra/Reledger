@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { BIG_NUMBER } from "@/constants/bignumber";
+
 import type { DashboardFilters } from "./useDashboardFilters";
 
 export interface DashboardData {
@@ -141,7 +141,7 @@ export function useDashboardData(filters: DashboardFilters): DashboardData {
           keyword: null,
           transaction_type: null,
           category: null,
-          limit: BIG_NUMBER,
+          limit: Number.MAX_SAFE_INTEGER,
           offset: 0,
         });
         if (cancelled) return;

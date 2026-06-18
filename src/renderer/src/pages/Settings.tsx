@@ -2,7 +2,7 @@ import { ModeToggle } from "@/components/ui/mode-toggle";
 import { useCurrency } from "@/stores/use-currency";
 import { useCsvSeparator } from "@/stores/use-csvseparator";
 import { CURRENCIES } from "@/constants/currencies";
-import { CSV_SEPARATORS } from "@/constants/csv-separators";
+
 import {
   Select,
   SelectContent,
@@ -84,7 +84,7 @@ function Settings(): React.JSX.Element {
                   <SelectValue placeholder="Select separator" />
                 </SelectTrigger>
                 <SelectContent>
-                  {CSV_SEPARATORS.map((s) => (
+                  {[",", ";"].map((s) => (
                     <SelectItem
                       key={s}
                       value={s}

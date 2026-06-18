@@ -1,16 +1,16 @@
-import { saveAs } from 'file-saver'
-
 export const handleCSVExport = (transactions: Transaction[], csvSeparator: string): void => {
   const csvContent = [
     ['Date', 'Name', 'Amount', 'Category', 'Type'],
     ...transactions.map((t) => [t.date, t.name, t.amount, t.category, t.transaction_type])
   ]
-    .map((row) => row.join(`${csvSeparator}`))
+    .map((row) => row.join(csvSeparator))
     .join('\n')
-  handleCSVDownload(csvContent)
-}
 
-const handleCSVDownload = (csv: string): void => {
-  const file = new File([csv], 'transactions.csv', { type: 'text/csv' })
-  saveAs(file)
+  const blob = new Blob([csvContent], { type: 'text/csv' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = 'transactions.csv'
+  a.click()
+  URL.revokeObjectURL(url)
 }

@@ -12,7 +12,6 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Trash2Icon } from 'lucide-react'
 import { useTheme } from '@/components/ui/theme-provider'
-import { applyDim } from '@/lib/theme'
 import { Button } from '@/components/ui/button'
 
 interface Props {
@@ -22,10 +21,17 @@ interface Props {
 function ResetDialog({ handleReset }: Props): React.JSX.Element {
   const { theme } = useTheme()
 
+  const applyDim = (isOpen: boolean): void => {
+    const resolved = theme === 'system'
+      ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+      : theme
+    window.api.dimTitlebar(isOpen, resolved)
+  }
+
   return (
     <AlertDialog
       onOpenChange={(isOpen) => {
-        applyDim(isOpen, theme)
+        applyDim(isOpen)
       }}
     >
       <AlertDialogTrigger asChild>

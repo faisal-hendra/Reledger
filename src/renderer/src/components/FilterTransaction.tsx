@@ -7,8 +7,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Button } from './ui/button';
 import { INCOME_CATEGORIES, EXPENSE_CATEGORIES } from '@/constants/categories';
 import { MONTHS } from '@/constants/months';
-import { TRANSACTION_TYPES } from '@/constants/transaction-types';
 import { Badge } from './ui/badge';
+
+const TRANSACTION_TYPES = [
+  { value: 'expense', label: 'Expense' },
+  { value: 'income', label: 'Income' }
+]
 
 interface Props {
   children: React.ReactNode;
@@ -21,13 +25,11 @@ interface Props {
     transaction_type: 'income' | 'expense' | null;
   }) => void;
   onTransactionFiltered?: () => void;
-  setIsFiltering: (value: boolean) => void;
 }
 function FilterTransaction({
   children,
   onFilterChange,
   onTransactionFiltered,
-  setIsFiltering,
 }: Props): React.JSX.Element {
   const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
@@ -146,7 +148,6 @@ function FilterTransaction({
   // Trigger filter callback whenever any filter criteria changes
   useEffect(() => {
     onTransactionFiltered?.();
-    setIsFiltering(true);
   }, [
     selectedMonth,
     selectedYear,
@@ -154,7 +155,6 @@ function FilterTransaction({
     selectedType,
     selectedCategory,
     onTransactionFiltered,
-    setIsFiltering,
   ]);
 
   const handleReset = (): void => {

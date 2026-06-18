@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from './ui/theme-provider';
-import { applyDim } from '@/lib/theme';
 import {
   Dialog,
   DialogClose,
@@ -26,7 +25,11 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { ChevronDownIcon, CalendarIcon } from 'lucide-react';
 import { Badge } from './ui/badge';
 import { INCOME_CATEGORIES, EXPENSE_CATEGORIES } from '@/constants/categories';
-import { TRANSACTION_TYPES } from '@/constants/transaction-types';
+
+const TRANSACTION_TYPES = [
+  { value: 'expense', label: 'Expense' },
+  { value: 'income', label: 'Income' }
+]
 
 import dayjs from 'dayjs';
 
@@ -134,6 +137,13 @@ export function AddTransaction({
 
   const { theme } = useTheme();
 
+  const applyDim = (isOpen: boolean): void => {
+    const resolved = theme === 'system'
+      ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+      : theme
+    window.api.dimTitlebar(isOpen, resolved)
+  }
+
   // Reset category select when transaction type is changed
   useEffect(() => {
     const resetCategory = (): void => {
@@ -147,7 +157,7 @@ export function AddTransaction({
       open={open}
       onOpenChange={(isOpen) => {
         setOpen(isOpen);
-        applyDim(isOpen, theme);
+        applyDim(isOpen);
       }}
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -156,7 +166,7 @@ export function AddTransaction({
           onSubmit={(e) => {
             handleSubmit(e);
             setOpen(false);
-            applyDim(false, theme);
+            applyDim(false);
           }}
         >
           <DialogHeader>

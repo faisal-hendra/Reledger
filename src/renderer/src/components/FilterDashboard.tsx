@@ -16,7 +16,11 @@ import dayjs from 'dayjs'
 import { Button } from './ui/button'
 import { MONTHS } from '@/constants/months'
 import { Separator } from './ui/separator'
-import { TRANSACTION_TYPES } from '@/constants/transaction-types'
+
+const TRANSACTION_TYPES = [
+  { value: 'expense', label: 'Expense' },
+  { value: 'income', label: 'Income' }
+]
 
 interface Props {
   children: React.ReactNode
