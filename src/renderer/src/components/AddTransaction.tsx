@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { useTheme } from './ui/theme-provider';
+import React, { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { useTheme } from "./ui/theme-provider";
 import {
   Dialog,
   DialogClose,
@@ -9,29 +9,33 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Field, FieldGroup } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+} from "@/components/ui/dialog";
+import { Field, FieldGroup } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { ChevronDownIcon, CalendarIcon } from 'lucide-react';
-import { Badge } from './ui/badge';
-import { INCOME_CATEGORIES, EXPENSE_CATEGORIES } from '@/constants/categories';
+} from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { ChevronDownIcon, CalendarIcon } from "lucide-react";
+import { Badge } from "./ui/badge";
+import { INCOME_CATEGORIES, EXPENSE_CATEGORIES } from "@/constants/categories";
 
 const TRANSACTION_TYPES = [
-  { value: 'expense', label: 'Expense' },
-  { value: 'income', label: 'Income' }
-]
+  { value: "expense", label: "Expense" },
+  { value: "income", label: "Income" },
+];
 
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 
 interface Props {
   children: React.ReactNode;
@@ -42,12 +46,12 @@ interface Props {
 }
 
 const INITIAL_FORM = {
-  transaction_type: 'expense',
-  date: dayjs().format('YYYY-MM-DD'),
-  name: '',
-  amount: '',
-  category: '',
-  description: '',
+  transaction_type: "expense",
+  date: dayjs().format("YYYY-MM-DD"),
+  name: "",
+  amount: "",
+  category: "",
+  description: "",
 };
 
 export function AddTransaction({
@@ -59,20 +63,21 @@ export function AddTransaction({
 }: Props): React.JSX.Element {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState(INITIAL_FORM);
-  const [selectedType, setSelectedType] = useState('');
+  const [selectedType, setSelectedType] = useState("");
 
   // Generic setter that handles both direct string values and input change events
-  const set = (field: string) => (value: string | React.ChangeEvent<HTMLInputElement>) =>
-    setFormData((prev) => ({
-      ...prev,
-      [field]: typeof value === 'string' ? value : value.target.value,
-    }));
+  const set =
+    (field: string) => (value: string | React.ChangeEvent<HTMLInputElement>) =>
+      setFormData((prev) => ({
+        ...prev,
+        [field]: typeof value === "string" ? value : value.target.value,
+      }));
 
   // Change list of category option according to transaction type
   const [listCategories, setListCategories] = useState<string[]>([]);
   useEffect(() => {
     const determineCategoryList = (): void => {
-      if (selectedType === 'income') {
+      if (selectedType === "income") {
         setListCategories([...INCOME_CATEGORIES]);
       } else {
         setListCategories([...EXPENSE_CATEGORIES]);
@@ -85,7 +90,7 @@ export function AddTransaction({
     e.preventDefault();
     try {
       const payload = {
-        transaction_type: formData.transaction_type as 'expense' | 'income',
+        transaction_type: formData.transaction_type as "expense" | "income",
         name: formData.name,
         amount: parseFloat(formData.amount),
         category: formData.category,
@@ -94,16 +99,16 @@ export function AddTransaction({
       };
       if (editMode) {
         await window.api.updateTransaction({ id: idToEdit, ...payload });
-        alert?.('Transaction edited successfully');
+        alert?.("Transaction edited successfully");
       } else {
         await window.api.addTransaction(payload);
-        alert?.('Transaction added successfully');
+        alert?.("Transaction added successfully");
       }
       setFormData(INITIAL_FORM);
       setOpen(false);
       onTransactionAdded?.();
     } catch (error) {
-      console.error('Failed to save transaction:', error);
+      console.error("Failed to save transaction:", error);
     }
   };
 
@@ -117,18 +122,19 @@ export function AddTransaction({
           }
           const dataToEdit = await window.api.getTransactionById(idToEdit);
           const FETCHED_DATA = {
-            transaction_type: dataToEdit?.transaction_type || 'expense',
-            date: dataToEdit?.date || dayjs().format('YYYY-MM-DD'),
-            name: dataToEdit?.name || '',
-            amount: dataToEdit?.amount?.toString() || '',
-            category: dataToEdit?.category || '',
-            description: dataToEdit?.description || '',
+            transaction_type: dataToEdit?.transaction_type || "expense",
+            date: dataToEdit?.date || dayjs().format("YYYY-MM-DD"),
+            name: dataToEdit?.name || "",
+            amount: dataToEdit?.amount?.toString() || "",
+            category: dataToEdit?.category || "",
+            description: dataToEdit?.description || "",
           };
           if (dataToEdit) {
             setFormData(FETCHED_DATA);
+            setSelectedType(FETCHED_DATA.transaction_type);
           }
         } catch (error) {
-          console.error('Failed to fetch transaction to update:', error);
+          console.error("Failed to fetch transaction to update:", error);
         }
       };
       fetchDataToEdit();
@@ -138,18 +144,25 @@ export function AddTransaction({
   const { theme } = useTheme();
 
   const applyDim = (isOpen: boolean): void => {
-    const resolved = theme === 'system'
-      ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-      : theme
-    window.api.dimTitlebar(isOpen, resolved)
-  }
+    const resolved =
+      theme === "system"
+        ? window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light"
+        : theme;
+    window.api.dimTitlebar(isOpen, resolved);
+  };
 
   // Reset category select when transaction type is changed
   useEffect(() => {
-    const resetCategory = (): void => {
-      setFormData((prev) => ({ ...prev, category: '' }));
-    };
-    resetCategory();
+    const isCategoryValid =
+      (selectedType === "income" &&
+        INCOME_CATEGORIES.includes(formData.category)) ||
+      (selectedType === "expense" &&
+        EXPENSE_CATEGORIES.includes(formData.category));
+    if (!isCategoryValid) {
+      setFormData((prev) => ({ ...prev, category: "" }));
+    }
   }, [selectedType]);
 
   return (
@@ -170,7 +183,9 @@ export function AddTransaction({
           }}
         >
           <DialogHeader>
-            <DialogTitle>{!editMode ? 'Add transaction' : 'Edit transaction'}</DialogTitle>
+            <DialogTitle>
+              {!editMode ? "Add transaction" : "Edit transaction"}
+            </DialogTitle>
           </DialogHeader>
           <div className="mt-4 flex items-start gap-4">
             {/* Left column */}
@@ -180,7 +195,7 @@ export function AddTransaction({
                 <Select
                   value={formData.transaction_type}
                   onValueChange={(value) => {
-                    set('transaction_type')(value);
+                    set("transaction_type")(value);
                     setSelectedType(value);
                   }}
                 >
@@ -192,9 +207,9 @@ export function AddTransaction({
                       <SelectItem key={type.value} value={type.value}>
                         <Badge
                           className={
-                            type.value === 'income'
-                              ? 'bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300'
-                              : 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300'
+                            type.value === "income"
+                              ? "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
+                              : "bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300"
                           }
                           variant="outline"
                         >
@@ -211,7 +226,7 @@ export function AddTransaction({
                 <Input
                   id="name"
                   value={formData.name}
-                  onChange={set('name')}
+                  onChange={set("name")}
                   placeholder="e.g. Grocery, Salary, Rent"
                   required
                 />
@@ -226,7 +241,7 @@ export function AddTransaction({
                   min="0"
                   value={formData.amount}
                   placeholder="Enter amount"
-                  onChange={set('amount')}
+                  onChange={set("amount")}
                   required
                 />
               </Field>
@@ -244,7 +259,10 @@ export function AddTransaction({
                   required
                   onChange={() => null}
                 />
-                <Select value={formData.category} onValueChange={(value) => set('category')(value)}>
+                <Select
+                  value={formData.category}
+                  onValueChange={(value) => set("category")(value)}
+                >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
@@ -263,7 +281,7 @@ export function AddTransaction({
                 <Input
                   id="description"
                   value={formData.description}
-                  onChange={set('description')}
+                  onChange={set("description")}
                   placeholder="Optional description"
                 />
               </Field>
@@ -279,7 +297,7 @@ export function AddTransaction({
                       <div className="flex gap-2 items-center">
                         <CalendarIcon className="opacity-30" />
                         {formData.date ? (
-                          dayjs(formData.date).format('DD MMMM YYYY')
+                          dayjs(formData.date).format("DD MMMM YYYY")
                         ) : (
                           <span>Pick a date</span>
                         )}
@@ -290,11 +308,13 @@ export function AddTransaction({
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
-                      selected={formData.date ? new Date(formData.date) : undefined}
+                      selected={
+                        formData.date ? new Date(formData.date) : undefined
+                      }
                       onSelect={(date) => {
                         setFormData({
                           ...formData,
-                          date: date ? dayjs(date).format('YYYY-MM-DD') : '',
+                          date: date ? dayjs(date).format("YYYY-MM-DD") : "",
                         });
                       }}
                     />
