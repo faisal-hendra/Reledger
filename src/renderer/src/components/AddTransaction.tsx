@@ -157,9 +157,9 @@ export function AddTransaction({
   useEffect(() => {
     const isCategoryValid =
       (selectedType === "income" &&
-        INCOME_CATEGORIES.includes(formData.category)) ||
+        (INCOME_CATEGORIES as readonly string[]).includes(formData.category)) ||
       (selectedType === "expense" &&
-        EXPENSE_CATEGORIES.includes(formData.category));
+        (EXPENSE_CATEGORIES as readonly string[]).includes(formData.category));
     if (!isCategoryValid) {
       setFormData((prev) => ({ ...prev, category: "" }));
     }
